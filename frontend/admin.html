@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Clean Shield Pro - Rajamahendravaram Operations</title>
+  <meta name="robots" content="noindex, nofollow">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230D3B2E'><path d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z'/></svg>">
+  
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <a href="admin.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="sidebar-brand-name">Clean Shield Pro</div>
+            <div class="sidebar-brand-tag">Operations Console</div>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="sidebar-nav-item active" onclick="switchTab('tabBookings', this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+          <span>Bookings & Orders</span>
+          <span class="sidebar-nav-badge" id="sidebarBookingsBadge">4</span>
+        </button>
+
+        <button class="sidebar-nav-item" onclick="switchTab('tabEnquiries', this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+          <span>Enquiries & Leads</span>
+          <span class="sidebar-nav-badge" id="sidebarEnquiriesBadge">3</span>
+        </button>
+
+        <button class="sidebar-nav-item" onclick="switchTab('tabCustomers', this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          <span>Customer Directory</span>
+        </button>
+
+        <button class="sidebar-nav-item" onclick="switchTab('tabReviews', this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <span>Customer Reviews</span>
+        </button>
+
+        <button class="sidebar-nav-item" onclick="switchTab('tabPricing', this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+          <span>Service Pricing</span>
+        </button>
+
+        <button class="sidebar-nav-item" onclick="switchTab('tabTemplates', this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
+          <span>WhatsApp Dispatch</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="index.html" class="view-live-site-btn" target="_blank">
+          <span>&larr; View Live Website</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <!-- Topbar -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <h2 class="topbar-title" id="pageTitle">Bookings & Operations Management</h2>
+          <span class="live-indicator">Rajamahendravaram Operations Live</span>
+        </div>
+
+        <div class="topbar-right">
+          <button class="notification-bell-btn" onclick="showRecentAlerts()" title="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span class="notification-badge" id="topbarAlertCount">0</span>
+          </button>
+
+          <button class="btn-manual-booking" onclick="openManualBookingModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            + New Phone Booking
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="admin-content">
+        <!-- Live Lead Alert Banner (Triggered automatically upon booking) -->
+        <div class="live-lead-banner" id="liveLeadBanner" style="display:none;">
+          <div class="lead-banner-left">
+            <div class="lead-pulse-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            </div>
+            <div>
+              <div class="lead-banner-title" id="leadBannerTitle">New Booking Alert!</div>
+              <div class="lead-banner-desc" id="leadBannerDesc">A new lead has arrived from Rajamahendravaram.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <a href="javascript:void(0)" id="leadBannerWaBtn" class="btn-action-wa" target="_blank">Chat on WhatsApp</a>
+            <button class="btn-action-sm" onclick="dismissLeadBanner()">Dismiss</button>
+          </div>
+        </div>
+
+        <!-- KPI Metrics Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Total Bookings</span>
+              <div class="kpi-icon-wrap kpi-icon-green">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpiTotalBookings">4</div>
+            <div class="kpi-meta">Confirmed & In Progress</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Gross Revenue</span>
+              <div class="kpi-icon-wrap kpi-icon-gold">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpiTotalRevenue">₹22,500</div>
+            <div class="kpi-meta">All confirmed bookings</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Active Enquiries</span>
+              <div class="kpi-icon-wrap kpi-icon-blue">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpiActiveEnquiries">3</div>
+            <div class="kpi-meta">Price on Request leads</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Avg. Customer Rating</span>
+              <div class="kpi-icon-wrap kpi-icon-purple">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpiAvgRating">5.0 ★</div>
+            <div class="kpi-meta">100% 5-Star Reviews</div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             TAB 1: BOOKINGS & ORDERS
+             =================================================================== -->
+        <div class="tab-panel active" id="tabBookings">
+          <div class="admin-card">
+            <div class="card-header">
+              <h3 class="card-title">All Bookings & Dispatches</h3>
+              <div class="card-actions-bar">
+                <input type="text" class="search-input" id="searchBookingsInput" placeholder="Search customer, ID, phone..." oninput="filterBookings()">
+                <select class="filter-select" id="statusFilterSelect" onchange="filterBookings()">
+                  <option value="All">All Statuses</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Confirmed">Confirmed</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Booking ID</th>
+                    <th>Customer Name & Phone</th>
+                    <th>Service & Size</th>
+                    <th>Date & Slot</th>
+                    <th>Locality</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bookingsTableBody">
+                  <!-- Dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             TAB 2: ENQUIRIES & LEADS
+             =================================================================== -->
+        <div class="tab-panel" id="tabEnquiries">
+          <div class="admin-card">
+            <div class="card-header">
+              <h3 class="card-title">Custom Quote Requests & Leads</h3>
+              <div class="card-actions-bar">
+                <input type="text" class="search-input" id="searchEnquiriesInput" placeholder="Search enquiries..." oninput="filterEnquiries()">
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Lead ID</th>
+                    <th>Customer & Phone</th>
+                    <th>Service Requested</th>
+                    <th>Locality</th>
+                    <th>Requirement Details</th>
+                    <th>Date Logged</th>
+                    <th>Lead Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="enquiriesTableBody">
+                  <!-- Dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             TAB 3: CUSTOMER DIRECTORY
+             =================================================================== -->
+        <div class="tab-panel" id="tabCustomers">
+          <div class="admin-card">
+            <div class="card-header">
+              <h3 class="card-title">Rajamahendravaram Customer Directory</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Phone / WhatsApp</th>
+                    <th>Locality</th>
+                    <th>Total Bookings</th>
+                    <th>Total Spent</th>
+                    <th>Quick Contact</th>
+                  </tr>
+                </thead>
+                <tbody id="customersTableBody">
+                  <!-- Dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             TAB 4: REVIEWS MODERATION
+             =================================================================== -->
+        <div class="tab-panel" id="tabReviews">
+          <div class="admin-card">
+            <div class="card-header">
+              <h3 class="card-title">Customer Reviews & Testimonials</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Review ID</th>
+                    <th>Customer & Locality</th>
+                    <th>Service</th>
+                    <th>Rating</th>
+                    <th>Review Content</th>
+                    <th>Website Visibility</th>
+                  </tr>
+                </thead>
+                <tbody id="reviewsTableBody">
+                  <!-- Dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             TAB 5: SERVICE PRICING MANAGER
+             =================================================================== -->
+        <div class="tab-panel" id="tabPricing">
+          <div class="admin-card">
+            <div class="card-header">
+              <h3 class="card-title">Base Pricing Configuration</h3>
+            </div>
+            <div style="padding:24px;">
+              <form id="pricingForm" onsubmit="handlePricingSave(event)">
+                <h4 style="color:var(--admin-primary); margin-bottom:14px; font-size:1.05rem;">Home Deep Cleaning Pricing (₹ INR)</h4>
+                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:24px;">
+                  <div>
+                    <label class="form-label">1 BHK Base Price</label>
+                    <input type="number" class="form-control" id="priceDeep1Bhk" required>
+                  </div>
+                  <div>
+                    <label class="form-label">2 BHK Base Price</label>
+                    <input type="number" class="form-control" id="priceDeep2Bhk" required>
+                  </div>
+                  <div>
+                    <label class="form-label">3 BHK Base Price</label>
+                    <input type="number" class="form-control" id="priceDeep3Bhk" required>
+                  </div>
+                  <div>
+                    <label class="form-label">4 BHK+ / Villa Price</label>
+                    <input type="number" class="form-control" id="priceDeep4Bhk" required>
+                  </div>
+                </div>
+
+                <h4 style="color:var(--admin-primary); margin-bottom:14px; font-size:1.05rem;">Pest Control Pricing (₹ INR)</h4>
+                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:24px;">
+                  <div>
+                    <label class="form-label">1 BHK Pest Control</label>
+                    <input type="number" class="form-control" id="pricePest1Bhk" required>
+                  </div>
+                  <div>
+                    <label class="form-label">2 BHK Pest Control</label>
+                    <input type="number" class="form-control" id="pricePest2Bhk" required>
+                  </div>
+                  <div>
+                    <label class="form-label">3 BHK Pest Control</label>
+                    <input type="number" class="form-control" id="pricePest3Bhk" required>
+                  </div>
+                  <div>
+                    <label class="form-label">Villas Pest Control</label>
+                    <input type="number" class="form-control" id="pricePestVilla" required>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-manual-booking" style="padding:10px 24px;">
+                  Save Updated Pricing & Sync Website
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             TAB 6: WHATSAPP TEMPLATES & DISPATCH
+             =================================================================== -->
+        <div class="tab-panel" id="tabTemplates">
+          <div class="admin-card">
+            <div class="card-header">
+              <h3 class="card-title">Official WhatsApp Notification Templates</h3>
+            </div>
+            <div style="padding:24px;">
+              <p style="color:var(--admin-text-muted); margin-bottom:20px; font-size:0.9rem;">
+                Use these pre-formatted messages to communicate with customers on WhatsApp regarding service confirmations, dispatch notifications, payment acknowledgements, and review requests.
+              </p>
+
+              <div class="templates-grid">
+                <div class="template-box">
+                  <div class="template-title">
+                    <span>1. Booking Confirmation</span>
+                    <div style="display:flex; gap:6px;">
+                      <button class="btn-action-sm" onclick="copyTemplate('tpl1')">Copy</button>
+                      <button class="btn-action-sm" onclick="dispatchTemplateToOffice('tpl1')">Send to Desk</button>
+                    </div>
+                  </div>
+                  <div class="template-text" id="tpl1">Namaste [Customer Name]! 🙏
+Your Clean Shield Pro booking [Booking ID] is CONFIRMED.
+
+🗓️ Date: [Date]
+⏰ Slot: [Time]
+📍 Address: [Address]
+💰 Amount: ₹[Amount] ([Payment Mode])
+
+Our Rajamahendravaram cleaning unit will arrive on schedule with professional equipment and eco-safe products.
+Thank you for trusting Clean Shield Pro!
+"Clean Home • Healthy Life - We Don't Just Clean, We Care."
+Contact: +91 90596 39955 / +91 88973 12523
+Emails: madhuripaka756@gmail.com / prasadanem777@gmail.com</div>
+                </div>
+
+                <div class="template-box">
+                  <div class="template-title">
+                    <span>2. Team Dispatched / En Route</span>
+                    <div style="display:flex; gap:6px;">
+                      <button class="btn-action-sm" onclick="copyTemplate('tpl2')">Copy</button>
+                      <button class="btn-action-sm" onclick="dispatchTemplateToOffice('tpl2')">Send to Desk</button>
+                    </div>
+                  </div>
+                  <div class="template-text" id="tpl2">Hello [Customer Name]! 🚚
+Our Clean Shield Pro mobile van is en route to your location in [Locality], Rajamahendravaram.
+
+Field Supervisor: [Supervisor Name]
+Office Helplines: +91 90596 39955 / +91 88973 12523
+Estimated Arrival: 15-20 Minutes.
+
+Please ensure power and water points are accessible. See you shortly!</div>
+                </div>
+
+                <div class="template-box">
+                  <div class="template-title">
+                    <span>3. Service Completed & Receipt</span>
+                    <div style="display:flex; gap:6px;">
+                      <button class="btn-action-sm" onclick="copyTemplate('tpl3')">Copy</button>
+                      <button class="btn-action-sm" onclick="dispatchTemplateToOffice('tpl3')">Send to Desk</button>
+                    </div>
+                  </div>
+                  <div class="template-text" id="tpl3">Namaste [Customer Name]! ✨
+Your home deep cleaning / pest control service ([Booking ID]) has been successfully completed and sanitized.
+
+Amount Paid: ₹[Amount]
+Payment Status: Received with thanks
+
+Please inspect all areas with our team leader before sign-off.
+Clean Shield Pro Rajamahendravaram: +91 90596 39955 / +91 88973 12523
+Email: madhuripaka756@gmail.com / prasadanem777@gmail.com</div>
+                </div>
+
+                <div class="template-box">
+                  <div class="template-title">
+                    <span>4. Review & Feedback Request</span>
+                    <div style="display:flex; gap:6px;">
+                      <button class="btn-action-sm" onclick="copyTemplate('tpl4')">Copy</button>
+                      <button class="btn-action-sm" onclick="dispatchTemplateToOffice('tpl4')">Send to Desk</button>
+                    </div>
+                  </div>
+                  <div class="template-text" id="tpl4">Dear [Customer Name],
+Thank you for choosing Clean Shield Pro! We hope your home feels clean, fresh and healthy.
+
+Could you please take 30 seconds to share your experience with fellow neighbors in Rajamahendravaram?
+Click here to rate us: http://localhost:8080/#reviews
+
+"We Don't Just Clean, We Care."</div>
+                </div>
+              </div>
+
+              <!-- Quick Dispatch Actions Bar -->
+              <div style="margin-top:24px; padding:18px; background:#F8FAF9; border-radius:12px; border:1px solid #E0EBE6;">
+                <h4 style="color:var(--admin-primary); margin-bottom:10px; font-size:1rem;">Direct Office Dispatch Contacts</h4>
+                <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                  <a href="https://wa.me/919059639955" target="_blank" rel="noopener" class="btn-action-wa" style="padding:10px 16px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
+                    WhatsApp Desk 1: +91 90596 39955
+                  </a>
+                  <a href="https://wa.me/918897312523" target="_blank" rel="noopener" class="btn-action-wa" style="padding:10px 16px; background-color:#1EBE5D;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
+                    WhatsApp Desk 2: +91 88973 12523
+                  </a>
+                  <a href="mailto:madhuripaka756@gmail.com,prasadanem777@gmail.com?subject=Clean%20Shield%20Pro%20Dispatch%20Update" class="btn-action-sm" style="padding:10px 16px; background:#0D3B2E; color:#FFFFFF;">
+                    ✉️ Email: madhuripaka756@gmail.com & prasadanem777@gmail.com
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: Booking Details -->
+  <div class="modal-overlay" id="modalAdminBookingDetail">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3>Booking Summary</h3>
+          <p id="adminDetailId">CSP-84921</p>
+        </div>
+        <button class="btn-close-modal" onclick="closeModal('modalAdminBookingDetail')">&times;</button>
+      </div>
+      <div class="modal-body" id="adminBookingDetailBody">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Manual Booking Entry (Phone call walk-in) -->
+  <div class="modal-overlay" id="modalManualBooking">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3>New Phone / Walk-in Booking</h3>
+          <p>Direct entry by Rajamahendravaram staff desk</p>
+        </div>
+        <button class="btn-close-modal" onclick="closeModal('modalManualBooking')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="manualBookingForm" onsubmit="handleManualBookingSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Customer Name *</label>
+              <input type="text" class="form-control" id="mCustName" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number *</label>
+              <input type="tel" class="form-control" id="mCustPhone" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Service</label>
+              <select class="form-control" id="mService">
+                <option value="Home Deep Cleaning">Home Deep Cleaning</option>
+                <option value="Pest Control">Pest Control</option>
+                <option value="Water Tank Cleaning">Water Tank Cleaning</option>
+                <option value="Kitchen Cleaning">Kitchen Cleaning</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Size / BHK</label>
+              <select class="form-control" id="mBhk">
+                <option value="1 BHK">1 BHK</option>
+                <option value="2 BHK" selected>2 BHK</option>
+                <option value="3 BHK">3 BHK</option>
+                <option value="4 BHK+">4 BHK+</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Date</label>
+              <input type="date" class="form-control" id="mDate" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Time Slot</label>
+              <select class="form-control" id="mTime">
+                <option value="08:30 AM - 12:30 PM">Morning (08:30 AM - 12:30 PM)</option>
+                <option value="02:00 PM - 06:00 PM">Afternoon (02:00 PM - 06:00 PM)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Locality in Rajahmundry</label>
+              <select class="form-control" id="mLocality">
+                <option value="Danavaipeta">Danavaipeta</option>
+                <option value="Prakash Nagar">Prakash Nagar</option>
+                <option value="Morampudi">Morampudi</option>
+                <option value="Lalacheruvu">Lalacheruvu</option>
+                <option value="Dowleswaram">Dowleswaram</option>
+                <option value="Diwancheruvu">Diwancheruvu</option>
+                <option value="Aryapuram">Aryapuram</option>
+                <option value="Innespeta">Innespeta</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Amount (₹)</label>
+              <input type="number" class="form-control" id="mAmount" value="4500" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Full Address</label>
+            <input type="text" class="form-control" id="mAddress" placeholder="Door No, Street, Landmark" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Payment Mode</label>
+            <select class="form-control" id="mPayment">
+              <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+              <option value="PhonePe UPI">PhonePe UPI</option>
+              <option value="Paytm UPI">Paytm UPI</option>
+            </select>
+          </div>
+
+          <button type="submit" class="modal-submit-btn">Create Booking & Notify</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast for Admin -->
+  <div class="csp-toast" id="cspToast">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="#D4A359"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    <span id="toastMessage">Success</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
