@@ -49,6 +49,617 @@ const DEFAULT_PRICING = {
   }
 };
 
+// Full Services Catalog for Urban Company Journey / Cart Flow
+const SERVICES_CATALOG = [
+  {
+    categoryId: 'full-home',
+    categoryName: 'Full Home Deep Cleaning',
+    categoryIcon: '🏠',
+    categorySubtitle: 'Single-disc machine scrubbing, vacuuming, and complete home sanitization',
+    services: [
+      {
+        id: 'fh-furnished',
+        name: 'Furnished Apartment Deep Cleaning',
+        subtitle: 'Floor scrubbing machine, kitchen degreasing, bathroom descaling & dust extraction',
+        rating: 4.88,
+        reviewCount: '14.2K reviews',
+        duration: '4 - 5 hrs',
+        crew: '2-3 Professionals',
+        image: 'images/service_deep_clean.jpg',
+        badge: 'Bestseller',
+        discountTag: '15% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 1,
+        variants: [
+          { name: '1 BHK', price: 3499, originalPrice: 4199, duration: '3 - 3.5 hrs' },
+          { name: '2 BHK', price: 4499, originalPrice: 5299, duration: '4 - 4.5 hrs' },
+          { name: '3 BHK', price: 5499, originalPrice: 6499, duration: '5 - 6 hrs' },
+          { name: '4 BHK+ / Villa', price: 7499, originalPrice: 8999, duration: '6 - 7 hrs' }
+        ],
+        highlights: [
+          'High-speed single-disc machine scrubbing for tile & marble floors',
+          'German Diversey & Taski eco-chemicals safe for toddlers and pets',
+          'Intense degreasing of kitchen slab, chimney mesh & gas stove',
+          'Complete descaling & stain removal for all bathroom tiles & WC',
+          'Dry vacuuming of sofa, carpets, mattress, curtains & window tracks'
+        ],
+        inclusions: [
+          'Floor scrubbing with rotary single-disc buffer machine',
+          'Kitchen slab, backsplash, chimney filter and exhaust degreasing',
+          'Bathroom tile descaling, WC sanitization, chrome buffing and mirror shine',
+          'Dry vacuuming of upholstery, rugs, window tracks and sliding channels',
+          'Balcony floor washing and exterior glass wiping',
+          'Ceiling fan, switchboards, doors, handles and frame wipe-down'
+        ],
+        exclusions: [
+          'Interior cleaning of wardrobes/drawers with customer clothes inside (unless emptied)',
+          'Heavy furniture lifting beyond safe 2-feet displacement',
+          'Exterior rope-access building facade washing'
+        ],
+        procedure: [
+          { step: 1, title: 'Inspection & Dry Vacuuming', desc: 'Thorough dusting of walls, cobwebs, ceilings, sofa and mattress.' },
+          { step: 2, title: 'Machine Floor Buffing', desc: 'Single-disc rotary scrubbing machine with Taski neutral floor cleaner.' },
+          { step: 3, title: 'Deep Degreasing & Descaling', desc: 'Suma Inox on kitchen metals and Taski R6 on bathroom limescale.' },
+          { step: 4, title: 'Steam Sanitization & Walkthrough', desc: 'High-temperature antibacterial steam on sanitizing touchpoints.' }
+        ]
+      },
+      {
+        id: 'fh-unfurnished',
+        name: 'Unfurnished / Move-In Deep Cleaning',
+        subtitle: 'Post-tenancy or new home handover with thorough cabinet & floor sanitization',
+        rating: 4.90,
+        reviewCount: '8.1K reviews',
+        duration: '3.5 - 4.5 hrs',
+        crew: '2 Professionals',
+        image: 'images/service_deep_clean.jpg',
+        badge: 'Move-In Special',
+        discountTag: '17% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 1,
+        variants: [
+          { name: '1 BHK (Empty)', price: 2999, originalPrice: 3599, duration: '3 hrs' },
+          { name: '2 BHK (Empty)', price: 3999, originalPrice: 4799, duration: '3.5 - 4 hrs' },
+          { name: '3 BHK (Empty)', price: 4999, originalPrice: 5999, duration: '4.5 - 5 hrs' },
+          { name: '4 BHK+ (Empty)', price: 6999, originalPrice: 8299, duration: '5.5 - 6.5 hrs' }
+        ],
+        highlights: [
+          'Complete interior sanitization of empty cupboards, wardrobes and shelves',
+          'Paint specks, plaster spots, and cement residue removal from tiles',
+          'Acid-free bathroom descaling, mirror polish and drain deodorization',
+          'Balcony wash and window glass gleaming'
+        ],
+        inclusions: [
+          'Deep machine floor scrubbing across all rooms',
+          'Inside-out cleaning of all modular cabinets, shelves and wardrobes',
+          'Deep wash of bathrooms, taps, tiles and exhaust vents',
+          'Window panes, sliding channels and balcony grill wash'
+        ],
+        exclusions: [
+          'Heavy paint scraping on fragile wall putty'
+        ],
+        procedure: [
+          { step: 1, title: 'Debris & Dust Evacuation', desc: 'Heavy-duty industrial vacuum extraction across all floors and recesses.' },
+          { step: 2, title: 'Cupboard & Shelves Wash', desc: 'Microfiber antibacterial sanitization of all empty storage units.' },
+          { step: 3, title: 'Floor Buffing & Paint Spotting', desc: 'Single-disc machine wash to lift stubborn stains and construction dust.' }
+        ]
+      },
+      {
+        id: 'fh-villa',
+        name: 'Independent House / Duplex Villa Deep Cleaning',
+        subtitle: 'Comprehensive multi-storey deep clean with industrial pressure jet & rotary machines',
+        rating: 4.93,
+        reviewCount: '3.8K reviews',
+        duration: '6 - 8 hrs',
+        crew: '4 Professionals',
+        image: 'images/hero_team.jpg',
+        badge: 'Luxury Care',
+        discountTag: '16% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 0,
+        variants: [
+          { name: '3 BHK Villa', price: 7999, originalPrice: 9499, duration: '6 hrs' },
+          { name: '4 BHK Villa', price: 9999, originalPrice: 11999, duration: '7 hrs' },
+          { name: '5 BHK+ Luxury Estate', price: 13499, originalPrice: 15999, duration: '8 hrs' }
+        ],
+        highlights: [
+          'Dual teams with high-pressure rotary floor buffers and jet cleaners',
+          'Staircase, banister, porch, and terrace wash included',
+          'Deep kitchen degreasing, bathroom descaling and sofa vacuuming'
+        ],
+        inclusions: [
+          'Multi-level floor scrubbing and polishing',
+          'Balconies, sit-out portico and terrace pressure washing',
+          'All bathrooms, modular kitchen and store rooms deep cleaned'
+        ],
+        exclusions: [
+          'Garden weed trimming or heavy landscaping'
+        ],
+        procedure: [
+          { step: 1, title: 'Top-to-Bottom Zoning', desc: 'Systematic cleaning starting from upper floors down to porch and ground level.' }
+        ]
+      }
+    ]
+  },
+  {
+    categoryId: 'bathroom',
+    categoryName: 'Bathroom & Toilet Cleaning',
+    categoryIcon: '🚿',
+    categorySubtitle: 'Hard water stain removal, tile descaling, WC sanitization and chrome buffer',
+    services: [
+      {
+        id: 'bt-intense',
+        name: 'Intense Bathroom Cleaning (Tile Descaling & Stain Removal)',
+        subtitle: 'Deep scrubbing of tiles, grout, hard water stains, WC, basin, and taps',
+        rating: 4.85,
+        reviewCount: '24.6K reviews',
+        duration: '60 mins',
+        crew: '1 Professional',
+        image: 'images/service_bathroom.jpg',
+        badge: 'High Demand',
+        discountTag: '28% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 0,
+        variants: [
+          { name: '1 Bathroom', price: 499, originalPrice: 699, duration: '60 mins' },
+          { name: '2 Bathrooms', price: 899, originalPrice: 1299, duration: '100 mins' },
+          { name: '3 Bathrooms', price: 1299, originalPrice: 1899, duration: '150 mins' },
+          { name: '4 Bathrooms', price: 1699, originalPrice: 2499, duration: '180 mins' }
+        ],
+        highlights: [
+          'Diversey Taski R6 acidic chemical for hard water limescale on tiles & glass',
+          'Tile grout scrubbing with manual stiff bristle brushes & hand buffer',
+          'Sanitization of WC commode, urinal, basin and floor drains',
+          'Chrome buffing for taps, showerheads and stainless steel fittings'
+        ],
+        inclusions: [
+          'Wall tile descaling up to 7 feet height',
+          'Shower partition glass stain removal',
+          'Commode interior & exterior sanitization',
+          'Floor tile scrubbing and drain opening de-gunking'
+        ],
+        exclusions: [
+          'Broken tile grout replacement or regrouting'
+        ],
+        procedure: [
+          { step: 1, title: 'Chemical Pre-soak', desc: 'Application of Diversey Taski R6 on hard water scales to dissolve deposits.' },
+          { step: 2, title: 'Tile & Grout Scrubbing', desc: 'Mechanical scrubbing of wall tiles, floor joints and shower area.' },
+          { step: 3, title: 'WC & Fitting Buffing', desc: 'Germicidal sanitization and chrome polishing for mirror-bright taps.' }
+        ]
+      },
+      {
+        id: 'bt-classic',
+        name: 'Classic Bathroom Cleaning',
+        subtitle: 'Routine maintenance sanitization, washbasin wipe and floor scrub',
+        rating: 4.79,
+        reviewCount: '9.2K reviews',
+        duration: '45 mins',
+        crew: '1 Professional',
+        image: 'images/service_bathroom.jpg',
+        badge: 'Value',
+        discountTag: '20% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 0,
+        variants: [
+          { name: '1 Bathroom', price: 399, originalPrice: 499, duration: '45 mins' },
+          { name: '2 Bathrooms', price: 749, originalPrice: 999, duration: '80 mins' },
+          { name: '3 Bathrooms', price: 1099, originalPrice: 1499, duration: '120 mins' }
+        ],
+        highlights: [
+          'Regular hygiene wash using Taski R1 sanitizing detergent',
+          'Washbasin, mirror, counter and WC seat disinfection',
+          'Floor scrubbing and deodorizing'
+        ],
+        inclusions: [
+          'Washbasin and mirror cleaning',
+          'WC sanitization and floor wash'
+        ],
+        exclusions: [
+          'Heavy calcium or brown hard water scale removal (choose Intense)'
+        ],
+        procedure: [
+          { step: 1, title: 'Sanitizing Wash', desc: 'Quick foam wash and WC disinfection with fragrant deodorizer.' }
+        ]
+      }
+    ]
+  },
+  {
+    categoryId: 'kitchen',
+    categoryName: 'Kitchen Deep Cleaning',
+    categoryIcon: '🍳',
+    categorySubtitle: 'Chimney degreasing, stove scrub, tile oil removal and cabinet wipe',
+    services: [
+      {
+        id: 'kt-complete',
+        name: 'Kitchen Deep Cleaning & Chimney Degreasing',
+        subtitle: 'Heavy oil and grease removal from tiles, stove, countertop, exhaust & chimney filters',
+        rating: 4.89,
+        reviewCount: '16.4K reviews',
+        duration: '2.5 hrs',
+        crew: '1 Professional',
+        image: 'images/service_kitchen.jpg',
+        badge: 'Bestseller',
+        discountTag: '23% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 0,
+        variants: [
+          { name: 'Standard Kitchen', price: 1299, originalPrice: 1699, duration: '2 - 2.5 hrs' },
+          { name: 'Large / Modular Kitchen', price: 1699, originalPrice: 2199, duration: '3 - 3.5 hrs' }
+        ],
+        highlights: [
+          'Chimney baffle filter hot chemical soak to dissolve sticky oil deposits',
+          'Industrial food-safe degreaser for stovetop, knobs, backsplash and exhaust fan',
+          'Exterior sanitization of all modular drawers and upper cabinets',
+          'Stainless steel sink descaling and chrome buffing'
+        ],
+        inclusions: [
+          'Chimney filter wash, exterior hood wipe and exhaust fan degreasing',
+          'Kitchen slab, gas stove, backsplash tile and sink deep scrub',
+          'Exterior cabinet and handle wipe-down'
+        ],
+        exclusions: [
+          'Chimney motor dismantling or duct replacement',
+          'Interior cleaning of cabinets filled with grocery items (unless emptied)'
+        ],
+        procedure: [
+          { step: 1, title: 'Degreasing Soak', desc: 'Chimney filters removed and soaked in high-potency degreasing solution.' },
+          { step: 2, title: 'Backsplash & Stove Scrub', desc: 'Intensive scrubbing of oil-splattered ceramic tiles and burner tops.' },
+          { step: 3, title: 'Sink & Metal Shine', desc: 'Descaling of stainless steel basin and tap with Taski Suma Inox.' }
+        ]
+      },
+      {
+        id: 'kt-modular',
+        name: 'Modular Kitchen Interior & Drawer Sanitization',
+        subtitle: 'Deep cleaning inside all drawers, pull-out wire baskets and food storage shelves',
+        rating: 4.82,
+        reviewCount: '5.1K reviews',
+        duration: '2 hrs',
+        crew: '1 Professional',
+        image: 'images/service_kitchen.jpg',
+        badge: 'Popular',
+        discountTag: '23% OFF',
+        hasVariants: false,
+        variants: [
+          { name: 'All Modular Drawers', price: 999, originalPrice: 1299, duration: '2 hrs' }
+        ],
+        highlights: [
+          'Food-safe antibacterial wipes for all cutlery trays and wire baskets',
+          'Removal of yellow oil grease spots and spice rings on laminate shelves',
+          'Safe non-toxic chemical formulas safe for spice jars and utensils'
+        ],
+        inclusions: [
+          'Interior wiping of up to 12 modular drawers and pull-outs',
+          'Drawer track dusting and roller glide cleaning'
+        ],
+        exclusions: [
+          'Washing of individual plates and vessels'
+        ],
+        procedure: [
+          { step: 1, title: 'Drawer Interior Extraction', desc: 'Vacuuming spice residues followed by warm sanitizing wipe.' }
+        ]
+      }
+    ]
+  },
+  {
+    categoryId: 'sofa',
+    categoryName: 'Sofa & Upholstery Cleaning',
+    categoryIcon: '🛋️',
+    categorySubtitle: 'Injection-extraction shampooing for fabric sofas, dining chairs and mattresses',
+    services: [
+      {
+        id: 'sf-shampoo',
+        name: 'Fabric Sofa Deep Shampooing & Stain Extraction',
+        subtitle: 'Foam shampooing and high-power vacuum extraction for deep dirt, sweat & odor',
+        rating: 4.87,
+        reviewCount: '18.1K reviews',
+        duration: '1 - 1.5 hrs',
+        crew: '1 Professional',
+        image: 'images/service_sofa.jpg',
+        badge: 'Top Rated',
+        discountTag: '27% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 1,
+        variants: [
+          { name: '3-Seater Sofa', price: 799, originalPrice: 1099, duration: '45 mins' },
+          { name: '5-Seater Sofa (3+1+1)', price: 1199, originalPrice: 1599, duration: '75 mins' },
+          { name: '7-Seater / L-Shaped Sofa', price: 1599, originalPrice: 2099, duration: '100 mins' }
+        ],
+        highlights: [
+          'German injection-extraction machine with high-power moisture suction',
+          'Biodegradable enzyme upholstery shampoo removes body grease and beverage spots',
+          'Semi-dry process dries in just 3 to 4 hours under ceiling fan'
+        ],
+        inclusions: [
+          'Complete dry vacuuming to remove embedded pet hair and dirt',
+          'Fabric shampoo foam agitation with soft horsehair brush',
+          'High-power moisture and stain suction extraction'
+        ],
+        exclusions: [
+          'Permanent chemical dye bleaches or acid burns on fabric'
+        ],
+        procedure: [
+          { step: 1, title: 'Deep Vacuuming', desc: 'Extraction of loose dirt, crumbs and hair from crevices and seat seams.' },
+          { step: 2, title: 'Enzyme Foam Shampoo', desc: 'Mild foaming cleaner massaged evenly into fabric weave.' },
+          { step: 3, title: 'Industrial Extraction', desc: '90% moisture extraction leaving sofa lightly damp and fresh.' }
+        ]
+      },
+      {
+        id: 'sf-mattress',
+        name: 'Mattress Sanitization & Dust-Mite Extraction',
+        subtitle: 'Allergen extraction, spot stain treatment and antibacterial steam deodorizing',
+        rating: 4.88,
+        reviewCount: '8.5K reviews',
+        duration: '45 mins',
+        crew: '1 Professional',
+        image: 'images/service_sofa.jpg',
+        badge: 'Health Choice',
+        discountTag: '22% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 1,
+        variants: [
+          { name: 'Single Bed Mattress', price: 499, originalPrice: 699, duration: '35 mins' },
+          { name: 'Queen / King Bed Mattress', price: 699, originalPrice: 899, duration: '50 mins' }
+        ],
+        highlights: [
+          'HEPA vacuum extraction of dead skin cells and dust mites',
+          'Enzyme spot treatment for stains and localized sanitization',
+          'Leaves mattress hygienic, fresh and allergen-free'
+        ],
+        inclusions: [
+          'Top and side surface vacuuming and stain extraction'
+        ],
+        exclusions: [
+          'Old aged oxidation yellowing from years of foam breakdown'
+        ],
+        procedure: [
+          { step: 1, title: 'UV & HEPA Vacuum', desc: 'Removal of microscopic allergens and dead skin cells.' }
+        ]
+      }
+    ]
+  },
+  {
+    categoryId: 'pest',
+    categoryName: 'Pest Control Services',
+    categoryIcon: '🪳',
+    categorySubtitle: 'Odorless Bayer gel baiting, termite drilling, and 90-day warranty',
+    services: [
+      {
+        id: 'pc-cockroach',
+        name: 'Odorless Cockroach & Ant Control',
+        subtitle: 'Advanced herbal gel baiting & crack-and-crevice odorless spray with 90-day warranty',
+        rating: 4.92,
+        reviewCount: '21.3K reviews',
+        duration: '45 mins',
+        crew: '1 Professional',
+        image: 'images/service_pest_control.jpg',
+        badge: '90-Day Warranty',
+        discountTag: '23% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 1,
+        variants: [
+          { name: '1 BHK', price: 999, originalPrice: 1299, duration: '30 mins' },
+          { name: '2 BHK', price: 1299, originalPrice: 1699, duration: '45 mins' },
+          { name: '3 BHK', price: 1599, originalPrice: 2099, duration: '60 mins' },
+          { name: '4 BHK / Villa', price: 1999, originalPrice: 2599, duration: '75 mins' }
+        ],
+        highlights: [
+          '100% odorless Bayer Maxforce / Syngenta certified gel dots in kitchen corners',
+          'No need to empty cupboards, move heavy utensils or leave the house',
+          'Secondary odorless spray along skirting boards and bathroom drains',
+          'Free re-service warranty if cockroaches reappear within 90 days'
+        ],
+        inclusions: [
+          'Kitchen cabinet gel dots placed at 20+ key nesting points',
+          'Odorless chemical spray in all bathrooms, balconies and utility areas',
+          'Safe for children, elderly persons and pets'
+        ],
+        exclusions: [
+          'Outdoor sewer line municipal fogging'
+        ],
+        procedure: [
+          { step: 1, title: 'Infestation Mapping', desc: 'Identify cockroach and ant transit routes behind fridge, sink and hinges.' },
+          { step: 2, title: 'Gel Point Baiting', desc: 'Drop odorless gel points inside drawer hinges and dark joints.' },
+          { step: 3, title: 'Barrier Spray', desc: 'Odorless perimeter spray on balcony thresholds and bathroom drains.' }
+        ]
+      },
+      {
+        id: 'pc-termite',
+        name: 'Complete Anti-Termite Injection Treatment',
+        subtitle: 'Drill-fill-seal subterranean termite barrier for doors, frames, and skirting',
+        rating: 4.95,
+        reviewCount: '6.2K reviews',
+        duration: '2 - 3 hrs',
+        crew: '2 Professionals',
+        image: 'images/service_pest_control.jpg',
+        badge: 'Long Term Barrier',
+        discountTag: '22% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 1,
+        variants: [
+          { name: '1 BHK Protection', price: 2499, originalPrice: 3199, duration: '2 hrs' },
+          { name: '2 BHK Protection', price: 3499, originalPrice: 4499, duration: '2.5 hrs' },
+          { name: '3 BHK Protection', price: 4499, originalPrice: 5699, duration: '3.5 hrs' },
+          { name: 'Villa Protection', price: 6999, originalPrice: 8899, duration: '5 hrs' }
+        ],
+        highlights: [
+          'Precision 6mm drilling near wooden door frames and skirting boards',
+          'High-pressure chemical injection using govt-approved Premise termiticide',
+          'Holes sealed neatly with matching white cement / wood filler'
+        ],
+        inclusions: [
+          'All door frames, window sills and wardrobe base perimeters',
+          '1-year chemical warranty with free re-treatment if active tubes found'
+        ],
+        exclusions: [
+          'Structural timber replacement of hollowed-out frames'
+        ],
+        procedure: [
+          { step: 1, title: 'Drilling & Injection', desc: 'Drill 6mm holes every 1 foot along wall-floor junction and infuse termiticide.' }
+        ]
+      }
+    ]
+  },
+  {
+    categoryId: 'tank',
+    categoryName: 'Water Tank & Balcony Cleaning',
+    categoryIcon: '🚰',
+    categorySubtitle: 'High pressure rotary jet washing for overhead tanks, underground sumps & balconies',
+    services: [
+      {
+        id: 'wt-tank',
+        name: 'Overhead Tank & Sump High-Pressure Jet Wash',
+        subtitle: '6-stage dewatering, sludge vacuum, rotary jet wash & antibacterial UV treatment',
+        rating: 4.93,
+        reviewCount: '7.4K reviews',
+        duration: '1.5 hrs',
+        crew: '2 Professionals',
+        image: 'images/service_water_tank.jpg',
+        badge: 'Pure Water',
+        discountTag: '25% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 0,
+        variants: [
+          { name: 'Overhead Sintex Tank (up to 2000L)', price: 899, originalPrice: 1199, duration: '60 mins' },
+          { name: 'Sump + Overhead Combo (up to 7000L)', price: 1499, originalPrice: 1999, duration: '100 mins' },
+          { name: 'Apartment Large Sump (10,000L+)', price: 2499, originalPrice: 3299, duration: '150 mins' }
+        ],
+        highlights: [
+          'Submersible dewatering pump to quickly evacuate murky stagnant water',
+          'Heavy industrial sludge vacuum extraction of mud and silt layers',
+          '140-bar high-pressure rotary water jet wash for tank walls and ceiling',
+          'Food-grade antibacterial potassium permanganate / UV sanitization'
+        ],
+        inclusions: [
+          'Complete sludge evacuation, wall scrubbing and disinfection',
+          'Safe non-toxic chemical treatment leaves water immediately potable'
+        ],
+        exclusions: [
+          'Plumbing pipeline replacement or ball valve repairs'
+        ],
+        procedure: [
+          { step: 1, title: 'Dewatering & Sludge Removal', desc: 'Fast water pump-out followed by high-suction sediment evacuation.' },
+          { step: 2, title: 'Pressure Jet Scrubbing', desc: '140-bar rotary pressure jet strips algae and microbial biofilm from walls.' },
+          { step: 3, title: 'Antibacterial Disinfection', desc: 'UV treatment and food-grade disinfectant spray before refill.' }
+        ]
+      },
+      {
+        id: 'wt-balcony',
+        name: 'Balcony & Window Mesh Deep Wash',
+        subtitle: 'Pressure cleaning of balcony tiles, railing, sliding glass and mosquito mesh',
+        rating: 4.81,
+        reviewCount: '5.8K reviews',
+        duration: '45 mins',
+        crew: '1 Professional',
+        image: 'images/hero_team.jpg',
+        badge: 'Gleam',
+        discountTag: '25% OFF',
+        hasVariants: true,
+        defaultVariantIndex: 0,
+        variants: [
+          { name: '1 Balcony', price: 499, originalPrice: 699, duration: '45 mins' },
+          { name: '2 Balconies', price: 849, originalPrice: 1199, duration: '75 mins' }
+        ],
+        highlights: [
+          'Floor tile scrubbing and mud stain removal',
+          'Railing dusting, spiderweb clearing and glass slider gleam',
+          'Mosquito mesh screen vacuuming'
+        ],
+        inclusions: [
+          'Balcony floor, grill, glass pane and drain wash'
+        ],
+        exclusions: [
+          'Rope rappelling external ledge wash'
+        ],
+        procedure: [
+          { step: 1, title: 'Pressure Wash & Polish', desc: 'Tile scrubbing and glass wiping with streak-free squeegee.' }
+        ]
+      }
+    ]
+  },
+  {
+    categoryId: 'addons',
+    categoryName: 'Add-ons & Mini Services',
+    categoryIcon: '⚡',
+    categorySubtitle: 'Single-item quick upgrades you can add to any booking with 1-click',
+    services: [
+      {
+        id: 'ao-fridge',
+        name: 'Refrigerator Interior Deep Clean & Disinfection',
+        subtitle: 'Removal of food spills, shelf sanitization and deodorizing',
+        rating: 4.86,
+        reviewCount: '4.2K reviews',
+        duration: '30 mins',
+        crew: '1 Pro',
+        image: 'images/service_kitchen.jpg',
+        badge: 'Add-on',
+        discountTag: '20% OFF',
+        hasVariants: false,
+        variants: [
+          { name: 'Single Fridge', price: 399, originalPrice: 499, duration: '30 mins' }
+        ],
+        highlights: ['Food-grade safe lemon extract disinfectant', 'Tray and vegetable crisper soak and wipe']
+      },
+      {
+        id: 'ao-chimney',
+        name: 'Kitchen Chimney Mesh Boiling & Degreasing',
+        subtitle: 'Hot chemical soak for stainless steel baffle filters',
+        rating: 4.90,
+        reviewCount: '6.7K reviews',
+        duration: '40 mins',
+        crew: '1 Pro',
+        image: 'images/service_kitchen.jpg',
+        badge: 'Add-on',
+        discountTag: '23% OFF',
+        hasVariants: false,
+        variants: [
+          { name: 'Chimney Filter Degrease', price: 499, originalPrice: 649, duration: '40 mins' }
+        ],
+        highlights: ['Clears grease blocks, restores 100% chimney suction power']
+      },
+      {
+        id: 'ao-microwave',
+        name: 'Microwave & Oven Interior Degreasing',
+        subtitle: 'Steam degreasing and baked-on oil splatters wipe',
+        rating: 4.83,
+        reviewCount: '3.1K reviews',
+        duration: '25 mins',
+        crew: '1 Pro',
+        image: 'images/service_kitchen.jpg',
+        badge: 'Add-on',
+        discountTag: '25% OFF',
+        hasVariants: false,
+        variants: [
+          { name: 'Single Microwave / OTG', price: 299, originalPrice: 399, duration: '25 mins' }
+        ],
+        highlights: ['Food-safe degreasing and glass plate sterilization']
+      },
+      {
+        id: 'ao-fan',
+        name: 'Ceiling Fan & Exhaust Fan Deep Scrub',
+        subtitle: 'Grease and static dust removal from fan blades & motor casing',
+        rating: 4.81,
+        reviewCount: '5.5K reviews',
+        duration: '20 mins',
+        crew: '1 Pro',
+        image: 'images/service_deep_clean.jpg',
+        badge: 'Add-on',
+        discountTag: '33% OFF',
+        hasVariants: false,
+        variants: [
+          { name: 'Up to 3 Ceiling Fans', price: 199, originalPrice: 299, duration: '20 mins' }
+        ],
+        highlights: ['Microfiber anti-static dusting and blade degrease']
+      }
+    ]
+  }
+];
+
+// Coupon Offers Configuration
+const PROMO_COUPONS = {
+  'FIRST500': { code: 'FIRST500', discountType: 'flat', value: 500, minOrder: 2500, desc: 'Flat ₹500 OFF on orders above ₹2,500' },
+  'GODAVARI10': { code: 'GODAVARI10', discountType: 'percent', value: 10, maxDiscount: 600, minOrder: 1000, desc: '10% OFF on all services (up to ₹600)' },
+  'CLEAN200': { code: 'CLEAN200', discountType: 'flat', value: 200, minOrder: 800, desc: 'Flat ₹200 OFF on your hygiene booking' }
+};
+
 // Default seed bookings
 const SEED_BOOKINGS = [
   {
@@ -389,7 +1000,8 @@ class CleanShieldDB {
       `"Clean Home • Healthy Life | We Don't Just Clean, We Care."\n\n` +
       `📌 *Booking ID:* ${booking.id}\n` +
       `👤 *Customer Name:* ${booking.customerName}\n` +
-      `📞 *Phone:* ${booking.phone}\n` +
+      `📞 *Primary Phone:* ${booking.phone}\n` +
+      (booking.altPhone ? `📱 *Secondary Phone:* ${booking.altPhone}\n` : '') +
       `✉️ *Email:* ${booking.email || 'N/A'}\n` +
       `🧹 *Service:* ${booking.service} (${booking.bhk || 'Standard'})\n` +
       `🗓️ *Scheduled Date:* ${booking.date}\n` +
@@ -466,6 +1078,23 @@ Official Operations Emails:
     const ccParam = (booking.email && booking.email !== 'N/A') ? `&cc=${encodeURIComponent(booking.email)}` : '';
     return `mailto:${toEmails}?subject=${subject}&body=${encodedBody}${ccParam}`;
   }
+
+  // Catalog & Journey helpers
+  static getCatalog() {
+    return SERVICES_CATALOG;
+  }
+
+  static getCoupons() {
+    return PROMO_COUPONS;
+  }
+
+  static getServiceById(serviceId) {
+    for (const cat of SERVICES_CATALOG) {
+      const found = cat.services.find(s => s.id === serviceId);
+      if (found) return found;
+    }
+    return null;
+  }
 }
 
 // Auto init on load
@@ -473,3 +1102,5 @@ CleanShieldDB.init();
 
 // Export to window for vanilla JS access
 window.CleanShieldDB = CleanShieldDB;
+window.SERVICES_CATALOG = SERVICES_CATALOG;
+window.PROMO_COUPONS = PROMO_COUPONS;
