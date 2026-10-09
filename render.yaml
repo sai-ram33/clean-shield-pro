@@ -20,3 +20,5 @@ services:
         value: CleanShieldPro@2026
       - key: JWT_SECRET
         value: clean_shield_pro_secure_jwt_token_key_2026
+      - key: CRON_SECRET
+        value: clean_shield_pro_cron_secret_2026
