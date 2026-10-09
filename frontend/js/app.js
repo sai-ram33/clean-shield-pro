@@ -702,22 +702,41 @@ function handleTrackSubmit(e) {
 /* ===================================================================
    Customer Reviews
    =================================================================== */
-function initReviews() {
+async function initReviews() {
   const container = document.getElementById('reviewsContainer');
   if (!container) return;
 
-  const reviews = window.CleanShieldDB ? window.CleanShieldDB.getReviews(true) : [];
-  if (!reviews || reviews.length === 0) return;
-  
-  // Keep the 3rd column "Share your experience" card intact, prepend the review cards
+  // Dynamically fetch approved reviews from MongoDB Atlas
+  const reviews = window.CleanShieldDB && window.CleanShieldDB.fetchReviews
+    ? await window.CleanShieldDB.fetchReviews(true)
+    : (window.CleanShieldDB ? window.CleanShieldDB.getReviews(true) : []);
+
+  // Keep the 3rd column "Share your experience" card intact
   const shareCard = container.querySelector('.share-experience-card');
 
-  // Clear existing review cards only
-  const existingCards = container.querySelectorAll('.review-card');
+  // Clear existing review cards
+  const existingCards = container.querySelectorAll('.review-card, .empty-review-invite');
   existingCards.forEach(c => c.remove());
 
-  // Render first two reviews
-  reviews.slice(0, 2).forEach(rev => {
+  if (!reviews || reviews.length === 0) {
+    const emptyCard = document.createElement('div');
+    emptyCard.className = 'review-card empty-review-invite';
+    emptyCard.style.cssText = 'border:1px dashed var(--color-border); background:#FAFDFB; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; min-height:220px; padding:24px;';
+    emptyCard.innerHTML = `
+      <div style="font-size:2rem; margin-bottom:8px;">✨</div>
+      <strong style="color:var(--color-primary); font-size:1.05rem; margin-bottom:6px;">No Customer Reviews Yet</strong>
+      <p style="color:var(--color-text-muted); font-size:0.85rem; margin:0; line-height:1.4;">Reviews submitted by verified clients will appear here dynamically. Booked a service with us? Share your feedback!</p>
+    `;
+    if (shareCard) {
+      container.insertBefore(emptyCard, shareCard);
+    } else {
+      container.appendChild(emptyCard);
+    }
+    return;
+  }
+
+  // Render dynamic reviews from MongoDB Atlas
+  reviews.slice(0, 4).forEach(rev => {
     const card = document.createElement('div');
     card.className = 'review-card';
     
@@ -788,6 +807,8 @@ function handleReviewSubmit(e) {
   });
 
   closeModal('modalReview');
-  showToast('Thank you! Your verified review has been submitted.');
+  const reviewForm = document.getElementById('reviewForm');
+  if (reviewForm) reviewForm.reset();
+  showToast('Thank you! Your review has been saved to the database.');
   initReviews();
 }

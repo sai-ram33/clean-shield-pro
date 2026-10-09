@@ -201,11 +201,12 @@ function switchTab(tabId, el) {
    Refresh Dashboard & KPIs (MongoDB Atlas Powered)
    =================================================================== */
 async function refreshDashboard(showSyncFeedback = false) {
-  if (window.CleanShieldDB && window.CleanShieldDB.fetchBookings) {
-    await Promise.all([
-      window.CleanShieldDB.fetchBookings(),
-      window.CleanShieldDB.fetchEnquiries()
-    ]);
+  if (window.CleanShieldDB) {
+    const fetchers = [];
+    if (window.CleanShieldDB.fetchBookings) fetchers.push(window.CleanShieldDB.fetchBookings());
+    if (window.CleanShieldDB.fetchEnquiries) fetchers.push(window.CleanShieldDB.fetchEnquiries());
+    if (window.CleanShieldDB.fetchReviews) fetchers.push(window.CleanShieldDB.fetchReviews(false));
+    await Promise.all(fetchers);
   }
 
   renderKPIs();
@@ -242,15 +243,21 @@ function renderKPIs() {
   const sidebarEnquiriesBadge = document.getElementById('sidebarEnquiriesBadge');
   if (sidebarEnquiriesBadge) sidebarEnquiriesBadge.textContent = activeEnq;
 
+  // Sidebar reviews badge
+  const sidebarReviewsBadge = document.getElementById('sidebarReviewsBadge');
+  if (sidebarReviewsBadge) sidebarReviewsBadge.textContent = reviews.length;
+
   // Avg rating
   const kpiAvgRating = document.getElementById('kpiAvgRating');
-  if (kpiAvgRating) {
-    if (reviews.length > 0) {
-      const avg = (reviews.reduce((s, r) => s + (r.rating || 5), 0) / reviews.length).toFixed(1);
-      kpiAvgRating.textContent = `${avg} ★`;
-    } else {
-      kpiAvgRating.textContent = `5.0 ★`;
-    }
+  const kpiAvgRatingMeta = document.getElementById('kpiAvgRatingMeta');
+
+  if (reviews.length > 0) {
+    const avg = (reviews.reduce((s, r) => s + (r.rating || 5), 0) / reviews.length).toFixed(1);
+    if (kpiAvgRating) kpiAvgRating.textContent = `${avg} ★`;
+    if (kpiAvgRatingMeta) kpiAvgRatingMeta.textContent = `${reviews.length} Verified Review${reviews.length > 1 ? 's' : ''}`;
+  } else {
+    if (kpiAvgRating) kpiAvgRating.textContent = `0.0 ★`;
+    if (kpiAvgRatingMeta) kpiAvgRatingMeta.textContent = `0 Customer Reviews`;
   }
 }
 
@@ -631,6 +638,25 @@ function renderReviewsTable() {
 
   const reviews = window.CleanShieldDB.getReviews(false);
 
+  if (reviews.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center; padding:48px 20px;">
+          <div style="max-width:440px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:10px;">
+            <div style="width:58px; height:58px; border-radius:50%; background:#FAF0E6; display:flex; align-items:center; justify-content:center; color:#B7791F;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+            <strong style="color:var(--admin-primary); font-size:1.05rem;">No Customer Reviews in Database Yet</strong>
+            <p style="color:var(--admin-text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
+              Reviews submitted dynamically by clients on the website will be stored in <strong>MongoDB Atlas</strong> and appear here for moderation.
+            </p>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
   tbody.innerHTML = reviews.map(r => `
     <tr>
       <td><strong>${r.id}</strong></td>
@@ -659,6 +685,7 @@ function toggleReview(reviewId) {
   if (updated) {
     showToast(`Review ${reviewId} is now ${updated.approved ? 'Visible' : 'Hidden'}`);
     renderReviewsTable();
+    renderKPIs();
   }
 }
 

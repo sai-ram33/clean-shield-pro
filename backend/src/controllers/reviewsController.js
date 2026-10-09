@@ -5,53 +5,8 @@
 
 const Review = require('../models/Review');
 
-// Initial seed reviews for real social proof on website if empty
-const DEFAULT_INITIAL_REVIEWS = [
-  {
-    id: 'REV-101',
-    customerName: 'K. Durga Prasad',
-    rating: 5,
-    locality: 'Danavaipeta',
-    service: 'Full Home Deep Cleaning',
-    date: '28 Sep 2026',
-    review: 'Clean Shield Pro deep cleaned our entire flat. Single disc scrub machine made tiles shine like brand new. Washroom scaling is 100% gone!',
-    approved: true
-  },
-  {
-    id: 'REV-102',
-    customerName: 'Smt. Lakshmi Prasanna',
-    rating: 5,
-    locality: 'Morampudi',
-    service: 'Odorless Cockroach Control',
-    date: '25 Sep 2026',
-    review: '100% odorless gel service. We did not have to remove a single utensil from our kitchen. Not a single cockroach spotted in 3 weeks.',
-    approved: true
-  },
-  {
-    id: 'REV-103',
-    customerName: 'M. Sreeramulu',
-    rating: 5,
-    locality: 'Prakash Nagar',
-    service: 'Pest Control AMC (Annual Maintenance)',
-    date: '22 Sep 2026',
-    review: 'Enrolled our independent villa into Clean Shield Pro Pest AMC. Excellent scheduled quarterly visits, prompt technician arrival, and zero insect issues.',
-    approved: true
-  }
-];
+// No static reviews seeded - reviews are strictly created dynamically when customers submit reviews
 
-// Seed reviews if none exist
-const ensureInitialReviews = async () => {
-  try {
-    const count = await Review.countDocuments();
-    if (count === 0) {
-      await Review.insertMany(DEFAULT_INITIAL_REVIEWS);
-      console.log('⭐ Seeded initial customer reviews in MongoDB');
-    }
-  } catch (err) {
-    console.warn('⚠️ Review seed warning:', err.message);
-  }
-};
-ensureInitialReviews();
 
 // GET /api/reviews - Get reviews (approved by default, ?all=true for admin moderation)
 exports.getAllReviews = async (req, res, next) => {
@@ -130,3 +85,23 @@ exports.toggleApproval = async (req, res, next) => {
     next(err);
   }
 };
+
+// DELETE /api/reviews/:id - Delete review from MongoDB
+exports.deleteReview = async (req, res, next) => {
+  try {
+    const rev = await Review.findOneAndDelete({ id: req.params.id.trim() });
+    if (!rev) {
+      return res.status(404).json({
+        success: false,
+        message: `Review with ID ${req.params.id} not found.`
+      });
+    }
+    res.json({
+      success: true,
+      message: `Review ${req.params.id} deleted successfully from MongoDB.`
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+

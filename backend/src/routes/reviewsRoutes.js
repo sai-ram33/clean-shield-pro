@@ -6,5 +6,6 @@ const reviewsController = require('../controllers/reviewsController');
 router.get('/', reviewsController.getAllReviews);
 router.post('/', reviewsController.createReview);
 router.patch('/:id/toggle', reviewsController.toggleApproval);
+router.delete('/:id', reviewsController.deleteReview);
 
 module.exports = router;

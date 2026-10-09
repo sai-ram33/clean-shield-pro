@@ -871,40 +871,7 @@ const API_BASE_URL = (typeof window !== 'undefined' && (window.location.hostname
 // Initial seeds are completely empty as per user requirement (portal starts clean until real bookings occur)
 const SEED_BOOKINGS = [];
 const SEED_ENQUIRIES = [];
-
-// Default customer reviews
-const SEED_REVIEWS = [
-  {
-    id: 'REV-101',
-    customerName: 'K. Durga Prasad',
-    rating: 5,
-    locality: 'Danavaipeta',
-    service: 'Full Home Deep Cleaning (3 BHK)',
-    date: '28 Sep 2026',
-    review: 'Clean Shield Pro did an extraordinary job with our 3 BHK in Danavaipeta before the festive season. The team arrived on time with professional machines, and every corner looks spotless. Highly recommended in Rajamahendravaram!',
-    approved: true
-  },
-  {
-    id: 'REV-102',
-    customerName: 'M. Padmavathi',
-    rating: 5,
-    locality: 'Prakash Nagar',
-    service: 'Kitchen & Chimney Cleaning',
-    date: '25 Sep 2026',
-    review: 'Our kitchen chimney had years of tough grease buildup. Their crew cleaned it completely like brand new without any harsh smells. Safe eco-friendly products as promised!',
-    approved: true
-  },
-  {
-    id: 'REV-103',
-    customerName: 'T. Subrahmanyam',
-    rating: 5,
-    locality: 'Morampudi',
-    service: 'Pest Control (2 BHK)',
-    date: '22 Sep 2026',
-    review: 'Very professional odorless pest control treatment. We had severe cockroach trouble in the kitchen cabinets, and within 48 hours they were completely eliminated. Punctual and courteous staff.',
-    approved: true
-  }
-];
+const SEED_REVIEWS = [];
 
 // Database API helper with MongoDB Atlas synchronization
 class CleanShieldDB {
@@ -922,9 +889,11 @@ class CleanShieldDB {
     const cleanedEnquiries = currentEnquiries.filter(e => !legacyEnqIds.includes(e.id));
     localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(cleanedEnquiries));
 
-    if (!localStorage.getItem(STORAGE_KEYS.REVIEWS)) {
-      localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(SEED_REVIEWS));
-    }
+    const currentReviews = JSON.parse(localStorage.getItem(STORAGE_KEYS.REVIEWS) || '[]');
+    const legacyRevIds = ['REV-101', 'REV-102', 'REV-103'];
+    const cleanedReviews = currentReviews.filter(r => !legacyRevIds.includes(r.id));
+    localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(cleanedReviews));
+
     if (!localStorage.getItem(STORAGE_KEYS.PRICING)) {
       localStorage.setItem(STORAGE_KEYS.PRICING, JSON.stringify(DEFAULT_PRICING));
     }
@@ -949,6 +918,14 @@ class CleanShieldDB {
         if (eData.success && Array.isArray(eData.data)) {
           localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(eData.data));
           window.dispatchEvent(new CustomEvent('csp_enquiries_synced', { detail: eData.data }));
+        }
+      }
+      const rRes = await fetch(`${API_BASE_URL}/reviews?all=true`);
+      if (rRes.ok) {
+        const rData = await rRes.json();
+        if (rData.success && Array.isArray(rData.data)) {
+          localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(rData.data));
+          window.dispatchEvent(new CustomEvent('csp_reviews_synced', { detail: rData.data }));
         }
       }
     } catch (e) {
@@ -1117,15 +1094,31 @@ class CleanShieldDB {
     return null;
   }
 
-  // Reviews
+  // Reviews (100% Dynamic from MongoDB Atlas)
   static getReviews(approvedOnly = true) {
     this.init();
     try {
       const all = JSON.parse(localStorage.getItem(STORAGE_KEYS.REVIEWS)) || [];
       return approvedOnly ? all.filter(r => r.approved) : all;
     } catch (e) {
-      return approvedOnly ? SEED_REVIEWS.filter(r => r.approved) : SEED_REVIEWS;
+      return [];
     }
+  }
+
+  static async fetchReviews(approvedOnly = true) {
+    try {
+      const url = approvedOnly ? `${API_BASE_URL}/reviews` : `${API_BASE_URL}/reviews?all=true`;
+      const res = await fetch(url);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data)) {
+          localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(json.data));
+          window.dispatchEvent(new CustomEvent('csp_reviews_synced', { detail: json.data }));
+          return json.data;
+        }
+      }
+    } catch (e) {}
+    return this.getReviews(approvedOnly);
   }
 
   static addReview(reviewData) {
@@ -1134,11 +1127,23 @@ class CleanShieldDB {
     const newReview = {
       id: newId,
       date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-      approved: true, // auto-approve for demonstration, easily toggled in admin
+      approved: true,
       ...reviewData
     };
     reviews.unshift(newReview);
     localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(reviews));
+
+    // Asynchronously save to MongoDB Atlas
+    fetch(`${API_BASE_URL}/reviews`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newReview)
+    }).then(r => r.json()).then(res => {
+      if (res.success && res.data) {
+        console.log('✅ Review saved dynamically in MongoDB:', res.data.id);
+      }
+    }).catch(err => console.warn('Review sync error:', err.message));
+
     return newReview;
   }
 
@@ -1148,9 +1153,27 @@ class CleanShieldDB {
     if (idx !== -1) {
       reviews[idx].approved = !reviews[idx].approved;
       localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(reviews));
+
+      // Asynchronously update in MongoDB Atlas
+      fetch(`${API_BASE_URL}/reviews/${reviewId}/toggle`, {
+        method: 'PATCH'
+      }).catch(err => console.warn('Review toggle sync error:', err.message));
+
       return reviews[idx];
     }
     return null;
+  }
+
+  static deleteReview(reviewId) {
+    const reviews = this.getReviews(false);
+    const filtered = reviews.filter(r => r.id !== reviewId);
+    localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(filtered));
+
+    fetch(`${API_BASE_URL}/reviews/${reviewId}`, {
+      method: 'DELETE'
+    }).catch(err => console.warn('Review delete error:', err.message));
+
+    return true;
   }
 
   // Pricing

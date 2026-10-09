@@ -203,6 +203,13 @@
       </div>
 
       <div class="reviews-grid-container" id="reviewsContainer">
+        <!-- Dynamic Reviews Populated from Database (Empty until customer reviews exist) -->
+        <div class="review-card empty-review-invite" id="reviewsPlaceholderCard" style="border:1px dashed var(--color-border); background:#FAFDFB; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; min-height:220px; padding:24px;">
+          <div style="font-size:2rem; margin-bottom:8px;">✨</div>
+          <strong style="color:var(--color-primary); font-size:1.05rem; margin-bottom:6px;">No Customer Reviews Yet</strong>
+          <p style="color:var(--color-text-muted); font-size:0.85rem; margin:0; line-height:1.4;">Reviews submitted by verified clients will appear here dynamically. Booked a service with us? Share your feedback!</p>
+        </div>
+
         <div class="share-experience-card">
           <div>
             <div class="share-card-header">

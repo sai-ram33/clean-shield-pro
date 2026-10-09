@@ -265,33 +265,11 @@
       </div>
 
       <div class="reviews-grid-container" id="reviewsContainer">
-        <!-- Dynamic Reviews Populated from Database, Seed Reviews Fallback -->
-        <div class="review-card">
-          <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="review-text">
-            "Booked 3 BHK deep cleaning for our apartment in Danavaipeta before housewarming. The team reached at 9 AM sharp with single-disc scrubbing machine and vacuum cleaners. Kitchen chimney and bathroom tiles look brand new!"
-          </p>
-          <div class="review-author-info">
-            <div class="author-avatar">SV</div>
-            <div>
-              <div class="author-name">Suresh Varma</div>
-              <div class="author-locality">Danavaipeta • 3 BHK Deep Clean</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="review-card">
-          <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="review-text">
-            "Very satisfied with their odorless cockroach gel treatment. We had small kids so we were worried about bad smells, but their herbal gel had zero smell and cleared all cockroaches within 3 days. Clean Shield Pro is our go-to team."
-          </p>
-          <div class="review-author-info">
-            <div class="author-avatar">LR</div>
-            <div>
-              <div class="author-name">Lakshmi Rao</div>
-              <div class="author-locality">Prakash Nagar • Pest Control</div>
-            </div>
-          </div>
+        <!-- Dynamic Reviews Populated from Database (Empty until customer reviews exist) -->
+        <div class="review-card empty-review-invite" id="reviewsPlaceholderCard" style="border:1px dashed var(--color-border); background:#FAFDFB; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; min-height:220px; padding:24px;">
+          <div style="font-size:2rem; margin-bottom:8px;">✨</div>
+          <strong style="color:var(--color-primary); font-size:1.05rem; margin-bottom:6px;">No Customer Reviews Yet</strong>
+          <p style="color:var(--color-text-muted); font-size:0.85rem; margin:0; line-height:1.4;">Reviews submitted by verified clients will appear here dynamically. Booked a service with us? Share your feedback!</p>
         </div>
 
         <!-- Share Experience Card -->
