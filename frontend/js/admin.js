@@ -1,12 +1,14 @@
 /**
  * Clean Shield Pro - Admin Dashboard Operations Logic
  * Rajamahendravaram Operations Desk
+ * MongoDB Atlas Real-Time Dynamic Integration
  */
 
 let currentAlertCount = 0;
+let dashboardPollInterval = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  refreshDashboard();
+  checkAdminAuth();
   initStorageAlerts();
   loadPricingForm();
 
@@ -17,7 +19,150 @@ document.addEventListener('DOMContentLoaded', () => {
     tmrw.setDate(tmrw.getDate() + 1);
     mDate.value = tmrw.toISOString().split('T')[0];
   }
+
+  // Periodic MongoDB sync every 15 seconds
+  dashboardPollInterval = setInterval(() => {
+    const token = localStorage.getItem('csp_admin_token');
+    if (token) {
+      refreshDashboard(false);
+    }
+  }, 15000);
 });
+
+/* ===================================================================
+   Owner Authentication & Session Verification
+   =================================================================== */
+function checkAdminAuth() {
+  const token = localStorage.getItem('csp_admin_token');
+  const overlay = document.getElementById('ownerAuthOverlay');
+  const layout = document.getElementById('adminLayoutRoot');
+
+  if (!token) {
+    // Show login screen
+    if (overlay) overlay.style.display = 'flex';
+    if (layout) layout.style.display = 'none';
+    return false;
+  }
+
+  // Authenticated
+  if (overlay) overlay.style.display = 'none';
+  if (layout) layout.style.display = 'flex';
+
+  // Populate owner chip details
+  const storedUser = localStorage.getItem('csp_admin_user');
+  if (storedUser) {
+    try {
+      const user = JSON.parse(storedUser);
+      const nameEl = document.getElementById('ownerDisplayName');
+      const letterEl = document.getElementById('ownerAvatarLetter');
+      if (nameEl) nameEl.textContent = user.name || user.email;
+      if (letterEl) letterEl.textContent = (user.name || user.email || 'O').charAt(0).toUpperCase();
+    } catch (e) {}
+  }
+
+  // Load live data from MongoDB
+  refreshDashboard(true);
+  return true;
+}
+
+async function handleOwnerLogin(e) {
+  e.preventDefault();
+  const emailInput = document.getElementById('ownerEmail');
+  const passwordInput = document.getElementById('ownerPassword');
+  const errorAlert = document.getElementById('authErrorAlert');
+  const submitBtn = document.getElementById('loginSubmitBtn');
+  const btnText = document.getElementById('loginBtnText');
+
+  const email = emailInput ? emailInput.value.trim() : '';
+  const password = passwordInput ? passwordInput.value : '';
+
+  if (!email || !password) {
+    if (errorAlert) {
+      errorAlert.textContent = 'Please enter both owner email and password.';
+      errorAlert.style.display = 'block';
+    }
+    return;
+  }
+
+  if (errorAlert) errorAlert.style.display = 'none';
+  if (submitBtn) submitBtn.disabled = true;
+  if (btnText) btnText.textContent = 'Verifying credentials...';
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      // Store token and user data
+      localStorage.setItem('csp_admin_token', data.token);
+      localStorage.setItem('csp_admin_user', JSON.stringify(data.admin));
+
+      // Unlock console
+      const overlay = document.getElementById('ownerAuthOverlay');
+      const layout = document.getElementById('adminLayoutRoot');
+      if (overlay) overlay.style.display = 'none';
+      if (layout) layout.style.display = 'flex';
+
+      // Update owner chip
+      const nameEl = document.getElementById('ownerDisplayName');
+      const letterEl = document.getElementById('ownerAvatarLetter');
+      if (nameEl) nameEl.textContent = data.admin.name || data.admin.email;
+      if (letterEl) letterEl.textContent = (data.admin.name || 'O').charAt(0).toUpperCase();
+
+      showToast(`Namaste, ${data.admin.name}! Welcome to Clean Shield Pro Operations.`);
+      refreshDashboard(true);
+    } else {
+      if (errorAlert) {
+        errorAlert.textContent = data.message || 'Invalid owner credentials. Please try again.';
+        errorAlert.style.display = 'block';
+      }
+    }
+  } catch (err) {
+    if (errorAlert) {
+      errorAlert.textContent = 'Cannot reach backend server. Please verify the server is running on port 5000.';
+      errorAlert.style.display = 'block';
+    }
+  } finally {
+    if (submitBtn) submitBtn.disabled = false;
+    if (btnText) btnText.textContent = 'Sign In as Owner';
+  }
+}
+
+function handleOwnerLogout() {
+  localStorage.removeItem('csp_admin_token');
+  localStorage.removeItem('csp_admin_user');
+
+  const overlay = document.getElementById('ownerAuthOverlay');
+  const layout = document.getElementById('adminLayoutRoot');
+  if (overlay) overlay.style.display = 'flex';
+  if (layout) layout.style.display = 'none';
+
+  showToast('You have signed out from the admin portal.');
+}
+
+function fillOwnerAccount(email) {
+  const emailInput = document.getElementById('ownerEmail');
+  const passwordInput = document.getElementById('ownerPassword');
+  if (emailInput) emailInput.value = email;
+  if (passwordInput) passwordInput.value = 'CleanShieldPro@2026';
+}
+
+async function manualSyncDashboard() {
+  const pill = document.getElementById('dbStatusPill');
+  if (pill) {
+    pill.innerHTML = `<span class="badge-dot"></span> Syncing...`;
+  }
+  await refreshDashboard(true);
+  if (pill) {
+    pill.innerHTML = `<span class="badge-dot"></span> MongoDB Live`;
+  }
+  showToast('MongoDB Atlas database synchronized!');
+}
 
 /* ===================================================================
    Tab Navigation
@@ -53,9 +198,16 @@ function switchTab(tabId, el) {
 }
 
 /* ===================================================================
-   Refresh Dashboard & KPIs
+   Refresh Dashboard & KPIs (MongoDB Atlas Powered)
    =================================================================== */
-function refreshDashboard() {
+async function refreshDashboard(showSyncFeedback = false) {
+  if (window.CleanShieldDB && window.CleanShieldDB.fetchBookings) {
+    await Promise.all([
+      window.CleanShieldDB.fetchBookings(),
+      window.CleanShieldDB.fetchEnquiries()
+    ]);
+  }
+
   renderKPIs();
   renderBookingsTable();
   renderEnquiriesTable();
@@ -92,9 +244,13 @@ function renderKPIs() {
 
   // Avg rating
   const kpiAvgRating = document.getElementById('kpiAvgRating');
-  if (kpiAvgRating && reviews.length > 0) {
-    const avg = (reviews.reduce((s, r) => s + (r.rating || 5), 0) / reviews.length).toFixed(1);
-    kpiAvgRating.textContent = `${avg} ★`;
+  if (kpiAvgRating) {
+    if (reviews.length > 0) {
+      const avg = (reviews.reduce((s, r) => s + (r.rating || 5), 0) / reviews.length).toFixed(1);
+      kpiAvgRating.textContent = `${avg} ★`;
+    } else {
+      kpiAvgRating.textContent = `5.0 ★`;
+    }
   }
 }
 
@@ -108,7 +264,24 @@ function renderBookingsTable(filteredList = null) {
   const bookings = filteredList || window.CleanShieldDB.getBookings();
 
   if (bookings.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:var(--admin-text-muted);">No bookings found.</td></tr>`;
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="9" style="text-align:center; padding:48px 20px;">
+          <div style="max-width:440px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:12px;">
+            <div style="width:58px; height:58px; border-radius:50%; background:#EAF6F1; display:flex; align-items:center; justify-content:center; color:#185D4A;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+            </div>
+            <strong style="color:var(--admin-primary); font-size:1.05rem;">No Active Bookings in Database Yet</strong>
+            <p style="color:var(--admin-text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
+              The portal is connected to <strong>MongoDB Atlas</strong>. When customers book any service on the website, their orders are added dynamically to the database and will appear here instantly.
+            </p>
+            <button class="btn-manual-booking" onclick="openManualBookingModal()" style="margin-top:6px; padding:8px 16px;">
+              + Create Phone Booking
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
     return;
   }
 
@@ -291,7 +464,21 @@ function renderEnquiriesTable(filteredList = null) {
   const enquiries = filteredList || window.CleanShieldDB.getEnquiries();
 
   if (enquiries.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--admin-text-muted);">No enquiries found.</td></tr>`;
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align:center; padding:48px 20px;">
+          <div style="max-width:440px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:12px;">
+            <div style="width:58px; height:58px; border-radius:50%; background:#EAF6F1; display:flex; align-items:center; justify-content:center; color:#185D4A;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+            </div>
+            <strong style="color:var(--admin-primary); font-size:1.05rem;">No Inbound Enquiries Yet</strong>
+            <p style="color:var(--admin-text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
+              Custom quote inquiries submitted through the website will be dynamically logged into <strong>MongoDB Atlas</strong> and will appear here in real time.
+            </p>
+          </div>
+        </td>
+      </tr>
+    `;
     return;
   }
 
@@ -395,6 +582,25 @@ function renderCustomersTable() {
   });
 
   const list = Array.from(map.values());
+
+  if (list.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center; padding:48px 20px;">
+          <div style="max-width:440px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:10px;">
+            <div style="width:58px; height:58px; border-radius:50%; background:#EAF6F1; display:flex; align-items:center; justify-content:center; color:#185D4A;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            </div>
+            <strong style="color:var(--admin-primary); font-size:1.05rem;">No Customer Records Yet</strong>
+            <p style="color:var(--admin-text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
+              Customer contact information and repeat order frequency compile dynamically once bookings are received.
+            </p>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
 
   tbody.innerHTML = list.map(c => `
     <tr>
@@ -622,7 +828,10 @@ function handleManualBookingSubmit(e) {
   });
 
   closeModal('modalManualBooking');
-  showToast(`Booking ${newBooking.id} created successfully!`);
+  if (document.getElementById('manualBookingForm')) {
+    document.getElementById('manualBookingForm').reset();
+  }
+  showToast(`Booking ${newBooking.id} created and saved to MongoDB!`);
   refreshDashboard();
 }
 

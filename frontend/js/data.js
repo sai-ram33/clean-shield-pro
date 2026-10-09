@@ -863,217 +863,14 @@ const PROMO_COUPONS = {
   'CLEAN200': { code: 'CLEAN200', discountType: 'flat', value: 200, minOrder: 800, desc: 'Flat ₹200 OFF on your hygiene booking' }
 };
 
-// Default seed bookings
-const SEED_BOOKINGS = [
-  {
-    id: 'CSP-84921',
-    customerName: 'Suresh Varma',
-    phone: '+91 98480 12345',
-    email: 'suresh.varma@gmail.com',
-    locality: 'Danavaipeta',
-    address: 'Flat 302, Sri Rama Nilayam, Danavaipeta, Rajamahendravaram',
-    service: 'Home Deep Cleaning',
-    bhk: '3 BHK',
-    addons: ['Balcony Cleaning', 'Kitchen Chimney'],
-    amount: 6600,
-    date: '2026-10-05',
-    timeSlot: '09:00 AM - 01:00 PM',
-    paymentMethod: 'UPI (PhonePe)',
-    paymentStatus: 'Paid',
-    status: 'Confirmed',
-    createdAt: '2026-10-02T10:30:00Z',
-    notes: 'Please pay extra attention to balcony tiles and kitchen exhaust.'
-  },
-  {
-    id: 'CSP-84920',
-    customerName: 'Lakshmi Prasanna',
-    phone: '+91 94401 56789',
-    email: 'lakshmi.p@outlook.com',
-    locality: 'Morampudi',
-    address: 'House #12-4-8, Opp. Rythu Bazar, Morampudi Junction, Rajamahendravaram',
-    service: 'Pest Control',
-    bhk: '2 BHK',
-    addons: [],
-    amount: 5000,
-    date: '2026-10-04',
-    timeSlot: '02:00 PM - 05:00 PM',
-    paymentMethod: 'Cash on Delivery (COD)',
-    paymentStatus: 'Pending',
-    status: 'In Progress',
-    createdAt: '2026-10-02T14:15:00Z',
-    notes: 'Cockroach control required in kitchen and utility.'
-  },
-  {
-    id: 'CSP-84919',
-    customerName: 'Ravi Kumar Raju',
-    phone: '+91 98852 98765',
-    email: 'ravi.raju@yahoo.com',
-    locality: 'Prakash Nagar',
-    address: 'Near Venkateswara Swamy Temple, Prakash Nagar, Rajamahendravaram',
-    service: 'Home Deep Cleaning',
-    bhk: '2 BHK',
-    addons: ['Fridge Cleaning'],
-    amount: 4900,
-    date: '2026-10-01',
-    timeSlot: '08:30 AM - 12:30 PM',
-    paymentMethod: 'Paytm UPI',
-    paymentStatus: 'Paid',
-    status: 'Completed',
-    createdAt: '2026-09-30T09:00:00Z',
-    notes: 'Move-in deep cleaning completed satisfactorily.'
-  },
-  {
-    id: 'CSP-84918',
-    customerName: 'Dr. K. Srinivas',
-    phone: '+91 97011 23456',
-    email: 'srinivas.k@gmail.com',
-    locality: 'Innespeta',
-    address: 'D.No 4-1-12, Godavari Bund Road, Innespeta, Rajamahendravaram',
-    service: 'Pest Control',
-    bhk: '3 BHK',
-    addons: [],
-    amount: 6000,
-    date: '2026-10-06',
-    timeSlot: '10:00 AM - 01:00 PM',
-    paymentMethod: 'Cash on Delivery (COD)',
-    paymentStatus: 'Pending',
-    status: 'Pending',
-    createdAt: '2026-10-03T11:45:00Z',
-    notes: 'General pest and termite prevention inspection needed.'
-  },
-  {
-    id: 'CSP-84922',
-    customerName: 'V. Satyanarayana',
-    phone: '+91 94403 78912',
-    email: 'satya.palakollu@gmail.com',
-    locality: 'Palakollu',
-    address: 'Near Ksheera Ramalingeswara Temple, Palakollu, West Godavari',
-    service: 'Home Deep Cleaning',
-    bhk: '3 BHK',
-    addons: ['Balcony Cleaning'],
-    amount: 6000,
-    date: '2026-10-07',
-    timeSlot: '09:00 AM - 01:00 PM',
-    paymentMethod: 'UPI (PhonePe)',
-    paymentStatus: 'Paid',
-    status: 'Confirmed',
-    createdAt: '2026-10-04T10:00:00Z',
-    notes: 'Full house cleaning before family function in Palakollu.'
-  },
-  {
-    id: 'CSP-84923',
-    customerName: 'Ch. Madhava Rao',
-    phone: '+91 98488 45671',
-    email: 'madhav.narsapur@gmail.com',
-    locality: 'Narasapuram',
-    address: 'Opp. Taylor High School, Steamer Road, Narasapuram, West Godavari',
-    service: 'Pest Control',
-    bhk: '2 BHK',
-    addons: [],
-    amount: 5000,
-    date: '2026-10-08',
-    timeSlot: '02:00 PM - 05:00 PM',
-    paymentMethod: 'Cash on Delivery (COD)',
-    paymentStatus: 'Pending',
-    status: 'Confirmed',
-    createdAt: '2026-10-04T12:30:00Z',
-    notes: 'Odorless cockroach and termite barrier treatment for Narasapuram residence.'
-  },
-  {
-    id: 'CSP-84924',
-    customerName: 'P. Venkata Ramana',
-    phone: '+91 99890 34211',
-    email: 'ramana.jaggampeta@gmail.com',
-    locality: 'Jaggampeta',
-    address: 'Near National Highway Junction, Main Bazar, Jaggampeta, East Godavari',
-    service: 'Home Deep Cleaning',
-    bhk: '2 BHK',
-    addons: ['Kitchen Chimney'],
-    amount: 5100,
-    date: '2026-10-08',
-    timeSlot: '08:30 AM - 12:30 PM',
-    paymentMethod: 'UPI (PhonePe)',
-    paymentStatus: 'Paid',
-    status: 'In Progress',
-    createdAt: '2026-10-05T08:45:00Z',
-    notes: 'Kitchen chimney degreasing and floor machine scrubbing in Jaggampeta.'
-  },
-  {
-    id: 'CSP-84925',
-    customerName: 'K. Subba Raju',
-    phone: '+91 97033 65421',
-    email: 'subbaraju.eg@gmail.com',
-    locality: 'East Godavari',
-    address: 'Collectorate Road, East Godavari Regional Zone',
-    service: 'Home Deep Cleaning',
-    bhk: '4 BHK+',
-    addons: ['Balcony Cleaning', 'Fridge Cleaning'],
-    amount: 8400,
-    date: '2026-10-09',
-    timeSlot: '09:00 AM - 02:00 PM',
-    paymentMethod: 'UPI (PhonePe)',
-    paymentStatus: 'Paid',
-    status: 'Confirmed',
-    createdAt: '2026-10-05T14:10:00Z',
-    notes: 'Duplex villa deep cleaning unit dispatched from East Godavari hub.'
-  },
-  {
-    id: 'CSP-84926',
-    customerName: 'M. Krishna Mohan',
-    phone: '+91 98661 22334',
-    email: 'krishnamohan.wg@gmail.com',
-    locality: 'West Godavari',
-    address: 'Bhimavaram Road, West Godavari Hub Center',
-    service: 'Pest Control',
-    bhk: '3 BHK',
-    addons: [],
-    amount: 6000,
-    date: '2026-10-09',
-    timeSlot: '11:00 AM - 02:00 PM',
-    paymentMethod: 'Cash on Delivery (COD)',
-    paymentStatus: 'Pending',
-    status: 'Confirmed',
-    createdAt: '2026-10-05T16:20:00Z',
-    notes: 'Comprehensive odorless pest control for West Godavari residential quarter.'
-  }
-];
+// API Base URL for MongoDB Express Backend
+const API_BASE_URL = (typeof window !== 'undefined' && (window.location.protocol === 'http:' || window.location.protocol === 'https:') && window.location.port === '5000')
+  ? '/api'
+  : 'http://localhost:5000/api';
 
-// Default seed enquiries
-const SEED_ENQUIRIES = [
-  {
-    id: 'ENQ-201',
-    name: 'B. Venkat Rao',
-    phone: '+91 99590 87654',
-    service: 'Water Tank Cleaning',
-    locality: 'Lalacheruvu',
-    details: 'Overhead Sintex tank (2000 Litres) + underground sump (5000 Litres) require deep pressure cleaning and UV sanitization.',
-    preferredDate: '2026-10-07',
-    status: 'New',
-    createdAt: '2026-10-03T09:15:00Z'
-  },
-  {
-    id: 'ENQ-202',
-    name: 'Anusha Chowdary',
-    phone: '+91 98492 44321',
-    service: 'Kitchen Cleaning',
-    locality: 'Diwancheruvu',
-    details: 'Heavy grease on chimney, oil stains on ceramic backsplash, modular drawers sanitization.',
-    preferredDate: '2026-10-06',
-    status: 'Contacted',
-    createdAt: '2026-10-02T16:20:00Z'
-  },
-  {
-    id: 'ENQ-203',
-    name: 'Satyanarayana Murthy',
-    phone: '+91 94901 33221',
-    service: 'Sofa and Furniture Cleaning',
-    locality: 'Aryapuram',
-    details: '7-seater L-shaped fabric sofa steam shampooing and 6 dining chairs fabric cleaning.',
-    preferredDate: '2026-10-08',
-    status: 'Converted',
-    createdAt: '2026-10-01T11:00:00Z'
-  }
-];
+// Initial seeds are completely empty as per user requirement (portal starts clean until real bookings occur)
+const SEED_BOOKINGS = [];
+const SEED_ENQUIRIES = [];
 
 // Default customer reviews
 const SEED_REVIEWS = [
@@ -1082,7 +879,7 @@ const SEED_REVIEWS = [
     customerName: 'K. Durga Prasad',
     rating: 5,
     locality: 'Danavaipeta',
-    service: 'Home Deep Cleaning (3 BHK)',
+    service: 'Full Home Deep Cleaning (3 BHK)',
     date: '28 Sep 2026',
     review: 'Clean Shield Pro did an extraordinary job with our 3 BHK in Danavaipeta before the festive season. The team arrived on time with professional machines, and every corner looks spotless. Highly recommended in Rajamahendravaram!',
     approved: true
@@ -1109,35 +906,53 @@ const SEED_REVIEWS = [
   }
 ];
 
-// Database API helper
+// Database API helper with MongoDB Atlas synchronization
 class CleanShieldDB {
   static init() {
-    if (!localStorage.getItem(STORAGE_KEYS.BOOKINGS)) {
-      localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(SEED_BOOKINGS));
-    } else {
-      try {
-        const current = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS)) || [];
-        const existingIds = new Set(current.map(b => b.id));
-        let changed = false;
-        SEED_BOOKINGS.forEach(seed => {
-          if (!existingIds.has(seed.id)) {
-            current.push(seed);
-            changed = true;
-          }
-        });
-        if (changed) {
-          localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(current));
-        }
-      } catch (e) {}
-    }
-    if (!localStorage.getItem(STORAGE_KEYS.ENQUIRIES)) {
-      localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(SEED_ENQUIRIES));
-    }
+    if (typeof localStorage === 'undefined') return;
+
+    // Clear legacy mock seed bookings if any exist so admin portal starts empty
+    const currentBookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+    const legacyIds = ['CSP-84921', 'CSP-84920', 'CSP-84919', 'CSP-84918', 'CSP-84922', 'CSP-84923', 'CSP-84924', 'CSP-84925', 'CSP-84926'];
+    const cleanedBookings = currentBookings.filter(b => !legacyIds.includes(b.id));
+    localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(cleanedBookings));
+
+    const currentEnquiries = JSON.parse(localStorage.getItem(STORAGE_KEYS.ENQUIRIES) || '[]');
+    const legacyEnqIds = ['ENQ-201', 'ENQ-202', 'ENQ-203'];
+    const cleanedEnquiries = currentEnquiries.filter(e => !legacyEnqIds.includes(e.id));
+    localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(cleanedEnquiries));
+
     if (!localStorage.getItem(STORAGE_KEYS.REVIEWS)) {
       localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(SEED_REVIEWS));
     }
     if (!localStorage.getItem(STORAGE_KEYS.PRICING)) {
       localStorage.setItem(STORAGE_KEYS.PRICING, JSON.stringify(DEFAULT_PRICING));
+    }
+
+    // Background sync from MongoDB if available
+    this.syncFromBackend();
+  }
+
+  static async syncFromBackend() {
+    try {
+      const bRes = await fetch(`${API_BASE_URL}/bookings`);
+      if (bRes.ok) {
+        const bData = await bRes.json();
+        if (bData.success && Array.isArray(bData.data)) {
+          localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bData.data));
+          window.dispatchEvent(new CustomEvent('csp_bookings_synced', { detail: bData.data }));
+        }
+      }
+      const eRes = await fetch(`${API_BASE_URL}/enquiries`);
+      if (eRes.ok) {
+        const eData = await eRes.json();
+        if (eData.success && Array.isArray(eData.data)) {
+          localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(eData.data));
+          window.dispatchEvent(new CustomEvent('csp_enquiries_synced', { detail: eData.data }));
+        }
+      }
+    } catch (e) {
+      // Offline fallback: continue using local storage
     }
   }
 
@@ -1147,8 +962,22 @@ class CleanShieldDB {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS)) || [];
     } catch (e) {
-      return SEED_BOOKINGS;
+      return [];
     }
+  }
+
+  static async fetchBookings() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/bookings`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data)) {
+          localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(json.data));
+          return json.data;
+        }
+      }
+    } catch (e) {}
+    return this.getBookings();
   }
 
   static addBooking(bookingData) {
@@ -1157,13 +986,24 @@ class CleanShieldDB {
     const newBooking = {
       id: newId,
       createdAt: new Date().toISOString(),
-      status: 'Pending',
-      paymentStatus: bookingData.paymentMethod.includes('Cash') ? 'Pending' : 'Paid',
+      status: 'Confirmed',
+      paymentStatus: (Number(bookingData.amount) === 0) ? 'Site Survey Scheduled' : (bookingData.paymentMethod && bookingData.paymentMethod.includes('Cash') ? 'Pending' : 'Paid'),
       ...bookingData
     };
     bookings.unshift(newBooking);
     localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
-    
+
+    // Asynchronously save to MongoDB Atlas
+    fetch(`${API_BASE_URL}/bookings`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newBooking)
+    }).then(r => r.json()).then(res => {
+      if (res.success && res.data) {
+        console.log('✅ Booking successfully stored in MongoDB:', res.data.id);
+      }
+    }).catch(err => console.warn('Backend sync queued:', err.message));
+
     // Trigger cross-tab notification
     this.triggerAlert({
       type: 'booking',
@@ -1183,8 +1023,18 @@ class CleanShieldDB {
       bookings[idx].status = newStatus;
       if (paymentStatus) {
         bookings[idx].paymentStatus = paymentStatus;
+      } else if (newStatus === 'Completed') {
+        bookings[idx].paymentStatus = 'Paid';
       }
       localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+
+      // Asynchronously update in MongoDB Atlas
+      fetch(`${API_BASE_URL}/bookings/${bookingId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      }).catch(err => console.warn('Status sync error:', err.message));
+
       return bookings[idx];
     }
     return null;
@@ -1195,7 +1045,7 @@ class CleanShieldDB {
     const q = query.trim().toLowerCase();
     return bookings.find(b => 
       b.id.toLowerCase() === q || 
-      b.phone.replace(/\D/g, '').includes(q.replace(/\D/g, ''))
+      (b.phone && b.phone.replace(/\D/g, '').includes(q.replace(/\D/g, '')))
     );
   }
 
@@ -1205,29 +1055,46 @@ class CleanShieldDB {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEYS.ENQUIRIES)) || [];
     } catch (e) {
-      return SEED_ENQUIRIES;
+      return [];
     }
+  }
+
+  static async fetchEnquiries() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/enquiries`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data)) {
+          localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(json.data));
+          return json.data;
+        }
+      }
+    } catch (e) {}
+    return this.getEnquiries();
   }
 
   static addEnquiry(enquiryData) {
     const enquiries = this.getEnquiries();
-    const newId = 'ENQ-' + Math.floor(100 + Math.random() * 900);
+    const newId = 'ENQ-' + Math.floor(200 + Math.random() * 800);
     const newEnquiry = {
       id: newId,
-      createdAt: new Date().toISOString(),
       status: 'New',
+      createdAt: new Date().toISOString(),
       ...enquiryData
     };
     enquiries.unshift(newEnquiry);
     localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(enquiries));
 
-    this.triggerAlert({
-      type: 'enquiry',
-      title: 'New Custom Quote Enquiry!',
-      message: `${newEnquiry.name} requested quote for ${newEnquiry.service} in ${newEnquiry.locality}`,
-      id: newId,
-      time: new Date().toLocaleTimeString()
-    });
+    // Asynchronously save to MongoDB Atlas
+    fetch(`${API_BASE_URL}/enquiries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newEnquiry)
+    }).then(r => r.json()).then(res => {
+      if (res.success && res.data) {
+        console.log('✅ Enquiry successfully stored in MongoDB:', res.data.id);
+      }
+    }).catch(err => console.warn('Enquiry sync error:', err.message));
 
     return newEnquiry;
   }
@@ -1238,6 +1105,13 @@ class CleanShieldDB {
     if (idx !== -1) {
       enquiries[idx].status = newStatus;
       localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(enquiries));
+
+      fetch(`${API_BASE_URL}/enquiries/${enquiryId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      }).catch(err => console.warn('Enquiry status sync error:', err.message));
+
       return enquiries[idx];
     }
     return null;

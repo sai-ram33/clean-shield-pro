@@ -1,0 +1,28 @@
+{
+  "name": "clean-shield-pro-backend",
+  "version": "1.0.0",
+  "description": "Node.js & Express.js REST API Backend for Clean Shield Pro - Deep Cleaning & Odorless Pest Control Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "clean-shield-pro",
+    "express",
+    "nodejs",
+    "rest-api",
+    "cleaning-services",
+    "pest-control"
+  ],
+  "author": "Clean Shield Pro Team",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.11.1"
+  }
+}

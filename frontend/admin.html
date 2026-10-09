@@ -13,7 +13,62 @@
 </head>
 <body>
 
-  <div class="admin-layout">
+  <!-- Owner Authentication Screen (Shown when owner is not logged in) -->
+  <div class="owner-auth-overlay" id="ownerAuthOverlay" style="display:none;">
+    <div class="owner-auth-card">
+      <div class="owner-auth-header">
+        <div class="owner-logo-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+          </svg>
+        </div>
+        <h2>Clean Shield Pro</h2>
+        <p class="auth-subtitle">Owner & Operations Command Portal</p>
+        <div class="auth-db-badge">
+          <span class="badge-dot"></span> Powered by MongoDB Atlas
+        </div>
+      </div>
+
+      <div id="authErrorAlert" class="auth-error-alert" style="display:none;"></div>
+
+      <form id="ownerLoginForm" onsubmit="handleOwnerLogin(event)">
+        <div class="form-group" style="text-align:left; margin-bottom:14px;">
+          <label class="form-label" for="ownerEmail">Owner Email Address</label>
+          <input type="email" id="ownerEmail" class="form-control" placeholder="madhuripaka756@gmail.com" value="madhuripaka756@gmail.com" required autocomplete="username">
+        </div>
+
+        <div class="form-group" style="text-align:left; margin-bottom:16px;">
+          <label class="form-label" for="ownerPassword">Owner Password</label>
+          <input type="password" id="ownerPassword" class="form-control" placeholder="••••••••••••" value="CleanShieldPro@2026" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="owner-login-btn" id="loginSubmitBtn">
+          <span id="loginBtnText">Sign In as Owner</span>
+        </button>
+
+        <div class="auth-accounts-hint">
+          <div class="hint-title">Authorized Owner Accounts:</div>
+          <div class="hint-accounts">
+            <button type="button" class="btn-hint-account" onclick="fillOwnerAccount('madhuripaka756@gmail.com')">
+              <span>👤 Madhuri Paka</span>
+              <small>madhuripaka756@gmail.com</small>
+            </button>
+            <button type="button" class="btn-hint-account" onclick="fillOwnerAccount('prasadanem777@gmail.com')">
+              <span>👤 Prasad Anem</span>
+              <small>prasadanem777@gmail.com</small>
+            </button>
+          </div>
+          <div class="hint-note">Default credentials configured in MongoDB database.</div>
+        </div>
+      </form>
+      
+      <div class="auth-card-footer">
+        <a href="index.html" class="auth-back-link">&larr; Return to Live Website</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-layout" id="adminLayoutRoot">
     <!-- Sidebar -->
     <aside class="admin-sidebar">
       <div class="sidebar-header">
@@ -34,13 +89,13 @@
         <button class="sidebar-nav-item active" onclick="switchTab('tabBookings', this)">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
           <span>Bookings & Orders</span>
-          <span class="sidebar-nav-badge" id="sidebarBookingsBadge">4</span>
+          <span class="sidebar-nav-badge" id="sidebarBookingsBadge">0</span>
         </button>
 
         <button class="sidebar-nav-item" onclick="switchTab('tabEnquiries', this)">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
           <span>Enquiries & Leads</span>
-          <span class="sidebar-nav-badge" id="sidebarEnquiriesBadge">3</span>
+          <span class="sidebar-nav-badge" id="sidebarEnquiriesBadge">0</span>
         </button>
 
         <button class="sidebar-nav-item" onclick="switchTab('tabCustomers', this)">
@@ -77,14 +132,37 @@
       <header class="admin-topbar">
         <div class="topbar-left">
           <h2 class="topbar-title" id="pageTitle">Bookings & Operations Management</h2>
-          <span class="live-indicator">Rajamahendravaram & 15+ Branches Live • 10,000+ Customer Network</span>
+          <span class="live-indicator">Rajamahendravaram & 15+ Branches Live</span>
         </div>
 
         <div class="topbar-right">
+          <!-- MongoDB Atlas Live Badge -->
+          <div class="db-status-pill" id="dbStatusPill" title="Connected to MongoDB Atlas Cluster">
+            <span class="badge-dot"></span>
+            <span>MongoDB Live</span>
+          </div>
+
+          <!-- Refresh Data Button -->
+          <button class="btn-refresh-data" onclick="manualSyncDashboard()" title="Fetch latest data from MongoDB Atlas">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            <span>Sync</span>
+          </button>
+
+          <!-- Notification Bell -->
           <button class="notification-bell-btn" onclick="showRecentAlerts()" title="Notifications">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
             <span class="notification-badge" id="topbarAlertCount">0</span>
           </button>
+
+          <!-- Owner Profile & Logout -->
+          <div class="owner-profile-chip" id="ownerProfileChip">
+            <div class="owner-avatar" id="ownerAvatarLetter">M</div>
+            <div class="owner-info">
+              <span class="owner-name" id="ownerDisplayName">Madhuri Paka</span>
+              <span class="owner-role-badge">Owner Admin</span>
+            </div>
+            <button class="btn-logout" onclick="handleOwnerLogout()" title="Logout from Admin Portal">Logout</button>
+          </div>
 
           <button class="btn-manual-booking" onclick="openManualBookingModal()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
@@ -121,8 +199,8 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
               </div>
             </div>
-            <div class="kpi-value" id="kpiTotalBookings">4</div>
-            <div class="kpi-meta">Confirmed & In Progress</div>
+            <div class="kpi-value" id="kpiTotalBookings">0</div>
+            <div class="kpi-meta">Dynamic from MongoDB</div>
           </div>
 
           <div class="kpi-card">
@@ -132,7 +210,7 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
               </div>
             </div>
-            <div class="kpi-value" id="kpiTotalRevenue">₹22,500</div>
+            <div class="kpi-value" id="kpiTotalRevenue">₹0</div>
             <div class="kpi-meta">All confirmed bookings</div>
           </div>
 
@@ -143,7 +221,7 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
               </div>
             </div>
-            <div class="kpi-value" id="kpiActiveEnquiries">3</div>
+            <div class="kpi-value" id="kpiActiveEnquiries">0</div>
             <div class="kpi-meta">Price on Request leads</div>
           </div>
 
