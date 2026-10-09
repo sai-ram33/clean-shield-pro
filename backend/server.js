@@ -5,10 +5,12 @@
  * MongoDB Atlas Backend Integration
  */
 
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 
 const connectDB = require('./src/config/db');
 const { seedOwnerAdmin } = require('./src/controllers/authController');
@@ -108,7 +110,7 @@ const startServer = async () => {
     await seedOwnerAdmin();
   }
 
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`
 =====================================================
 🛡️  CLEAN SHIELD PRO - BACKEND API SERVER RUNNING

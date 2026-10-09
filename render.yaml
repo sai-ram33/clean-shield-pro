@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: clean-shield-pro
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_ORIGIN
+        value: '*'
+      - key: MONGODB_URI
+        value: mongodb+srv://sairamvemula15_db_user:msnCp0ST9JIdFS8Y@cluster0.uyjt7lp.mongodb.net/clean_shield_pro?retryWrites=true&w=majority
+      - key: ADMIN_EMAIL
+        value: madhuripaka756@gmail.com
+      - key: ADMIN_SECONDARY_EMAIL
+        value: prasadanem777@gmail.com
+      - key: ADMIN_PASSWORD
+        value: CleanShieldPro@2026
+      - key: JWT_SECRET
+        value: clean_shield_pro_secure_jwt_token_key_2026

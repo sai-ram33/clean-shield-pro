@@ -863,10 +863,10 @@ const PROMO_COUPONS = {
   'CLEAN200': { code: 'CLEAN200', discountType: 'flat', value: 200, minOrder: 800, desc: 'Flat ₹200 OFF on your hygiene booking' }
 };
 
-// API Base URL for MongoDB Express Backend
-const API_BASE_URL = (typeof window !== 'undefined' && (window.location.protocol === 'http:' || window.location.protocol === 'https:') && window.location.port === '5000')
+// API Base URL for MongoDB Express Backend (Auto-detects Render cloud domain or localhost)
+const API_BASE_URL = (typeof window !== 'undefined' && (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'))
   ? '/api'
-  : 'http://localhost:5000/api';
+  : ((typeof window !== 'undefined' && window.location.port === '5000') ? '/api' : 'http://localhost:5000/api');
 
 // Initial seeds are completely empty as per user requirement (portal starts clean until real bookings occur)
 const SEED_BOOKINGS = [];

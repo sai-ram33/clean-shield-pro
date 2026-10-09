@@ -15,10 +15,8 @@ try {
 
 const connectDB = async () => {
   try {
-    const uri = process.env.MONGODB_URI;
-    if (!uri) {
-      throw new Error('MONGODB_URI is not defined in environment variables.');
-    }
+    const defaultUri = 'mongodb+srv://sairamvemula15_db_user:msnCp0ST9JIdFS8Y@cluster0.uyjt7lp.mongodb.net/clean_shield_pro?retryWrites=true&w=majority';
+    const uri = process.env.MONGODB_URI || defaultUri;
 
     const conn = await mongoose.connect(uri, {
       serverSelectionTimeoutMS: 10000
