@@ -6,11 +6,15 @@
 const dns = require('dns');
 const mongoose = require('mongoose');
 
-// Configure reliable DNS servers on Windows/local networks for SRV record lookups
-try {
-  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
-} catch (e) {
-  // Ignore if custom dns servers cannot be set in current environment
+let lastDbError = null;
+
+// On Windows local networks, ISP routers often block SRV records; set Google DNS
+if (process.platform === 'win32') {
+  try {
+    dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
+  } catch (e) {
+    // Ignore if not supported
+  }
 }
 
 const connectDB = async () => {
@@ -22,13 +26,31 @@ const connectDB = async () => {
       serverSelectionTimeoutMS: 10000
     });
 
+    lastDbError = null;
     console.log(`✅ MongoDB Connected successfully to host: ${conn.connection.host}`);
     console.log(`📦 Database Name: ${conn.connection.name}`);
     return conn;
   } catch (error) {
+    lastDbError = error.message;
     console.error(`❌ MongoDB Connection Error: ${error.message}`);
+
+    // If querySrv error on cloud containers, try fallback DNS once
+    if (error.message.includes('querySrv')) {
+      try {
+        dns.setServers(['8.8.8.8', '1.1.1.1']);
+        const retryConn = await mongoose.connect(uri, { serverSelectionTimeoutMS: 10000 });
+        lastDbError = null;
+        console.log(`✅ MongoDB Connected on retry: ${retryConn.connection.host}`);
+        return retryConn;
+      } catch (retryErr) {
+        lastDbError = retryErr.message;
+      }
+    }
+
     return null;
   }
 };
+
+connectDB.getLastError = () => lastDbError;
 
 module.exports = connectDB;

@@ -102,7 +102,13 @@ exports.executeCronJob = async (req, res, next) => {
 
     // 3. Task 2: Database Connection & Active Ping
     executedTasks.push('databaseHealthCheck');
-    const isDbConnected = mongoose.connection.readyState === 1;
+    let isDbConnected = mongoose.connection.readyState === 1;
+    if (!isDbConnected && mongoose.connection.readyState === 0) {
+      const connectDB = require('../config/db');
+      await connectDB();
+      isDbConnected = mongoose.connection.readyState === 1;
+    }
+
     let dbPingResult = 'disconnected';
 
     if (isDbConnected && mongoose.connection.db) {
@@ -114,12 +120,16 @@ exports.executeCronJob = async (req, res, next) => {
       }
     }
 
+    const connectDB = require('../config/db');
+    const lastError = connectDB.getLastError ? connectDB.getLastError() : null;
+
     const dbHealth = {
       status: isDbConnected ? 'connected' : 'disconnected',
       readyState: mongoose.connection.readyState,
       ping: dbPingResult,
       host: mongoose.connection.host || 'unknown',
-      databaseName: mongoose.connection.name || 'clean_shield_pro'
+      databaseName: mongoose.connection.name || 'clean_shield_pro',
+      error: !isDbConnected ? lastError : null
     };
     taskDetails.database = dbHealth;
 
@@ -238,7 +248,15 @@ exports.pingKeepAlive = async (req, res) => {
   cronStats.totalKeepAlivePings += 1;
   cronStats.lastKeepAliveAt = new Date().toISOString();
 
-  const isDbConnected = mongoose.connection.readyState === 1;
+  let isDbConnected = mongoose.connection.readyState === 1;
+  if (!isDbConnected && mongoose.connection.readyState === 0) {
+    const connectDB = require('../config/db');
+    await connectDB();
+    isDbConnected = mongoose.connection.readyState === 1;
+  }
+
+  const connectDB = require('../config/db');
+  const lastError = connectDB.getLastError ? connectDB.getLastError() : null;
 
   res.status(200).json({
     success: true,
@@ -249,7 +267,8 @@ exports.pingKeepAlive = async (req, res) => {
     uptimeFormatted: formatUptime(process.uptime()),
     database: {
       status: isDbConnected ? 'connected' : 'disconnected',
-      readyState: mongoose.connection.readyState
+      readyState: mongoose.connection.readyState,
+      error: !isDbConnected ? lastError : null
     },
     keepAlivePingsCount: cronStats.totalKeepAlivePings,
     lastFullCronExecution: cronStats.lastExecutionAt

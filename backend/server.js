@@ -57,8 +57,10 @@ app.get('/api/health', (req, res) => {
     version: '1.0.0',
     database: {
       status: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+      readyState: mongoose.connection.readyState,
       host: mongoose.connection.host || 'unknown',
-      name: mongoose.connection.name || 'clean_shield_pro'
+      name: mongoose.connection.name || 'clean_shield_pro',
+      error: mongoose.connection.readyState !== 1 && connectDB.getLastError ? connectDB.getLastError() : null
     },
     endpoints: {
       authLogin: 'POST /api/auth/login',
