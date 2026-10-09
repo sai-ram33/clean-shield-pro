@@ -20,6 +20,7 @@ const bookingsRoutes = require('./src/routes/bookingsRoutes');
 const enquiriesRoutes = require('./src/routes/enquiriesRoutes');
 const reviewsRoutes = require('./src/routes/reviewsRoutes');
 const servicesRoutes = require('./src/routes/servicesRoutes');
+const cronRoutes = require('./src/routes/cronRoutes');
 const errorHandler = require('./src/middleware/errorHandler');
 
 const app = express();
@@ -69,7 +70,10 @@ app.get('/api/health', (req, res) => {
       services: 'GET /api/services',
       pricing: 'GET, PUT /api/pricing',
       config: 'GET /api/config',
-      branches: 'GET /api/branches'
+      branches: 'GET /api/branches',
+      cron: 'GET, POST /api/cron',
+      cronPing: 'GET /api/cron/ping',
+      cronStatus: 'GET /api/cron/status'
     }
   });
 });
@@ -79,6 +83,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingsRoutes);
 app.use('/api/enquiries', enquiriesRoutes);
 app.use('/api/reviews', reviewsRoutes);
+app.use('/api/cron', cronRoutes);
 app.use('/api', servicesRoutes);
 
 // Serve Frontend Static Assets
@@ -119,6 +124,7 @@ const startServer = async () => {
 🌐 API Base:         http://localhost:${PORT}/api
 🔐 Owner Login:      http://localhost:${PORT}/api/auth/login
 🩺 Health Check:     http://localhost:${PORT}/api/health
+⏱️ Cron Endpoint:   http://localhost:${PORT}/api/cron
 📁 Frontend Served:  http://localhost:${PORT}/
 📦 Database:         MongoDB Atlas (clean_shield_pro)
 =====================================================

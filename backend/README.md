@@ -28,6 +28,7 @@ backend/
     ├── controllers/
     │   ├── authController.js      # Owner admin login & auto-seeding
     │   ├── bookingsController.js  # Bookings & tracking logic (Dynamic MongoDB storage)
+    │   ├── cronController.js      # Keep-alive, scheduled tasks & metrics audit
     │   ├── enquiriesController.js # Custom quote enquiries & leads
     │   ├── reviewsController.js   # Customer reviews & admin moderation
     │   └── servicesController.js  # Services catalog, pricing & config
@@ -42,6 +43,7 @@ backend/
     └── routes/
         ├── authRoutes.js          # /api/auth (Login & session verification)
         ├── bookingsRoutes.js      # /api/bookings routes
+        ├── cronRoutes.js          # /api/cron routes (keep-alive, status, ping)
         ├── enquiriesRoutes.js     # /api/enquiries routes
         ├── reviewsRoutes.js       # /api/reviews routes
         └── servicesRoutes.js      # /api/services, /api/pricing, /api/config
@@ -148,3 +150,33 @@ The server will launch at:
 | `GET` | `/api/config` | Official contact info, helplines, WhatsApp & stats |
 | `GET` | `/api/branches` | 15+ operational branches network across Andhra Pradesh |
 | `GET` | `/api/health` | Server uptime and health check |
+
+---
+
+### 5. Cron Job & Scheduled Worker (`/api/cron`)
+Designed for hosting keep-alive (e.g. Render, Koyeb, Glitch free tier 15-minute sleep prevention), MongoDB connection pool refresh, routine telemetry, and automated maintenance.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` / `POST` | `/api/cron` | Executes scheduled cron tasks: server keep-alive, MongoDB health & ping, and operational count snapshot |
+| `GET` | `/api/cron/ping` | Ultra-fast lightweight ping to keep free hosting containers awake (`/api/cron/keep-alive` alias) |
+| `GET` | `/api/cron/status` | Current cron telemetry (total executions, last run duration, uptime) |
+| `GET` / `POST` | `/api/cron?cleanup=true` | Triggers routine maintenance & data cleanup checks |
+
+#### Security & Authentication:
+To prevent unauthorized execution in production, set `CRON_SECRET` in your `.env`. You can pass the key using any of:
+1. **Query parameter:** `/api/cron?key=YOUR_CRON_SECRET`
+2. **Bearer Token:** Header `Authorization: Bearer YOUR_CRON_SECRET`
+3. **Custom Header:** Header `x-cron-secret: YOUR_CRON_SECRET`
+
+*(Note: `/api/cron/ping` works publicly without a secret to easily support basic uptime monitors).*
+
+#### How to Setup Scheduled Triggers:
+- **Free Cron Services (e.g. cron-job.org):**
+  - Set URL to: `https://your-api.onrender.com/api/cron?key=YOUR_CRON_SECRET` (every 10 or 14 minutes).
+- **Uptime Monitors (e.g. UptimeRobot / Better Stack):**
+  - Monitor URL: `https://your-api.onrender.com/api/cron/ping` (every 5 minutes).
+- **cURL Trigger:**
+  ```bash
+  curl -X GET "http://localhost:5000/api/cron?key=clean_shield_pro_cron_secret_2026"
+  ```
