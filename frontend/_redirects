@@ -1,0 +1,3 @@
+# Clean Shield Pro - Netlify API Proxy Rules
+# Proxies frontend /api requests to Render backend service
+/api/*  https://clean-shield-pro.onrender.com/api/:splat  200!

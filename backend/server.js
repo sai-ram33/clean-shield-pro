@@ -26,12 +26,48 @@ const errorHandler = require('./src/middleware/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS for frontend clients
-const clientOrigin = process.env.CLIENT_ORIGIN || '*';
+// Enable CORS for frontend clients (Netlify, Render, Localhost, etc.)
+const defaultAllowedOrigins = [
+  'https://cleanshieldpro.netlify.app',
+  'https://clean-shield-pro.onrender.com',
+  'http://localhost:5000',
+  'http://localhost:8080',
+  'http://localhost:3000',
+  'http://127.0.0.1:5500',
+  'http://127.0.0.1:8080',
+  'http://127.0.0.1:5000'
+];
+
+const envOrigins = (process.env.CLIENT_ORIGIN || '')
+  .split(',')
+  .map(s => s.trim().replace(/\/$/, ''))
+  .filter(Boolean);
+
+const allowedOrigins = Array.from(new Set([...defaultAllowedOrigins, ...envOrigins]));
+
 app.use(cors({
-  origin: clientOrigin,
+  origin: (origin, callback) => {
+    // Allow non-browser requests (e.g. mobile apps, curl, cron-job.org, Postman)
+    if (!origin) return callback(null, true);
+
+    const cleanOrigin = origin.replace(/\/$/, '');
+    if (
+      process.env.CLIENT_ORIGIN === '*' ||
+      allowedOrigins.includes('*') ||
+      allowedOrigins.includes(cleanOrigin) ||
+      cleanOrigin.endsWith('.netlify.app') ||
+      cleanOrigin.endsWith('.onrender.com')
+    ) {
+      return callback(null, true);
+    }
+
+    console.warn(`[CORS] Blocked request from unauthorized origin: ${origin}`);
+    return callback(new Error(`CORS policy: origin '${origin}' is not allowed`));
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-cron-secret'],
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
 
 // Body Parsers

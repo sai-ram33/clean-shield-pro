@@ -863,10 +863,46 @@ const PROMO_COUPONS = {
   'CLEAN200': { code: 'CLEAN200', discountType: 'flat', value: 200, minOrder: 800, desc: 'Flat ₹200 OFF on your hygiene booking' }
 };
 
-// API Base URL for MongoDB Express Backend (Auto-detects Render cloud domain or localhost)
-const API_BASE_URL = (typeof window !== 'undefined' && (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'))
-  ? '/api'
-  : ((typeof window !== 'undefined' && window.location.port === '5000') ? '/api' : 'http://localhost:5000/api');
+// Production Render Backend URL: https://clean-shield-pro.onrender.com/api
+// Local Express Backend URL:     http://localhost:5000/api
+const RENDER_PROD_API_URL = 'https://clean-shield-pro.onrender.com/api';
+
+function getApiBaseUrl() {
+  if (typeof window === 'undefined') return RENDER_PROD_API_URL;
+
+  // 1. Check for runtime environment variable overrides (Vite/Netlify or window config)
+  const envOverride = (window.__ENV__ && (window.__ENV__.VITE_API_URL || window.__ENV__.API_URL))
+    || window.CSP_API_URL
+    || (typeof localStorage !== 'undefined' && localStorage.getItem('csp_api_base_url'));
+
+  if (envOverride) {
+    return envOverride.replace(/\/+$/, '');
+  }
+
+  const hostname = window.location.hostname;
+  const port = window.location.port;
+
+  // 2. Local development on localhost or 127.0.0.1
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    // If running directly on backend Express port 5000
+    if (port === '5000') return '/api';
+    // If running on a local static dev server (Live Server 5500, 8080, 3000, etc.)
+    return 'http://localhost:5000/api';
+  }
+
+  // 3. When served directly from Render domain
+  if (hostname.endsWith('onrender.com')) {
+    return '/api';
+  }
+
+  // 4. Production on Netlify (cleanshieldpro.netlify.app) or any custom domain
+  return RENDER_PROD_API_URL;
+}
+
+const API_BASE_URL = getApiBaseUrl();
+if (typeof window !== 'undefined') {
+  window.API_BASE_URL = API_BASE_URL;
+}
 
 // Initial seeds are completely empty as per user requirement (portal starts clean until real bookings occur)
 const SEED_BOOKINGS = [];

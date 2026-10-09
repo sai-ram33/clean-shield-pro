@@ -95,9 +95,14 @@ async function handleOwnerLogin(e) {
       body: JSON.stringify({ email, password })
     });
 
-    const data = await res.json();
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (parseErr) {
+      // Response was not JSON (e.g., HTML error page)
+    }
 
-    if (res.ok && data.success) {
+    if (res.ok && data && data.success) {
       // Store token and user data
       localStorage.setItem('csp_admin_token', data.token);
       localStorage.setItem('csp_admin_user', JSON.stringify(data.admin));
@@ -118,13 +123,31 @@ async function handleOwnerLogin(e) {
       refreshDashboard(true);
     } else {
       if (errorAlert) {
-        errorAlert.textContent = data.message || 'Invalid owner credentials. Please try again.';
+        let msg = 'Authentication failed. Please verify your credentials.';
+        if (data && data.message) {
+          msg = data.message;
+        } else if (res.status === 401) {
+          msg = 'Invalid owner credentials. Please verify your email and password.';
+        } else if (res.status === 404) {
+          msg = `Authentication endpoint not found (HTTP 404 at ${API_BASE_URL}/auth/login).`;
+        } else if (res.status === 500) {
+          msg = 'Backend server encountered an internal error (HTTP 500). Please check server logs.';
+        } else if (res.status === 502 || res.status === 503) {
+          msg = 'Backend service is starting up or temporarily sleeping. Please wait 15 seconds and try again.';
+        } else if (!res.ok) {
+          msg = `Server returned HTTP ${res.status}: ${res.statusText || 'Unable to authenticate'}.`;
+        }
+        errorAlert.textContent = msg;
         errorAlert.style.display = 'block';
       }
     }
   } catch (err) {
     if (errorAlert) {
-      errorAlert.textContent = 'Cannot reach backend server. Please verify the server is running on port 5000.';
+      const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      const targetUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'backend server';
+      errorAlert.textContent = isLocal
+        ? `Cannot reach local backend server at ${targetUrl}. Please verify the server is running on port 5000.`
+        : `Cannot reach backend API server at ${targetUrl}. Please verify your connection or that the Render service is online.`;
       errorAlert.style.display = 'block';
     }
   } finally {
