@@ -152,6 +152,38 @@ function fillOwnerAccount(email) {
   if (passwordInput) passwordInput.value = 'CleanShieldPro@2026';
 }
 
+function togglePasswordVisibility() {
+  const pwdInput = document.getElementById('ownerPassword');
+  const showIcon = document.getElementById('eyeIconShow');
+  const hideIcon = document.getElementById('eyeIconHide');
+  const checkbox = document.getElementById('showPasswordCheckbox');
+  if (!pwdInput) return;
+
+  const isPassword = pwdInput.type === 'password';
+  pwdInput.type = isPassword ? 'text' : 'password';
+
+  if (showIcon && hideIcon) {
+    showIcon.style.display = isPassword ? 'none' : 'block';
+    hideIcon.style.display = isPassword ? 'block' : 'none';
+  }
+  if (checkbox) {
+    checkbox.checked = isPassword;
+  }
+}
+
+function togglePasswordCheckbox(cb) {
+  const pwdInput = document.getElementById('ownerPassword');
+  const showIcon = document.getElementById('eyeIconShow');
+  const hideIcon = document.getElementById('eyeIconHide');
+  if (!pwdInput) return;
+
+  pwdInput.type = cb.checked ? 'text' : 'password';
+  if (showIcon && hideIcon) {
+    showIcon.style.display = cb.checked ? 'none' : 'block';
+    hideIcon.style.display = cb.checked ? 'block' : 'none';
+  }
+}
+
 async function manualSyncDashboard() {
   const pill = document.getElementById('dbStatusPill');
   if (pill) {
