@@ -1,13 +1,13 @@
 # Clean Shield Pro - Frontend Application
 
 > **Clean Home • Healthy Life** | *"We Don't Just Clean, We Care."*  
-> Serving Rajamahendravaram, Andhra Pradesh
+> Serving 10,000+ Customers across Rajamahendravaram, East Godavari, West Godavari, Palakollu, Narasapuram, Jaggampeta & Andhra Pradesh
 
 ---
 
 ## 🌟 Overview
 
-Clean Shield Pro is an end-to-end residential deep cleaning and pest control platform. Headquartered in **Rajahmundry**, with active operational branches across **Vijayawada, Kakinada, Tanuku, Tadepalligudem, Eluru, Amalapuram, Ravulapalem, Bhimavaram, Jangareddygudem, Vizag, and East & West Godavari districts**. It connects customers seeking high-quality hygiene services with the operations team managing dispatches, bookings, customer leads, and reviews.
+Clean Shield Pro is an end-to-end residential deep cleaning and pest control platform trusted by **10,000+ happy customers**. Headquartered in **Rajahmundry**, with active operational branches across **East Godavari, West Godavari, Palakollu, Narasapuram, Jaggampeta, Vijayawada, Kakinada, Tanuku, Tadepalligudem, Eluru, Amalapuram, Ravulapalem, Bhimavaram, Jangareddygudem, and Vizag**. It connects customers seeking high-quality hygiene services with the operations team managing dispatches, bookings, customer leads, and reviews.
 
 This frontend application is built purely with **semantic HTML5**, **modern Vanilla CSS**, and **modular JavaScript**, with a shared local database state (`js/data.js`).
 
@@ -66,10 +66,9 @@ Then visit:
   - Headline, subtitle, and trust badges ("Free quotation", "COD and UPI accepted", "Booking alerts on WhatsApp").
   - Gold primary CTA button: **"Book a Service"**.
   - Commercial hero photo of the Clean Shield Pro team in Rajamahendravaram.
-- **Our Services Grid (Matches Wireframe):**
-  - **Home Deep Cleaning:** Upfront pricing (1 BHK from ₹3,500, 2 BHK from ₹4,500, 3 BHK from ₹5,500, 4 BHK+ custom).
-  - **Pest Control:** Upfront pricing (1 BHK from ₹4,000, 2 BHK from ₹5,000, 3 BHK from ₹6,000, Villas custom).
-  - **Price-on-Request Services:** Water Tank Cleaning, Kitchen Cleaning, Bathroom & Washroom, Sofa & Furniture, Balcony & Window.
+- **Our Services Grid & Expanded Catalog:**
+  - **Home & Commercial Cleaning (11 Services):** Full Home Deep Cleaning (Starting at ₹3,499), Bathroom & Toilet (Starting at ₹599 to ₹749, 30-60 mins), Kitchen & Chimney (Starting at ₹1,499), Water Tank Jet Wash (Starting at ₹1,199), Balcony Cleaning (Starting at ₹699), Sofa & Upholstery (Starting at ₹1,199), Floor Scrubbing (Starting at ₹1,999), Move-in / Vacant Flat (Starting at ₹2,999, Duplex Starting at ₹7,999), Commercial Deep Cleaning (Custom Quote), Industrial Cleaning (Custom Quote), and AMC Annual Maintenance Contracts (Custom Quote).
+  - **Pest Control Solutions (10 Services):** Odorless Cockroach Control (Starting at ₹1,199), Anti-Termite 6mm-8mm Drill Treatment (Starting at ₹2,999, 3-Year Warranty), Bed Bug Eradication (Starting at ₹1,199), Mosquito & Drain Fly Fogging (Starting at ₹1,299), Ants Perimeter Barrier (Starting at ₹1,499), Rodent Proofing (Starting at ₹1,699), Full House Pest Shield Combo (Starting at ₹2,499), Commercial Pest Control (Custom Quote, B2B), Industrial Pest Control & Fumigation (Custom Quote, Heavy-Duty), and Pest Control AMC (Annual Maintenance Contracts / Charges, Custom Quote).
 - **Interactive Before & After Comparison Slider:**
   - Drag the gold circular handle left and right to inspect the transformation of dirty vs. deep-cleaned kitchen surfaces.
 - **What Customers Say (Reviews):**

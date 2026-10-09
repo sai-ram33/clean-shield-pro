@@ -20,15 +20,15 @@ const SERVICES_DETAILED_DATA = {
     duration: '4 - 5 Hours',
     crew: '2 - 3 Trained Cleaning Specialists',
     guarantee: '100% Re-cleaning Guarantee within 24 Hours',
-    startingPrice: '₹3,500',
+    startingPrice: 'Starting at ₹3,499',
     priceUnit: 'for 1 BHK',
     brief: 'Single-disc rotary floor scrubbing, kitchen degreasing & washroom descaling.',
     description: 'Our signature whole-house restoration cleaning using German Taski eco-chemicals, high-torque single-disc rotary floor buffing machines, and heavy-duty dust extractors. We restore tile luster, dissolve grease in kitchens, eliminate hard water scales in bathrooms, and deep-vacuum all upholstery.',
     pricingOptions: [
-      { label: '1 BHK Deep Clean', price: '₹3,500', note: 'Up to 600 sq.ft • 2 Pros • 3.5 hrs' },
-      { label: '2 BHK Deep Clean', price: '₹4,500', note: 'Up to 1,000 sq.ft • 2-3 Pros • 4.5 hrs (Most Popular)' },
-      { label: '3 BHK Deep Clean', price: '₹5,500', note: 'Up to 1,500 sq.ft • 3 Pros • 5.5 hrs' },
-      { label: '4 BHK+ / Villa', price: '₹7,500', note: 'Up to 2,500 sq.ft • 4 Pros • 7 hrs' }
+      { label: '1 BHK Deep Clean', price: 'Starting at ₹3,499', note: 'Up to 600 sq.ft • 2 Pros • 3.5 hrs' },
+      { label: '2 BHK Deep Clean', price: 'Starting at ₹5,499', note: 'Up to 1,000 sq.ft • 2-3 Pros • 4.5 hrs (Most Popular)' },
+      { label: '3 BHK Deep Clean', price: 'Starting at ₹5,999', note: 'Up to 1,500 sq.ft • 3 Pros • 5.5 hrs' },
+      { label: '4 BHK+ / Villa', price: 'Starting at ₹14999', note: 'Up to 2,500 sq.ft • 4 Pros • 7 hrs' }
     ],
     bullets: [
       'Single-disc machine rotary floor scrubbing for tiles, marble and granite',
@@ -68,18 +68,16 @@ const SERVICES_DETAILED_DATA = {
     image: 'images/service_bathroom.jpg',
     rating: 4.88,
     reviewCount: '2,650+ bathrooms restored',
-    duration: '60 - 90 Minutes per Bath',
+    duration: '30 - 60 Minutes per Bath',
     crew: '1 - 2 Dedicated Specialists',
     guarantee: 'Sparkling Tile & Acid-Free Safe Chemistry',
-    startingPrice: '₹799',
+    startingPrice: 'Starting at ₹599',
     priceUnit: 'per Bathroom',
     brief: 'Acid-free hard-water tile descaling, WC sanitization & tap mirror buff.',
     description: 'Specialized hard-water mineral stain removal formulated specifically for the Godavari region water supply. We utilize Taski R6 acid-free sanitizers that dissolve tough yellow scale from vitrified tiles, shower cubicles, and WC bowls without eroding grout or harming chrome taps.',
     pricingOptions: [
-      { label: '1 Bathroom Intensive', price: '₹799', note: 'Complete descaling • 60 mins' },
-      { label: '2 Bathrooms Combo', price: '₹1,499', note: 'Save ₹100 • 2 Hours' },
-      { label: '3 Bathrooms Value Pack', price: '₹1,999', note: 'Save ₹400 • Most Popular' },
-      { label: '4 Bathrooms Villa Pack', price: '₹2,499', note: 'Full house washroom hygiene' }
+      { label: '1 Bathroom Intensive', price: 'Starting at ₹599 - ₹749', note: 'Complete descaling • 30 - 60 mins' },
+      { label: '2 Bathrooms Combo', price: 'Starting at ₹1,099 - ₹1,299', note: 'Save ₹200 • 60 - 90 mins' }
     ],
     bullets: [
       'Hard-water scale removal from wall & floor tiles',
@@ -120,14 +118,14 @@ const SERVICES_DETAILED_DATA = {
     duration: '2 - 3 Hours',
     crew: '2 Specialized Technicians',
     guarantee: '100% Oil & Tadka Stain Breakdown',
-    startingPrice: '₹1,499',
-    priceUnit: 'Standard Kitchen',
+    startingPrice: 'Starting at ₹599',
+    priceUnit: 'Standard Kitchen / Chimney',
     brief: 'Heavy oil, grease & tadka stain breakdown with chimney filter wash.',
     description: 'Deep kitchen sanitization engineered to dissolve sticky oil deposits, tadka soot, and yellow grease from chimney baffle filters, gas hobs, backsplash tiles, and modular cabinets.',
     pricingOptions: [
-      { label: 'Standard Kitchen Degrease', price: '₹1,499', note: 'Countertop, stove, backsplash & sink' },
-      { label: 'Kitchen + Chimney Filter', price: '₹1,999', note: 'Includes mesh filter soak & wash' },
-      { label: 'Complete Modular Kitchen', price: '₹2,499', note: 'Chimney + Inside/Out Cabinets + Sump' }
+      { label: 'Chimney Degrease & Filter', price: 'Starting at ₹599', note: 'Baffle filter wash & exterior soak' },
+      { label: 'Standard Kitchen Degrease', price: 'Starting at ₹1,499', note: 'Countertop, stove, backsplash & sink' },
+      { label: 'Complete Modular Kitchen', price: 'Starting at ₹1,999', note: 'Chimney + Inside/Out Cabinets + Slab' }
     ],
     bullets: [
       'Heavy oil, grease & tadka stain chemical breakdown',
@@ -168,15 +166,15 @@ const SERVICES_DETAILED_DATA = {
     duration: '1.5 - 2 Hours',
     crew: '1 - 2 Upholstery Experts',
     guarantee: 'Dust Mite & Odor Extraction',
-    startingPrice: '₹999',
-    priceUnit: 'for 3-Seater',
+    startingPrice: 'Starting at ₹899',
+    priceUnit: 'Mattress / Sofa',
     brief: '3-Stage injection extraction shampoo for dust mites & deep sweat suction.',
     description: 'High-suction extraction shampoo treatment that eliminates embedded dirt, pet dander, food stains, body oils, and dust mites from sofa cushions and dining chairs without damaging delicate fabric threads.',
     pricingOptions: [
-      { label: '3-Seater Sofa Set', price: '₹999', note: 'Fabric or suede material • 60 mins' },
-      { label: '5-Seater Sofa Set (3+1+1)', price: '₹1,499', note: 'Most Popular • 90 mins' },
-      { label: '7-Seater / L-Shape Recliner', price: '₹1,999', note: 'Includes backrests & headrests' },
-      { label: 'Mattress Sanitization Add-on', price: '₹700', note: 'Double bed deep extraction' }
+      { label: 'Mattress Sanitization', price: 'Starting at ₹899', note: 'Single or double bed deep extraction' },
+      { label: '3-Seater Sofa Set', price: 'Starting at ₹1,199', note: 'Fabric or suede material • 60 mins' },
+      { label: '5-Seater Sofa Set (3+1+1)', price: 'Starting at ₹1,999', note: 'Most Popular • 90 mins' },
+      { label: '7-Seater Sofa Set', price: 'Starting at ₹2,499', note: 'Full 7-seater deep extraction' }
     ],
     bullets: [
       '3-Stage injection extraction shampoo machine wash',
@@ -216,15 +214,14 @@ const SERVICES_DETAILED_DATA = {
     duration: '1.5 - 2 Hours',
     crew: '2 Certified Tank Technicians',
     guarantee: '100% Safe Drinking Water Standard',
-    startingPrice: '₹999',
+    startingPrice: 'Starting at ₹1,199',
     priceUnit: 'Up to 1,000L Overhead',
-    brief: '140-bar German pressure jet wash, sludge evacuation & UV sterilization.',
-    description: '6-stage mechanized cleaning process for overhead Sintex tanks and underground sumps. Removes years of accumulated mud, algae, microbial biofilm, and mosquito larvae to protect your family from water-borne illnesses.',
+    description: 'Mechanized pressure cleaning for overhead Sintex tanks and underground sumps. Evacuates accumulated mud, algae, and biofilm to ensure healthy drinking and bathing water.',
     pricingOptions: [
-      { label: 'Overhead Tank (Up to 1,000L)', price: '₹999', note: 'Sintex / plastic tanks' },
-      { label: 'Overhead Tank (Up to 2,000L)', price: '₹1,299', note: 'Large residential overhead' },
-      { label: 'Underground Sump (Up to 5,000L)', price: '₹1,499', note: 'Concrete or brick underground' },
-      { label: 'Sump + Overhead Combo', price: '₹2,299', note: 'Save ₹200 • Best Value' }
+      { label: 'Overhead Tank (Up to 1,000L)', price: 'Starting at ₹1,199', note: 'Sintex / plastic tanks' },
+      { label: 'Overhead Tank (Up to 2,000L)', price: 'Starting at ₹1,999', note: 'Large residential overhead' },
+      { label: 'Underground Sump (Up to 2,000L)', price: 'Starting at ₹1,499', note: 'Concrete or brick underground sump' },
+      { label: 'Sump + Overhead Combo', price: 'Starting at ₹2,499', note: 'Complete home water hygiene' }
     ],
     bullets: [
       'German high-pressure rotary pressure washer (140-bar)',
@@ -264,15 +261,15 @@ const SERVICES_DETAILED_DATA = {
     duration: '2 - 3 Hours',
     crew: '2 Machine Operators',
     guarantee: 'Grout Grime Lift & Mirror Shine',
-    startingPrice: '₹1,800',
+    startingPrice: 'Starting at ₹1,999',
     priceUnit: 'Up to 1,000 sq.ft',
     brief: 'High-torque rotary buffer for marble, granite, vitrified & grout lines.',
     description: 'Industrial single-disc machine floor restoration that strips black dirt from tile joints, removes surface grime, and restores original glossy shine to vitrified tiles, Italian marble, and mosaic flooring.',
     pricingOptions: [
-      { label: 'Up to 1,000 sq.ft', price: '₹1,800', note: 'Living, hall, dining & bedrooms' },
-      { label: '1,001 - 1,500 sq.ft', price: '₹2,499', note: 'Standard 3 BHK flooring' },
-      { label: '1,501 - 2,500 sq.ft Villa', price: '₹3,799', note: 'Multi-level bungalow floors' },
-      { label: 'Extra Area Beyond Quoted', price: '₹1.50/sq.ft', note: 'Discounted per sq.ft add-on' }
+      { label: 'Up to 1,000 sq.ft', price: 'Starting at ₹1,999', note: 'Living, hall, dining & bedrooms' },
+      { label: '1,001 - 1,500 sq.ft', price: 'Starting at ₹2,999', note: 'Standard 3 BHK flooring' },
+      { label: '1,501 - 2,500 sq.ft', price: 'Starting at ₹4,499', note: 'Multi-level bungalow floors' },
+      { label: 'Extra Area Beyond Quoted', price: '₹2 per sq.ft', note: 'Additional area rate' }
     ],
     bullets: [
       'High-torque single-disc rotary machine scrubbing',
@@ -311,15 +308,16 @@ const SERVICES_DETAILED_DATA = {
     duration: '3.5 - 5 Hours',
     crew: '2 - 3 Cleaning Specialists',
     guarantee: 'Ready-to-Shift Sanitization',
-    startingPrice: '₹2,999',
+    startingPrice: 'Starting at ₹2,999',
     priceUnit: 'for 1 BHK Empty',
     brief: 'Inside-out empty wardrobe wipedown, paint spots & construction dust removal.',
     description: 'Designed specifically for tenants moving into new rentals or homeowners taking possession. Focuses on inside-out cleaning of all empty wardrobes, kitchen shelves, window tracks, paint spot scraping, and multi-bathroom sterilization.',
     pricingOptions: [
-      { label: '1 BHK Empty Flat', price: '₹2,999', note: 'Fast turnaround • 3 hrs' },
-      { label: '2 BHK Empty Flat', price: '₹3,999', note: 'Most Popular • 4 hrs' },
-      { label: '3 BHK Empty Flat', price: '₹4,999', note: 'Up to 1,600 sq.ft • 5 hrs' },
-      { label: '4 BHK+ Empty / Duplex', price: '₹6,499', note: 'Large vacant home handover' }
+      { label: '1 BHK Empty Flat', price: 'Starting at ₹2,999', note: 'Fast turnaround • 3 hrs' },
+      { label: '2 BHK Empty Flat', price: 'Starting at ₹3,999', note: 'Most Popular • 4 hrs' },
+      { label: '3 BHK Empty Flat', price: 'Starting at ₹4,999', note: 'Up to 1,600 sq.ft • 5 hrs' },
+      { label: '4 BHK Empty Flat', price: 'Starting at ₹6,999', note: 'Large vacant home handover' },
+      { label: 'Duplex Home Cleaning', price: 'Starting at ₹7,999', note: 'Multi-level vacant duplex handover' }
     ],
     bullets: [
       'Inside-out empty wardrobe & cabinet wipedown',
@@ -359,14 +357,14 @@ const SERVICES_DETAILED_DATA = {
     duration: '45 - 60 Minutes per Unit',
     crew: '1 - 2 Technicians',
     guarantee: 'Bird Dropping & Track Dust Clear',
-    startingPrice: '₹699',
+    startingPrice: 'Starting at ₹699',
     priceUnit: 'per Balcony',
     brief: 'Bird droppings wash, sliding track channel vacuuming & streak-free glass.',
     description: 'Thorough cleaning of open balconies, bird mess removal, railing wipedown, vacuuming of sliding mosquito mesh tracks, and crystal clear streak-free window glass wiping.',
     pricingOptions: [
-      { label: '1 Balcony Deep Wash', price: '₹699', note: 'Floor, grill & glass' },
-      { label: '2 Balconies Combo', price: '₹1,199', note: 'Save ₹200' },
-      { label: 'Full Home Windows & Tracks', price: '₹1,299', note: 'All windows + sliding channels' }
+      { label: '1 Balcony Deep Wash', price: 'Starting at ₹699', note: 'Floor, grill & glass' },
+      { label: '2 Balconies Combo', price: 'Starting at ₹1,199', note: 'Save ₹200' },
+      { label: 'Full Home Windows & Tracks', price: 'Starting at ₹1,499', note: 'All windows + sliding channels' }
     ],
     bullets: [
       'Bird dropping removal & tile floor pressure wash',
@@ -408,15 +406,16 @@ const SERVICES_DETAILED_DATA = {
     duration: '45 - 60 Minutes',
     crew: '1 Certified Pest Technician',
     guarantee: '90-Day Relief Warranty with Free 45-Day Re-visit',
-    startingPrice: '₹1,499',
-    priceUnit: 'for 1 BHK',
+    startingPrice: 'Starting at ₹1,199',
+    priceUnit: 'Kitchen / 1 BHK',
     brief: 'German Fipronil herbal gel dots. No need to empty kitchen or vacate.',
     description: 'Advanced German Fipronil bait gel technology applied in microscopic dots at cockroach transit points. Cockroaches consume the bait and return to their nest, transferring the formula through the colony to eliminate the entire population at the root. 100% odorless with no need to empty utensils or vacate the home.',
     pricingOptions: [
-      { label: '1 BHK Gel Treatment', price: '₹1,499', note: 'Kitchen, baths & dining • 90-day warranty' },
-      { label: '2 BHK Gel Treatment', price: '₹1,899', note: 'Most Popular • Free 45-day check' },
-      { label: '3 BHK Gel Treatment', price: '₹2,399', note: 'Whole house protection' },
-      { label: 'Annual Contract (3 Visits)', price: '₹3,999', note: 'Year-round 365-day peace of mind' }
+      { label: 'Kitchen Only Gel Treatment', price: 'Starting at ₹1,199', note: 'Cabinet hinges, sink & appliances' },
+      { label: '1 BHK Gel Treatment', price: 'Starting at ₹1,499', note: 'Kitchen, baths & dining • 90-day warranty' },
+      { label: '2 BHK Gel Treatment', price: 'Starting at ₹1,999', note: 'Most Popular • Free 45-day check' },
+      { label: '3 BHK Gel Treatment', price: 'Starting at ₹2,499', note: 'Whole house protection' },
+      { label: 'Annual Contract (3 Visits)', price: 'Starting at ₹4,999', note: 'Year-round 365-day peace of mind' }
     ],
     bullets: [
       'German Fipronil herbal gel dot technology',
@@ -448,35 +447,35 @@ const SERVICES_DETAILED_DATA = {
     category: 'pesticides',
     categoryName: 'Pesticide Cleaning Services',
     name: 'Anti-Termite Drill Treatment',
-    badge: 'Bayer Premise • 5-Yr Warranty',
+    badge: 'Bayer Premise • 3-Yr Warranty',
     image: 'images/service_termite.jpg',
     rating: 4.95,
     reviewCount: '1,150+ homes termite-proofed',
     duration: '3 - 5 Hours',
     crew: '2 Certified Drilling Technicians',
-    guarantee: 'Official 5-Year Warranty Certificate with Free Annual Audits',
-    startingPrice: '₹3,499',
+    guarantee: 'Official 3-Year Warranty Certificate with Free Annual Audits',
+    startingPrice: 'Starting at ₹2,999',
     priceUnit: 'for 1 BHK',
-    brief: '12mm drill-and-inject technology at skirtings & door frames.',
-    description: 'Drill-Hole-Inject chemical barrier system utilizing genuine Bayer Premise (Imidacloprid). We drill neat 12mm holes along skirting tiles and wooden door frames, inject high-pressure termiticide into the masonry, and seal the holes with matching white cement. Non-repellent chemistry eliminates subterranean colonies.',
+    brief: '6mm to 8mm drill-and-inject technology at skirtings & door frames.',
+    description: 'Drill-Hole-Inject chemical barrier system utilizing genuine Bayer Premise (Imidacloprid). We drill neat 6mm to 8mm holes along skirting tiles and wooden door frames, inject high-pressure termiticide into the masonry, and seal the holes with matching white cement. Non-repellent chemistry eliminates subterranean colonies.',
     pricingOptions: [
-      { label: '1 BHK Drill & Barrier', price: '₹3,499', note: 'Skirting & frame injection • 5-Yr cert' },
-      { label: '2 BHK Drill & Barrier', price: '₹4,499', note: 'Full flat protection • Most Popular' },
-      { label: '3 BHK Drill & Barrier', price: '₹5,499', note: 'Comprehensive multi-room barrier' },
-      { label: 'Independent Villa / Duplex', price: '₹8,499+', note: 'Perimeter soil drill + woodwork' }
+      { label: '1 BHK Drill & Barrier', price: 'Starting at ₹2,999', note: 'Skirting & frame injection • 3-Yr cert' },
+      { label: '2 BHK Drill & Barrier', price: 'Starting at ₹3,499 - ₹3,999', note: 'Full flat protection • Most Popular' },
+      { label: '3 BHK Drill & Barrier', price: 'Starting at ₹4,499 - ₹5,499', note: 'Comprehensive multi-room barrier' },
+      { label: 'Independent Villa / Duplex', price: 'Starting at ₹7,499+', note: 'Perimeter soil drill + woodwork' }
     ],
     bullets: [
-      '12mm drill-and-inject technology at wall skirtings',
+      '6mm to 8mm drill-and-inject technology at wall skirtings',
       'Bayer Premise odorless non-repellent chemical',
       'Door frame, wardrobe & false ceiling chemical infusion',
-      'Official warranty certificate & free annual audits'
+      'Official 3-year warranty certificate & free annual audits'
     ],
     inclusions: [
-      '12mm drilling along wall-floor junction at 1-foot intervals.',
+      '6mm to 8mm drilling along wall-floor junction at 1-foot intervals.',
       'High-pressure chemical pumping of Bayer Premise creating an impenetrable barrier.',
       'Door frames, wooden cupboards, and electrical conduits treated with wood injector.',
       'Color-matched chalk/cement sealing leaving drill holes virtually invisible.',
-      'Official printed 5-Year Clean Shield Pro Warranty Certificate.'
+      'Official printed 3-Year Clean Shield Pro Warranty Certificate.'
     ],
     exclusions: [
       'Replacing already hollowed-out or destroyed woodwork.'
@@ -484,7 +483,7 @@ const SERVICES_DETAILED_DATA = {
     chemicals: 'Bayer Premise (Imidacloprid 30.5% SC). Odorless, non-toxic to humans, non-repellent transfer effect.',
     steps: [
       { step: 1, title: 'Mud Tube & Moisture Mapping', desc: 'Acoustic and visual inspection of woodwork, wardrobes, and skirtings.' },
-      { step: 2, title: 'Precision 12mm Drilling', desc: 'Neat holes drilled at 45-degree angle along floor skirting.' },
+      { step: 2, title: 'Precision 6mm to 8mm Drilling', desc: 'Neat holes drilled at 45-degree angle along floor skirting.' },
       { step: 3, title: 'Pressure Chemical Infusion', desc: 'Termiticide injected deep into masonry and soil bed.' },
       { step: 4, title: 'Invisible Sealing & Clean-up', desc: 'Holes sealed flush with matching color filler and vacuumed.' }
     ]
@@ -503,14 +502,15 @@ const SERVICES_DETAILED_DATA = {
     duration: '2 Hours per Visit',
     crew: '2 Bed Bug Specialists',
     guarantee: '2 Full Visits Included to Break Complete Egg Cycle',
-    startingPrice: '₹1,999',
-    priceUnit: 'for 1 BHK (2 Visits)',
+    startingPrice: 'Starting at ₹1,199',
+    priceUnit: '1 Room & 1 Bed',
     brief: 'High-heat seam steaming & targeted pesticide to break life cycle.',
     description: 'Two-stage eradication protocol. Visit 1 uses high-temperature thermal steam extraction to penetrate mattress seams, headboards, and cot frames, followed by contact spray killing live bedbugs. Visit 2 follows after 12-14 days to kill newly hatched nymphs, permanently breaking the reproduction cycle.',
     pricingOptions: [
-      { label: '1 BHK (2 Full Visits Included)', price: '₹1,999', note: '1 bedroom + living • 2 sessions' },
-      { label: '2 BHK (2 Full Visits Included)', price: '₹2,699', note: '2 bedrooms • Most Popular' },
-      { label: '3 BHK (2 Full Visits Included)', price: '₹3,399', note: 'Complete family home relief' }
+      { label: '1 Room & 1 Bed Treatment', price: 'Starting at ₹1,199', note: 'Single bedroom & cot deep steam' },
+      { label: '1 BHK (2 Full Visits Included)', price: 'Starting at ₹1,999', note: '1 bedroom + living • 2 sessions' },
+      { label: '2 BHK (2 Full Visits Included)', price: 'Starting at ₹2,699', note: '2 bedrooms • Most Popular' },
+      { label: '3 BHK (2 Full Visits Included)', price: 'Starting at ₹3,399', note: 'Complete family home relief' }
     ],
     bullets: [
       'High-heat steaming for mattress seams & crevices',
@@ -549,14 +549,14 @@ const SERVICES_DETAILED_DATA = {
     duration: '45 - 60 Minutes',
     crew: '2 Fogging Technicians',
     guarantee: 'Immediate Swarm Knockdown & Larva Control',
-    startingPrice: '₹1,299',
+    startingPrice: 'Starting at ₹1,299',
     priceUnit: 'Residential Flat',
     brief: 'Thermal fogging for balconies, drains & sumps with larvicide drops.',
     description: 'Dual-action mosquito control utilizing thermal fogging smoke in open areas, shafts, and balcony corridors, combined with microbial biological larvicide granules in water stagnation points to prevent larvae from turning into adult mosquitoes.',
     pricingOptions: [
-      { label: 'Residential Flat (Balcony + Shaft)', price: '₹1,299', note: 'Balconies, ducts & interior residual' },
-      { label: 'Duplex / Villa & Compound', price: '₹1,899', note: 'Garden, perimeter & drains' },
-      { label: 'Apartment Society / Compound', price: '₹2,999', note: 'Stairwells, basement & boundary' }
+      { label: 'Residential Flat (Balcony + Shaft)', price: 'Starting at ₹1,299', note: 'Balconies, ducts & interior residual' },
+      { label: 'Duplex / Villa & Compound', price: 'Starting at ₹1,899', note: 'Garden, perimeter & drains' },
+      { label: 'Apartment Society / Compound', price: 'Starting at ₹2,999', note: 'Stairwells, basement & boundary' }
     ],
     bullets: [
       'Thermal fogging of balconies, basements & drains',
@@ -593,14 +593,14 @@ const SERVICES_DETAILED_DATA = {
     duration: '45 Minutes',
     crew: '1 Pest Specialist',
     guarantee: 'Queen Colony Kill & Perimeter Shield',
-    startingPrice: '₹1,199',
+    startingPrice: 'Starting at ₹1,499',
     priceUnit: 'for 1 - 2 BHK',
     brief: 'Pheromone-attracting granular bait kills queen and entire colony.',
     description: 'Specialized sweet-and-protein attractant granules that foraging worker ants carry back deep into the subterranean nest. Once fed to the queen and larvae, the colony collapses within 48 to 72 hours.',
     pricingOptions: [
-      { label: '1 - 2 BHK Home Barrier', price: '₹1,199', note: 'Kitchen, dining & balconies' },
-      { label: '3 BHK / Duplex Barrier', price: '₹1,699', note: 'Multi-balcony & full house' },
-      { label: 'Villa & Garden Perimeter', price: '₹2,499', note: 'Includes lawn and outdoor walls' }
+      { label: '1 - 2 BHK Home Barrier', price: 'Starting at ₹1,499', note: 'Kitchen, dining & balconies' },
+      { label: '3 BHK / Duplex Barrier', price: 'Starting at ₹1,999', note: 'Multi-balcony & full house' },
+      { label: 'Villa & Garden Perimeter', price: 'Starting at ₹3,499', note: 'Includes lawn and outdoor walls' }
     ],
     bullets: [
       'Specialized pheromone-attracting granular bait',
@@ -637,14 +637,14 @@ const SERVICES_DETAILED_DATA = {
     duration: '1 Hour',
     crew: '1 - 2 Technicians',
     guarantee: 'Safe Trapping & Odorless Baits',
-    startingPrice: '₹1,699',
+    startingPrice: 'Starting at ₹1,699',
     priceUnit: 'Standard House',
     brief: 'Child-safe lockable bait stations & heavy-duty transit glue pads.',
     description: 'Multi-angle rodent management using heavy-duty glue pad boards, tamper-proof lockable bait stations, and anti-coagulant cake blocks. Eliminates rats without risk of foul odors inside walls.',
     pricingOptions: [
-      { label: 'Standard Residential Flat', price: '₹1,699', note: 'Up to 6 stations/pads placed' },
-      { label: 'Independent House / Duplex', price: '₹2,499', note: 'Up to 12 stations + attic/false ceiling' },
-      { label: 'Commercial Godown / Office', price: '₹2,899', note: 'Heavy industrial proofing' }
+      { label: 'Standard Residential Flat', price: 'Starting at ₹1,699', note: 'Up to 6 stations/pads placed' },
+      { label: 'Independent House / Duplex', price: 'Starting at ₹2,499', note: 'Up to 12 stations + attic/false ceiling' },
+      { label: 'Commercial Godown / Office', price: 'Starting at ₹2,899', note: 'Heavy industrial proofing' }
     ],
     bullets: [
       'Child-safe lockable bait station placement',
@@ -683,15 +683,15 @@ const SERVICES_DETAILED_DATA = {
     duration: '1.5 - 2 Hours',
     crew: '2 Pest Specialists',
     guarantee: '6-Month Comprehensive Shield with Free Re-visit',
-    startingPrice: '₹2,499',
+    startingPrice: 'Starting at ₹2,499',
     priceUnit: 'for 1 BHK',
-    brief: 'Cockroach gel + Ants barrier + Silverfish + Mosquito with 6-month warranty.',
+    brief: 'All-in-one comprehensive pest protection across kitchen, washrooms & living spaces.',
     description: 'Our most comprehensive home pest protection package. Combines odorless German cockroach gel, ants colony transfer bait, silverfish contact spray, drain fly foam treatment, and balcony mosquito barrier into a single, high-value visit.',
     pricingOptions: [
-      { label: '1 BHK Pest Shield Combo', price: '₹2,499', note: 'All-in-one • 6-Month warranty' },
-      { label: '2 BHK Pest Shield Combo', price: '₹3,299', note: 'Most Popular • Free re-service visit' },
-      { label: '3 BHK Pest Shield Combo', price: '₹3,999', note: 'Full 3-bedroom protection' },
-      { label: '4 BHK+ / Villa Combo', price: '₹5,499', note: 'Maximum coverage & warranty' }
+      { label: '1 BHK Pest Shield Combo', price: 'Starting at ₹2,499', note: 'All-in-one • 6-Month warranty' },
+      { label: '2 BHK Pest Shield Combo', price: 'Starting at ₹3,299', note: 'Most Popular • Free re-service visit' },
+      { label: '3 BHK Pest Shield Combo', price: 'Starting at ₹3,999', note: 'Full 3-bedroom protection' },
+      { label: '4 BHK+ / Villa Combo', price: 'Starting at ₹5,499', note: 'Maximum coverage & warranty' }
     ],
     bullets: [
       'Cockroach gel + Ants barrier + Silverfish spray',
@@ -717,8 +717,309 @@ const SERVICES_DETAILED_DATA = {
       { step: 3, title: 'Washroom & Drain Barrier', desc: 'Drain fly flush and silverfish perimeter spray.' },
       { step: 4, title: 'Warranty Issue & Certificate', desc: '6-month warranty registered on Clean Shield Pro operations console.' }
     ]
+  },
+
+  'commercial-pest': {
+    id: 'commercial-pest',
+    cardId: 'card-commercial-pest',
+    category: 'pesticides',
+    categoryName: 'Pesticide Cleaning Services',
+    name: 'Commercial Pest Control',
+    badge: 'Offices, IT & Retail • B2B',
+    image: 'images/service_cockroach.jpg',
+    rating: 4.96,
+    reviewCount: '460+ commercial facilities protected',
+    duration: 'Scheduled / After-Hours Shifts',
+    crew: 'Commercial IPM Crew (2 - 6 Certified Specialists)',
+    guarantee: 'Audit-Compliant Hygiene & Free 24-Hr SLA Callouts',
+    startingPrice: 'Custom Quote',
+    priceUnit: 'Based on Commercial Carpet Area',
+    brief: 'Customized Integrated Pest Management (IPM) for corporate offices, IT parks, retail malls, restaurants & clinics.',
+    description: 'Comprehensive commercial Integrated Pest Management (IPM) engineered specifically for corporate offices, IT workstations, tech parks, banks, retail showrooms, restaurants, cloud kitchens, and hospitals across Rajamahendravaram and the Godavari region. Features odorless Bayer Fipronil gel baiting, concealed tamper-proof rodent stations in AHU/electrical risers, bio-foam drain fly eradication, and perimeter pest shields. Delivered during after-hours and weekend shifts to ensure zero business downtime, backed by FSSAI, ISO, and municipal audit-compliant documentation.',
+    pricingOptions: [
+      { label: 'Corporate Office & IT Tech Park', price: 'Custom Quote', note: 'Cubicles, pantry, server rooms • Free site audit' },
+      { label: 'Restaurant & Cloud Kitchen IPM', price: 'Custom Quote', note: 'FSSAI compliant kitchen & dining protection' },
+      { label: 'Retail Showroom & Shopping Center', price: 'Custom Quote', note: 'Concealed odorless baiting & stockroom shield' },
+      { label: 'Hospital, Clinic & Diagnostic Lab', price: 'Custom Quote', note: 'Sensitive healthcare non-allergenic biosecurity' }
+    ],
+    bullets: [
+      '100% odorless German Fipronil gel for server rooms, pantries & workstations',
+      'Tamper-evident child & pet safe rodent bait stations for utility ducts',
+      'FSSAI & ISO audit-ready digital pest logs and compliance certificates',
+      'Flexible night & weekend shifts with zero business disruption'
+    ],
+    inclusions: [
+      'Comprehensive inspection and pest-mapping across workstations, false ceilings, pantry, server rooms, and washrooms.',
+      'Odorless German Maxforce / Goliath gel dots applied to cabinet hinges, drawers, coffee points, and printer alcoves.',
+      'Concealed rodent multi-catch glue boards and tamper-resistant lockable bait stations installed in utility shafts.',
+      'Drain bio-film treatment and insect growth regulator (IGR) flush in all corporate washrooms.',
+      'Perimeter crack-and-crevice residual spray across entry corridors, emergency exits, and basements.',
+      'Official digital service logs, safety data sheets (MSDS), and compliance certificates for corporate audits.'
+    ],
+    exclusions: [
+      'Repairing open exterior civil structural wall penetrations exceeding 2 inches (advisory report provided).'
+    ],
+    chemicals: 'Bayer Maxforce Fipronil 0.05% gel, BASF Goliath, Sumilarv IGR, and micro-encapsulated pyrethroids. 100% Central Insecticides Board (CIB) & FSSAI approved.',
+    steps: [
+      { step: 1, title: 'Commercial Site Audit & IPM Plan', desc: 'Technical supervisor surveys entry points, moisture zones, and crafts an itemized SLA proposal.' },
+      { step: 2, title: 'After-Hours Technicians Deployment', desc: 'Certified commercial team arrives post business hours with specialized dispensing tools.' },
+      { step: 3, title: 'Zonal Gel Baiting & Shaft Proofing', desc: 'Precision baiting across pantries, workstations, utility risers, and drainage lines.' },
+      { step: 4, title: 'Supervisor Audit & Compliance Handover', desc: 'Detailed audit checklist and warranty certificate handed over to facility manager.' }
+    ]
+  },
+
+  'industrial-pest': {
+    id: 'industrial-pest',
+    cardId: 'card-industrial-pest',
+    category: 'pesticides',
+    categoryName: 'Pesticide Cleaning Services',
+    name: 'Industrial Pest Control & Fumigation',
+    badge: 'Heavy Industrial & Warehouse Grade',
+    image: 'images/service_pest_control.jpg',
+    rating: 4.94,
+    reviewCount: '210+ factories & godowns protected',
+    duration: 'Scheduled by Facility Acreage',
+    crew: 'Industrial Pest Crew & Safety Supervisor (3 - 8 Pros)',
+    guarantee: 'Factory Inspectorate & Export Shipment Compliance',
+    startingPrice: 'Custom Quote',
+    priceUnit: 'Based on Facility Scope & Area',
+    brief: 'Heavy-duty pest proofing, godown fumigation, perimeter rodent burrow defense & raw material warehouse insect eradication.',
+    description: 'Industrial-grade pest management and specialized fumigation engineered for factories, manufacturing facilities, logistics godowns, cold storage units, packaging plants, rice mills, and processing plants across Andhra Pradesh. We combat stored-product pests (weevils, beetles, moths), subterranean termite attacks, factory rodent infestations, and flies/mosquitoes in high-ceiling structures. Delivered by safety-certified personnel with full PPE, breathing apparatus, and heavy-duty thermal foggers adhering to OSHA, HACCP, and Factory Inspectorate norms.',
+    pricingOptions: [
+      { label: 'Logistics Warehouse & Godown', price: 'Custom Quote', note: 'Pallet racking, transit bays & perimeter baiting' },
+      { label: 'Manufacturing & Production Facility', price: 'Custom Quote', note: 'Heavy machine line degreasing pest defense' },
+      { label: 'Cold Storage & Agro-Processing Unit', price: 'Custom Quote', note: 'Food-safe HACCP standard non-toxic defense' },
+      { label: 'Export Godown Fumigation & Proofing', price: 'Custom Quote', note: 'Pre-shipment pest clearance & audit documentation' }
+    ],
+    bullets: [
+      'Heavy-duty warehouse fumigation & thermal fogging for high-bay trusses',
+      'Subterranean rodent burrow gassing & heavy exterior perimeter bait stations',
+      'Stored-product pest eradication for raw materials, pallets & finished goods',
+      'PPE-equipped technicians with Factory Inspectorate & ISO audit clearance'
+    ],
+    inclusions: [
+      'Full perimeter inspection of warehouse boundaries, loading docks, raw material silos, and machinery beds.',
+      'High-velocity ULV cold misting and thermal fogging across high-ceiling trusses, rafters, and roof beams.',
+      'Heavy-duty industrial rodent management: tamper-proof anchor stations along perimeter fencing and runway traps.',
+      'Stored-product insect (SPI) pheromone trapping and targeted space treatments for grain, textile, or packaging godowns.',
+      'Anti-termite barrier drilling and chemical infusion along factory perimeter plinths and wooden crating zones.',
+      'Formal technical inspection report, MSDS sheets, and Factory Inspectorate compliance certificate.'
+    ],
+    exclusions: [
+      'Operational high-voltage electrical transformer interiors or hazardous chemical disposal lines.'
+    ],
+    chemicals: 'CIB-registered industrial termiticides, Bromadiolone bait blocks, Deltamethrin ULV mist concentrates, and biological fly larvicides.',
+    steps: [
+      { step: 1, title: 'Facility Hazard & Pest Assessment', desc: 'Safety audit of structural vulnerabilities, stored goods risk, and factory safety protocols.' },
+      { step: 2, title: 'Pre-Shift Staging & PPE Clearance', desc: 'Technicians equipped with safety helmets, respirators, harnesses, and industrial equipment.' },
+      { step: 3, title: 'Heavy Fogging & Perimeter Anchoring', desc: 'Systematic misting of trusses, pallet zones, and installation of external bait stations.' },
+      { step: 4, title: 'Clearance Audit & Safety Sign-Off', desc: 'Air-quality safety check and compliance dossier submitted to safety officer.' }
+    ]
+  },
+
+  'amc-pest': {
+    id: 'amc-pest',
+    cardId: 'card-amc-pest',
+    category: 'pesticides',
+    categoryName: 'Pesticide Cleaning Services',
+    name: 'Pest Control AMC (Annual Maintenance Contract)',
+    badge: 'Annual Contract • 365-Day Pest-Free SLA',
+    image: 'images/service_pest_control.jpg',
+    rating: 4.98,
+    reviewCount: '380+ active annual pest contracts',
+    duration: 'Monthly / Bi-Monthly / Quarterly Cycles',
+    crew: 'Dedicated Account Manager & Assigned Pest Technicians',
+    guarantee: 'Zero-Pest Guarantee with Unlimited Free Emergency Callouts (4-Hr SLA)',
+    startingPrice: 'Custom Quote',
+    priceUnit: 'Annual SLA Contract / Flexible Billing',
+    brief: 'Scheduled recurring annual maintenance contract (AMC) covering cockroaches, termites, rodents, ants, and drain flies with free emergency re-visits.',
+    description: 'Our premier annual pest maintenance contract (AMC / Annual Maintenance Charges) designed for luxury villas, gated apartments, corporate offices, restaurants, healthcare centers, and educational campuses. Enjoy uninterrupted, year-round pest defense with scheduled periodic visits, proactive life-cycle suppression (eggs, nymphs, adults), seasonal mosquito fogging, and unlimited emergency callouts within a 4-hour SLA window at zero extra cost. Save up to 30% compared to ad-hoc single bookings with a dedicated Key Account Manager.',
+    pricingOptions: [
+      { label: 'Residential Villa / Flat AMC (Quarterly)', price: 'Custom Quote', note: '4 scheduled services/yr + unlimited free callouts' },
+      { label: 'Apartment Society Common Areas AMC', price: 'Custom Quote', note: 'Basement, shafts, clubhouse, corridors & sumps' },
+      { label: 'Corporate Office / Retail AMC (Monthly)', price: 'Custom Quote', note: '12 scheduled visits + digital compliance logbook' },
+      { label: 'Restaurant & Hospitality AMC (Bi-Monthly)', price: 'Custom Quote', note: '6 intensive treatments + FSSAI audit support' }
+    ],
+    bullets: [
+      'Scheduled recurring visits without the hassle of follow-up calls',
+      'Unlimited free emergency callouts within 4 hours for unexpected sightings',
+      'Multi-pest coverage: cockroaches, ants, termites, rodents, drain flies & mosquitoes',
+      'Save up to 30% on hygiene expenses with dedicated Key Account Manager'
+    ],
+    inclusions: [
+      'Pre-scheduled monthly, bi-monthly, or quarterly service sessions with automatic calendar reminders.',
+      'Comprehensive multi-pest protection: odorless Bayer cockroach gel, ant colony eliminators, silverfish spray, and drain fly treatments.',
+      'Semi-annual subterranean termite audit and spot treatment included for woodwork and door frames.',
+      'Rodent prevention pads and tamper-proof bait stations inspected and replenished on every visit.',
+      'Priority emergency callout within 4 hours at zero additional cost whenever any pest is sighted.',
+      'Digital service logbook with before-and-after tracking and corporate audit compliance certificates.'
+    ],
+    exclusions: [
+      'Major structural civil repairs or pipeline plumbing replacements.'
+    ],
+    chemicals: 'Complete portfolio of Bayer Maxforce, Premise, BASF Goliath, and WHO-approved larvicides customized to your property type.',
+    steps: [
+      { step: 1, title: 'Property Audit & Custom SLA Design', desc: 'Technical inspection to determine pest vulnerability and define customized visit frequencies.' },
+      { step: 2, title: 'Annual Calendar Booking & Agreement', desc: 'Maintenance schedule booked on the Clean Shield Pro operations console with assigned account manager.' },
+      { step: 3, title: 'Automated Scheduled Execution', desc: 'Technicians arrive automatically on scheduled dates with industrial-grade formulations.' },
+      { step: 4, title: 'Continuous Monitoring & 4-Hr Callouts', desc: 'Round-the-clock priority hotline for instant emergency callouts between scheduled cycles.' }
+    ]
+  },
+
+  // =========================================================================
+  // CATEGORY 3: COMMERCIAL, INDUSTRIAL & AMC SERVICES (No Fixed Price - Custom Quote)
+  // =========================================================================
+  'commercial': {
+    id: 'commercial',
+    cardId: 'card-commercial',
+    category: 'cleaning',
+    categoryName: 'Commercial Cleaning Services',
+    name: 'Commercial Deep Cleaning',
+    badge: 'Offices, IT & Retail',
+    image: 'images/service_floor.jpg',
+    rating: 4.96,
+    reviewCount: '580+ commercial offices cleaned',
+    duration: 'Flexible / After-Hours Shifts',
+    crew: 'Dedicated Commercial Crew (4 - 10 Specialists)',
+    guarantee: 'Audit-Ready Corporate Hygiene & Compliance',
+    startingPrice: 'Custom Quote',
+    priceUnit: 'Based on Carpet Area & Scope',
+    brief: 'Tailored deep cleaning for corporate offices, IT parks, retail showrooms, clinics & banks.',
+    description: 'Comprehensive commercial sanitization and deep cleaning engineered for corporate offices, IT workstations, retail showrooms, banks, clinics, and hospitality spaces. Includes computer workstation wiping, server room dust prevention, pantry degreasing, multi-cubicle carpet foam extraction, glass facade wiping, and restroom germicidal deep scrubbing. We offer night and weekend shifts to prevent business interruption.',
+    pricingOptions: [
+      { label: 'Corporate Office & IT Park', price: 'Custom Quote', note: 'Based on carpet area • Free site audit' },
+      { label: 'Retail Showroom & Shop', price: 'Custom Quote', note: 'Display glass, racks & showroom floor' },
+      { label: 'Clinic, Hospital & Diagnostic Lab', price: 'Custom Quote', note: 'Hospital-grade surface disinfection' },
+      { label: 'Restaurant & Cloud Kitchen', price: 'Custom Quote', note: 'Kitchen degreasing & dining sanitation' }
+    ],
+    bullets: [
+      'Workstation, cubicle & IT equipment safe wipedown',
+      'High-torque floor scrubbing & mirror buffing',
+      'Restroom deep wash & touch-point sanitization',
+      'Flexible scheduling (night shift / weekend execution)'
+    ],
+    inclusions: [
+      'Individual workstation, keyboard, monitor framing, and ergonomic chair sanitization.',
+      'Reception lounge, conference boardrooms, and glass partition streak-free wash.',
+      'Pantry, cafeteria food prep slab, microwave, and refrigerator wipedown.',
+      'Restroom multi-cubicle acid-free descaling and hygienic odor neutralization.',
+      'Industrial single-disc rotary machine scrubbing of high-traffic corridors.',
+      'Waste segregation and responsible commercial disposal.'
+    ],
+    exclusions: [
+      'Internal server rack wiring manipulation or high-voltage electrical panels.'
+    ],
+    chemicals: 'Diversey Taski series (R1 to R9), Suma Inox, and hospital-grade QAC biocides.',
+    steps: [
+      { step: 1, title: 'Free Site Audit & Assessment', desc: 'Our commercial supervisor inspects your facility and crafts an itemized SLA proposal.' },
+      { step: 2, title: 'Pre-Shift Site Staging', desc: 'Trained crew arrives with industrial machinery and Diversey chemical concentrates.' },
+      { step: 3, title: 'Zone-by-Zone Deep Scrub', desc: 'Systematic execution across workstations, conference rooms, pantry, and restrooms.' },
+      { step: 4, title: 'Supervisor Handover & Sign-Off', desc: 'Quality audit checklist signed with the facility manager.' }
+    ]
+  },
+
+  'industrial': {
+    id: 'industrial',
+    cardId: 'card-industrial',
+    category: 'cleaning',
+    categoryName: 'Industrial Cleaning Services',
+    name: 'Industrial & Warehouse Cleaning',
+    badge: 'Heavy-Duty Industrial Grade',
+    image: 'images/service_floor.jpg',
+    rating: 4.94,
+    reviewCount: '210+ factories & warehouses serviced',
+    duration: 'Scheduled by Facility Size',
+    crew: 'Industrial Crew & Safety Supervisor',
+    guarantee: 'OSHA / Factory Inspectorate Standard Hygiene',
+    startingPrice: 'Custom Quote',
+    priceUnit: 'Based on Facility Scope & Machinery',
+    brief: 'Heavy-duty degreasing, warehouse epoxy floor scrubbing & high-level factory rafter cleaning.',
+    description: 'Industrial-grade deep decontamination engineered for factories, manufacturing units, logistics warehouses, cold storage facilities, workshops, and processing plants. Features heavy machinery degreasing, epoxy floor auto-scrubbing, overhead truss and duct dust removal, and industrial grime decontamination using certified industrial PPE and equipment.',
+    pricingOptions: [
+      { label: 'Logistics Warehouse & Godown', price: 'Custom Quote', note: 'Epoxy floor scrubbing & pallet rack dusting' },
+      { label: 'Manufacturing & Production Floor', price: 'Custom Quote', note: 'Machine degreasing & oil stain removal' },
+      { label: 'Cold Storage & Food Processing Unit', price: 'Custom Quote', note: 'Food-safe HACCP standard sanitation' },
+      { label: 'Post-Construction Factory Handover', price: 'Custom Quote', note: 'Full site cement & debris clearance' }
+    ],
+    bullets: [
+      'Heavy-duty grease & industrial oil extraction',
+      'Epoxy floor automatic scrubber-drier cleaning',
+      'High-bay truss, rafters & overhead duct dusting',
+      'Certified industrial safety gear & supervisor on-site'
+    ],
+    inclusions: [
+      'Industrial automatic walk-behind / ride-on scrubber-drier floor cleaning.',
+      'Heavy oil and grease spot lifting using high-strength alkaline emulsifiers.',
+      'High-bay structural rafters, overhead cable trays, and ventilation duct wiping.',
+      'Loading docks, ramp bays, and shutter track vacuuming.',
+      'PPE-compliant technicians with safety helmets, harnesses, and anti-slip boots.'
+    ],
+    exclusions: [
+      'Operational high-voltage electrical transformer servicing or hazardous chemical disposal.'
+    ],
+    chemicals: 'Heavy-duty industrial alkaline degreasers, epoxy-safe neutral cleaners, and oil emulsifiers.',
+    steps: [
+      { step: 1, title: 'Safety & Risk Assessment', desc: 'On-site technical evaluation of floor condition, roof height, and safety protocols.' },
+      { step: 2, title: 'Heavy Debris & Dust Evacuation', desc: 'Industrial suction removes metal shavings, packaging residue, and coarse dirt.' },
+      { step: 3, title: 'Machine Degrease & Auto-Scrub', desc: 'High-torque scrubber-driers lift stubborn tire marks and grease films.' },
+      { step: 4, title: 'Safety Audit & Clearance', desc: 'Dry, anti-slip surface handed over with compliance checklist.' }
+    ]
+  },
+
+  'amc': {
+    id: 'amc',
+    cardId: 'card-amc',
+    category: 'cleaning',
+    categoryName: 'Annual Maintenance Contracts',
+    name: 'AMC (Annual Maintenance Contract)',
+    badge: 'Year-Round Care & SLA Priority',
+    image: 'images/hero_team.jpg',
+    rating: 4.98,
+    reviewCount: '340+ active annual contracts',
+    duration: 'Scheduled Monthly / Quarterly Cycles',
+    crew: 'Dedicated Account Manager & Trained Crew',
+    guarantee: 'Guaranteed Priority Scheduling & SLA Compliance',
+    startingPrice: 'Custom Quote',
+    priceUnit: 'Monthly / Quarterly / Annual Billing',
+    brief: 'Scheduled recurring deep cleaning & pest management contracts for villas, apartments, offices & institutions.',
+    description: 'Customized annual maintenance contracts designed for luxury villas, gated communities, corporate offices, educational institutions, and healthcare centers. Enjoy routine periodic deep cleaning, automated pest control, emergency callouts, a dedicated relationship manager, and discounted rates across all specialized services with complete SLA adherence.',
+    pricingOptions: [
+      { label: 'Residential Villa AMC (Quarterly)', price: 'Custom Quote', note: '4 deep cleans + 4 pest sprays / year' },
+      { label: 'Apartment Society Common Areas AMC', price: 'Custom Quote', note: 'Clubhouse, gym, corridors & sumps' },
+      { label: 'Corporate Office AMC (Monthly)', price: 'Custom Quote', note: 'Dedicated maintenance schedule' },
+      { label: 'Retail & Restaurant Facility AMC', price: 'Custom Quote', note: 'Preventive pest + periodic deep scrub' }
+    ],
+    bullets: [
+      'Scheduled recurring visits without follow-up hassles',
+      'Free emergency callouts for sudden spills or pest spikes',
+      'Dedicated account manager & digital service reports',
+      'Up to 30% savings compared to one-time ad-hoc bookings'
+    ],
+    inclusions: [
+      'Pre-scheduled quarterly or monthly deep cleaning visits with automated reminders.',
+      'Routine pest control treatments (cockroach gel, ant barrier, drain fly treatment).',
+      'Semi-annual water tank jet wash and floor machine scrubbing included.',
+      'Dedicated Key Account Manager for rapid escalation and custom requests.',
+      'Priority emergency callout within 4 hours at zero extra charge.'
+    ],
+    exclusions: [
+      'Civil plumbing modifications or electrical rewiring.'
+    ],
+    chemicals: 'Complete Diversey Taski & Bayer professional sanitation packages customized for the site.',
+    steps: [
+      { step: 1, title: 'Property Audit & Custom SLA', desc: 'Site inspection to define visit frequencies, scope, and specific hygiene standards.' },
+      { step: 2, title: 'Contract Finalization & Calendar', desc: 'Fixed monthly/quarterly maintenance schedule booked in our system.' },
+      { step: 3, title: 'Automated Service Execution', desc: 'Certified teams arrive on scheduled dates with all equipment and supplies.' },
+      { step: 4, title: 'Digital Reports & Reviews', desc: 'Supervisor service certificate and before/after report shared after each visit.' }
+    ]
   }
 };
+
+// Helpful URL aliases for commercial, industrial and AMC pest services
+SERVICES_DETAILED_DATA['commercial-pest-control'] = SERVICES_DETAILED_DATA['commercial-pest'];
+SERVICES_DETAILED_DATA['industrial-pest-control'] = SERVICES_DETAILED_DATA['industrial-pest'];
+SERVICES_DETAILED_DATA['pest-amc'] = SERVICES_DETAILED_DATA['amc-pest'];
+SERVICES_DETAILED_DATA['pest-control-amc'] = SERVICES_DETAILED_DATA['amc-pest'];
 
 // Global helper to open service detail page
 function openServiceDetail(serviceId) {
@@ -726,4 +1027,9 @@ function openServiceDetail(serviceId) {
   // Clean id if it has card- prefix
   const cleanId = serviceId.replace(/^card-/, '');
   window.location.href = 'service-detail.html?service=' + encodeURIComponent(cleanId);
+}
+
+// Export to window
+if (typeof window !== 'undefined') {
+  window.SERVICES_DETAILED_DATA = SERVICES_DETAILED_DATA;
 }

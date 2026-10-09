@@ -15,8 +15,8 @@
   <div class="top-notice-bar">
     <div class="container top-notice-content">
       <div class="top-notice-left">
-        <span class="top-badge">Rajamahendravaram #1</span>
-        <span>Professional Cleaning & Safe Pesticide Extermination</span>
+        <span class="top-badge">10,000+ Happy Customers</span>
+        <span>Professional Cleaning & Safe Pest Control across 15+ Branches</span>
       </div>
       <div class="top-notice-right">
         <a href="tel:+919059639955" class="top-link" title="Call Clean Shield Pro">
@@ -341,23 +341,39 @@
 
           <!-- Location & Main Address in Rajamahendravaram -->
           <div class="form-group">
-            <label class="form-label" for="bookingLocality">Select Locality in Rajamahendravaram <span class="req">*</span></label>
+            <label class="form-label" for="bookingLocality">Select City / Branch & Locality <span class="req">*</span></label>
             <select class="form-control" id="bookingLocality" required>
-              <option value="Danavaipeta" selected>Danavaipeta</option>
-              <option value="Prakash Nagar">Prakash Nagar</option>
-              <option value="Morampudi">Morampudi</option>
-              <option value="Lalacheruvu">Lalacheruvu</option>
-              <option value="Diwancheruvu">Diwancheruvu</option>
-              <option value="Dowleswaram">Dowleswaram</option>
-              <option value="Aryapuram">Aryapuram</option>
-              <option value="Innespeta">Innespeta</option>
-              <option value="Katheru">Katheru</option>
-              <option value="Bommuru">Bommuru</option>
-              <option value="Hukumpeta">Hukumpeta</option>
-              <option value="Lalitha Nagar">Lalitha Nagar</option>
-              <option value="Syamala Nagar">Syamala Nagar</option>
-              <option value="JN Road Area">JN Road Area</option>
-              <option value="Other Area in Rajahmundry">Other Area in Rajahmundry</option>
+              <optgroup label="Headquarters (Rajahmundry)">
+                <option value="Danavaipeta" selected>Rajahmundry - Danavaipeta</option>
+                <option value="Prakash Nagar">Rajahmundry - Prakash Nagar</option>
+                <option value="Morampudi">Rajahmundry - Morampudi</option>
+                <option value="Lalacheruvu">Rajahmundry - Lalacheruvu</option>
+                <option value="Diwancheruvu">Rajahmundry - Diwancheruvu</option>
+                <option value="Dowleswaram">Rajahmundry - Dowleswaram</option>
+                <option value="Aryapuram">Rajahmundry - Aryapuram</option>
+                <option value="Innespeta">Rajahmundry - Innespeta</option>
+                <option value="Katheru">Rajahmundry - Katheru</option>
+                <option value="Bommuru">Rajahmundry - Bommuru</option>
+                <option value="Hukumpeta">Rajahmundry - Hukumpeta</option>
+                <option value="Other Area in Rajahmundry">Rajahmundry - Other Area</option>
+              </optgroup>
+              <optgroup label="Regional Operational Branches">
+                <option value="East Godavari">East Godavari District Branch</option>
+                <option value="West Godavari">West Godavari District Branch</option>
+                <option value="Palakollu">Palakollu Branch</option>
+                <option value="Narasapuram">Narasapuram Branch</option>
+                <option value="Jaggampeta">Jaggampeta Branch</option>
+                <option value="Vijayawada">Vijayawada Branch</option>
+                <option value="Kakinada">Kakinada Branch</option>
+                <option value="Tanuku">Tanuku Branch</option>
+                <option value="Tadepalligudem">Tadepalligudem Branch</option>
+                <option value="Eluru">Eluru Branch</option>
+                <option value="Amalapuram">Amalapuram Branch</option>
+                <option value="Ravulapalem">Ravulapalem Branch</option>
+                <option value="Bhimavaram">Bhimavaram Branch</option>
+                <option value="Jangareddygudem">Jangareddygudem Branch</option>
+                <option value="Vizag">Vizag (Visakhapatnam) Branch</option>
+              </optgroup>
             </select>
           </div>
 
@@ -547,7 +563,7 @@
 
       // Sticky Widget
       document.getElementById('widgetPrice').textContent = s.startingPrice;
-      document.getElementById('widgetPriceUnit').textContent = `${s.priceUnit} (Taxes Included)`;
+      document.getElementById('widgetPriceUnit').textContent = (s.startingPrice && s.startingPrice.includes('Quote')) ? `${s.priceUnit} • Free Proposal` : `${s.priceUnit} (Taxes Included)`;
 
       // Widget Pills
       const pillsContainer = document.getElementById('widgetPillsList');

@@ -40,7 +40,7 @@ function switchTab(tabId, el) {
   const titles = {
     'tabBookings': 'Bookings & Operations Management',
     'tabEnquiries': 'Custom Quote Enquiries & Inbound Leads',
-    'tabCustomers': 'Rajamahendravaram Customer Directory',
+    'tabCustomers': 'Customer Directory (15+ Branches Network • 10,000+ Customers)',
     'tabReviews': 'Customer Reviews Moderation',
     'tabPricing': 'Service Pricing Configuration',
     'tabTemplates': 'WhatsApp Official Dispatch Templates'
@@ -463,15 +463,15 @@ function loadPricingForm() {
   const pricing = window.CleanShieldDB.getPricing();
   if (!pricing) return;
 
-  document.getElementById('priceDeep1Bhk').value = pricing.deepCleaning['1 BHK'] || 3500;
-  document.getElementById('priceDeep2Bhk').value = pricing.deepCleaning['2 BHK'] || 4500;
-  document.getElementById('priceDeep3Bhk').value = pricing.deepCleaning['3 BHK'] || 5500;
-  document.getElementById('priceDeep4Bhk').value = pricing.deepCleaning['4 BHK+'] || 7500;
+  document.getElementById('priceDeep1Bhk').value = pricing.deepCleaning['1 BHK'] || 3499;
+  document.getElementById('priceDeep2Bhk').value = pricing.deepCleaning['2 BHK'] || 5499;
+  document.getElementById('priceDeep3Bhk').value = pricing.deepCleaning['3 BHK'] || 5999;
+  document.getElementById('priceDeep4Bhk').value = pricing.deepCleaning['4 BHK+'] || 7499;
 
-  document.getElementById('pricePest1Bhk').value = pricing.pestControl['1 BHK'] || 4000;
-  document.getElementById('pricePest2Bhk').value = pricing.pestControl['2 BHK'] || 5000;
-  document.getElementById('pricePest3Bhk').value = pricing.pestControl['3 BHK'] || 6000;
-  document.getElementById('pricePestVilla').value = pricing.pestControl['Villas'] || 8500;
+  document.getElementById('pricePest1Bhk').value = pricing.pestControl['1 BHK'] || 1499;
+  document.getElementById('pricePest2Bhk').value = pricing.pestControl['2 BHK'] || 1999;
+  document.getElementById('pricePest3Bhk').value = pricing.pestControl['3 BHK'] || 2499;
+  document.getElementById('pricePestVilla').value = pricing.pestControl['Villas'] || 7499;
 }
 
 function handlePricingSave(e) {
@@ -490,10 +490,10 @@ function handlePricingSave(e) {
       'Villas': Number(document.getElementById('pricePestVilla').value)
     },
     addons: {
-      balconyCleaning: 500,
-      fridgeDeepClean: 400,
-      chimneyDegrease: 600,
-      mattressSanitization: 700
+      balconyCleaning: 499,
+      fridgeDeepClean: 399,
+      chimneyDegrease: 599,
+      mattressSanitization: 899
     }
   };
 
@@ -614,7 +614,9 @@ function handleManualBookingSubmit(e) {
     timeSlot,
     locality,
     amount,
-    address: `${street}, ${locality}, Rajamahendravaram`,
+    address: locality.toLowerCase().includes('rajahmundry') || ['danavaipeta', 'prakash nagar', 'morampudi', 'lalacheruvu', 'dowleswaram', 'diwancheruvu', 'aryapuram', 'innespeta', 'other'].includes(locality.toLowerCase())
+      ? `${street}, ${locality}, Rajamahendravaram`
+      : `${street}, ${locality}`,
     paymentMethod,
     status: 'Confirmed'
   });

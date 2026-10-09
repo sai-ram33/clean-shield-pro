@@ -232,23 +232,30 @@ function initComparisonSlider() {
    =================================================================== */
 const SERVICE_PRICING_TABLE = {
   // Cleaning Services
-  'Full Home Deep Cleaning': { '1 BHK': 3500, '2 BHK': 4500, '3 BHK': 5500, '4 BHK+': 7500 },
-  'Bathroom & Toilet Descaling': { '1 BHK': 799, '2 BHK': 1499, '3 BHK': 1999, '4 BHK+': 2699 },
-  'Kitchen & Chimney Degreasing': { '1 BHK': 1499, '2 BHK': 1899, '3 BHK': 2499, '4 BHK+': 2999 },
-  'Sofa & Upholstery Shampooing': { '1 BHK': 999, '2 BHK': 1499, '3 BHK': 1899, '4 BHK+': 2499 },
-  'Water Tank Jet Wash': { '1 BHK': 999, '2 BHK': 1200, '3 BHK': 1499, '4 BHK+': 1899 },
-  'Floor Scrubbing & Machine Buffing': { '1 BHK': 1800, '2 BHK': 2400, '3 BHK': 3200, '4 BHK+': 4500 },
+  'Full Home Deep Cleaning': { '1 BHK': 3499, '2 BHK': 5499, '3 BHK': 5999, '4 BHK+': 7499 },
+  'Bathroom & Toilet Descaling': { '1 BHK': 599, '2 BHK': 1099, '3 BHK': 1599, '4 BHK+': 2099 },
+  'Kitchen & Chimney Degreasing': { '1 BHK': 1499, '2 BHK': 1999, '3 BHK': 2499, '4 BHK+': 2999 },
+  'Sofa & Upholstery Shampooing': { '1 BHK': 1199, '2 BHK': 1999, '3 BHK': 2499, '4 BHK+': 2999 },
+  'Water Tank Jet Wash': { '1 BHK': 1199, '2 BHK': 1499, '3 BHK': 1999, '4 BHK+': 2499 },
+  'Floor Scrubbing & Machine Buffing': { '1 BHK': 1999, '2 BHK': 2999, '3 BHK': 4499, '4 BHK+': 5999 },
   'Move-in / Vacant Flat Cleaning': { '1 BHK': 2999, '2 BHK': 3999, '3 BHK': 4999, '4 BHK+': 6999 },
-  'Balcony, Window & Mesh Cleaning': { '1 BHK': 699, '2 BHK': 1199, '3 BHK': 1599, '4 BHK+': 2199 },
+  'Balcony, Window & Mesh Cleaning': { '1 BHK': 699, '2 BHK': 1199, '3 BHK': 1499, '4 BHK+': 1999 },
+  'Commercial Deep Cleaning': { '1 BHK': 0, '2 BHK': 0, '3 BHK': 0, '4 BHK+': 0 },
+  'Industrial & Warehouse Cleaning': { '1 BHK': 0, '2 BHK': 0, '3 BHK': 0, '4 BHK+': 0 },
+  'AMC (Annual Maintenance Contract)': { '1 BHK': 0, '2 BHK': 0, '3 BHK': 0, '4 BHK+': 0 },
 
   // Pesticides & Pest Control Services
-  'Odorless Cockroach Control': { '1 BHK': 1499, '2 BHK': 1899, '3 BHK': 2399, '4 BHK+': 3199 },
-  'Anti-Termite Drill Treatment': { '1 BHK': 3499, '2 BHK': 4499, '3 BHK': 5499, '4 BHK+': 7499 },
+  'Odorless Cockroach Control': { '1 BHK': 1499, '2 BHK': 1999, '3 BHK': 2499, '4 BHK+': 3199 },
+  'Anti-Termite Drill Treatment': { '1 BHK': 2999, '2 BHK': 3499, '3 BHK': 4499, '4 BHK+': 7499 },
   'Bed Bug Eradication': { '1 BHK': 1999, '2 BHK': 2699, '3 BHK': 3399, '4 BHK+': 4299 },
   'Mosquito & Drain Fly Fogging': { '1 BHK': 1299, '2 BHK': 1699, '3 BHK': 2199, '4 BHK+': 2999 },
-  'Ants Perimeter Barrier': { '1 BHK': 1199, '2 BHK': 1499, '3 BHK': 1899, '4 BHK+': 2499 },
+  'Ants Perimeter Barrier': { '1 BHK': 1499, '2 BHK': 1999, '3 BHK': 2499, '4 BHK+': 3499 },
   'Rodent & Rat Proofing': { '1 BHK': 1699, '2 BHK': 2199, '3 BHK': 2699, '4 BHK+': 3499 },
-  'Full House Pest Shield Combo': { '1 BHK': 2499, '2 BHK': 3299, '3 BHK': 3999, '4 BHK+': 5199 }
+  'Full House Pest Shield Combo': { '1 BHK': 2499, '2 BHK': 3299, '3 BHK': 3999, '4 BHK+': 5499 },
+  'Commercial Pest Control': { '1 BHK': 0, '2 BHK': 0, '3 BHK': 0, '4 BHK+': 0 },
+  'Industrial Pest Control & Fumigation': { '1 BHK': 0, '2 BHK': 0, '3 BHK': 0, '4 BHK+': 0 },
+  'Pest Control AMC (Annual Maintenance Contract)': { '1 BHK': 0, '2 BHK': 0, '3 BHK': 0, '4 BHK+': 0 },
+  'Pest Control AMC': { '1 BHK': 0, '2 BHK': 0, '3 BHK': 0, '4 BHK+': 0 }
 };
 
 /* ===================================================================
@@ -337,30 +344,40 @@ function calculateBookingPrice() {
   const service = document.getElementById('bookingServiceSelect')?.value || 'Full Home Deep Cleaning';
   const bhk = document.getElementById('selectedBhkInput')?.value || '2 BHK';
 
-  let basePrice = 4500;
-  if (SERVICE_PRICING_TABLE[service] && SERVICE_PRICING_TABLE[service][bhk]) {
+  const isB2B = service.includes('Commercial') || service.includes('Industrial') || service.includes('AMC');
+
+  let basePrice = 5499;
+  if (SERVICE_PRICING_TABLE[service] && SERVICE_PRICING_TABLE[service][bhk] !== undefined) {
     basePrice = SERVICE_PRICING_TABLE[service][bhk];
   }
 
   let addOnTotal = 0;
-  if (document.getElementById('addonBalcony')?.checked) addOnTotal += 500;
-  if (document.getElementById('addonFridge')?.checked) addOnTotal += 400;
-  if (document.getElementById('addonChimney')?.checked) addOnTotal += 600;
-  if (document.getElementById('addonMattress')?.checked) addOnTotal += 700;
+  if (document.getElementById('addonBalcony')?.checked) addOnTotal += 499;
+  if (document.getElementById('addonFridge')?.checked) addOnTotal += 399;
+  if (document.getElementById('addonChimney')?.checked) addOnTotal += 599;
+  if (document.getElementById('addonMattress')?.checked) addOnTotal += 899;
 
-  const total = basePrice + addOnTotal;
+  const total = isB2B ? 0 : (basePrice + addOnTotal);
 
   const titleEl = document.getElementById('priceSummaryTitle');
   const totalEl = document.getElementById('priceSummaryTotal');
 
   if (titleEl) {
-    titleEl.textContent = `${service} (${bhk})${addOnTotal > 0 ? ' + Add-ons' : ''}`;
+    if (isB2B) {
+      titleEl.textContent = `${service} (Site Inspection & Free Proposal)`;
+    } else {
+      titleEl.textContent = `${service} (${bhk})${addOnTotal > 0 ? ' + Add-ons' : ''}`;
+    }
   }
   if (totalEl) {
-    totalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
+    if (isB2B) {
+      totalEl.textContent = 'Custom Quote';
+    } else {
+      totalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
+    }
   }
 
-  return { service, bhk, basePrice, addOnTotal, total };
+  return { service, bhk, basePrice, addOnTotal, total, isB2B };
 }
 
 function handleBookingSubmit(e) {

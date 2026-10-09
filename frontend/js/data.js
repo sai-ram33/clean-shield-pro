@@ -27,25 +27,56 @@ const BUSINESS_CONFIG = {
   allWhatsApp: ['9059639955', '8897312523']
 };
 
+// Company Statistics & Achievements (10,000+ Customers)
+const COMPANY_STATS = {
+  customerCount: '10,000+',
+  customerCountNum: 10000,
+  customerCountLabel: '10,000+ Happy Customers',
+  rating: '4.9 ★',
+  branchesCount: '15+',
+  satisfactionRate: '100%',
+  homesCleaned: '10,000+ Homes Cleaned'
+};
+
+// Regional Operational Branches Network (Headquarters + 15 Service Hubs)
+const BRANCHES_CONFIG = [
+  { id: 'rajahmundry', name: 'Rajahmundry', district: 'East Godavari', isHq: true, phone: '+91 90596 39955', tag: 'Main HQ' },
+  { id: 'east-godavari', name: 'East Godavari', district: 'East Godavari', isHq: false, phone: '+91 90596 39955', tag: 'District Hub' },
+  { id: 'west-godavari', name: 'West Godavari', district: 'West Godavari', isHq: false, phone: '+91 90596 39955', tag: 'District Hub' },
+  { id: 'palakollu', name: 'Palakollu', district: 'West Godavari', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'narasapuram', name: 'Narasapuram', district: 'West Godavari', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'jaggampeta', name: 'Jaggampeta', district: 'East Godavari', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'vijayawada', name: 'Vijayawada', district: 'Krishna / NTR', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'kakinada', name: 'Kakinada', district: 'Kakinada', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'tanuku', name: 'Tanuku', district: 'West Godavari', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'tadepalligudem', name: 'Tadepalligudem', district: 'West Godavari', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'eluru', name: 'Eluru', district: 'Eluru', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'amalapuram', name: 'Amalapuram', district: 'Dr. B.R. Ambedkar Konaseema', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'ravulapalem', name: 'Ravulapalem', district: 'Dr. B.R. Ambedkar Konaseema', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'bhimavaram', name: 'Bhimavaram', district: 'West Godavari', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'jangareddygudem', name: 'Jangareddygudem', district: 'Eluru', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' },
+  { id: 'vizag', name: 'Vizag (Visakhapatnam)', district: 'Visakhapatnam', isHq: false, phone: '+91 90596 39955', tag: 'Active Hub' }
+];
+
 // Initial default pricing
 const DEFAULT_PRICING = {
   deepCleaning: {
-    '1 BHK': 3500,
-    '2 BHK': 4500,
-    '3 BHK': 5500,
-    '4 BHK+': 7500
+    '1 BHK': 3499,
+    '2 BHK': 5499,
+    '3 BHK': 5999,
+    '4 BHK+': 7499
   },
   pestControl: {
-    '1 BHK': 4000,
-    '2 BHK': 5000,
-    '3 BHK': 6000,
-    'Villas': 8500
+    '1 BHK': 1499,
+    '2 BHK': 1999,
+    '3 BHK': 2499,
+    'Villas': 7499
   },
   addons: {
-    balconyCleaning: 500,
-    fridgeDeepClean: 400,
-    chimneyDegrease: 600,
-    mattressSanitization: 700
+    balconyCleaning: 499,
+    fridgeDeepClean: 399,
+    chimneyDegrease: 599,
+    mattressSanitization: 899
   }
 };
 
@@ -72,8 +103,8 @@ const SERVICES_CATALOG = [
         defaultVariantIndex: 1,
         variants: [
           { name: '1 BHK', price: 3499, originalPrice: 4199, duration: '3 - 3.5 hrs' },
-          { name: '2 BHK', price: 4499, originalPrice: 5299, duration: '4 - 4.5 hrs' },
-          { name: '3 BHK', price: 5499, originalPrice: 6499, duration: '5 - 6 hrs' },
+          { name: '2 BHK', price: 5499, originalPrice: 6499, duration: '4 - 4.5 hrs' },
+          { name: '3 BHK', price: 5999, originalPrice: 7199, duration: '5 - 6 hrs' },
           { name: '4 BHK+ / Villa', price: 7499, originalPrice: 8999, duration: '6 - 7 hrs' }
         ],
         highlights: [
@@ -120,7 +151,8 @@ const SERVICES_CATALOG = [
           { name: '1 BHK (Empty)', price: 2999, originalPrice: 3599, duration: '3 hrs' },
           { name: '2 BHK (Empty)', price: 3999, originalPrice: 4799, duration: '3.5 - 4 hrs' },
           { name: '3 BHK (Empty)', price: 4999, originalPrice: 5999, duration: '4.5 - 5 hrs' },
-          { name: '4 BHK+ (Empty)', price: 6999, originalPrice: 8299, duration: '5.5 - 6.5 hrs' }
+          { name: '4 BHK (Empty)', price: 6999, originalPrice: 8299, duration: '5.5 - 6.5 hrs' },
+          { name: 'Duplex Empty Flat', price: 7999, originalPrice: 9499, duration: '6.5 - 7.5 hrs' }
         ],
         highlights: [
           'Complete interior sanitization of empty cupboards, wardrobes and shelves',
@@ -192,18 +224,17 @@ const SERVICES_CATALOG = [
         subtitle: 'Deep scrubbing of tiles, grout, hard water stains, WC, basin, and taps',
         rating: 4.85,
         reviewCount: '24.6K reviews',
-        duration: '60 mins',
+        duration: '30 - 60 mins',
         crew: '1 Professional',
         image: 'images/service_bathroom.jpg',
         badge: 'High Demand',
-        discountTag: '28% OFF',
+        discountTag: '20% OFF',
         hasVariants: true,
         defaultVariantIndex: 0,
         variants: [
-          { name: '1 Bathroom', price: 499, originalPrice: 699, duration: '60 mins' },
-          { name: '2 Bathrooms', price: 899, originalPrice: 1299, duration: '100 mins' },
-          { name: '3 Bathrooms', price: 1299, originalPrice: 1899, duration: '150 mins' },
-          { name: '4 Bathrooms', price: 1699, originalPrice: 2499, duration: '180 mins' }
+          { name: '1 Bathroom', price: 599, originalPrice: 749, duration: '30 - 60 mins' },
+          { name: '2 Bathrooms', price: 1099, originalPrice: 1299, duration: '60 - 90 mins' },
+          { name: '3 Bathrooms', price: 1599, originalPrice: 1899, duration: '90 - 120 mins' }
         ],
         highlights: [
           'Diversey Taski R6 acidic chemical for hard water limescale on tiles & glass',
@@ -232,17 +263,16 @@ const SERVICES_CATALOG = [
         subtitle: 'Routine maintenance sanitization, washbasin wipe and floor scrub',
         rating: 4.79,
         reviewCount: '9.2K reviews',
-        duration: '45 mins',
+        duration: '30 - 45 mins',
         crew: '1 Professional',
         image: 'images/service_bathroom.jpg',
         badge: 'Value',
-        discountTag: '20% OFF',
+        discountTag: '15% OFF',
         hasVariants: true,
         defaultVariantIndex: 0,
         variants: [
-          { name: '1 Bathroom', price: 399, originalPrice: 499, duration: '45 mins' },
-          { name: '2 Bathrooms', price: 749, originalPrice: 999, duration: '80 mins' },
-          { name: '3 Bathrooms', price: 1099, originalPrice: 1499, duration: '120 mins' }
+          { name: '1 Bathroom', price: 499, originalPrice: 599, duration: '30 - 45 mins' },
+          { name: '2 Bathrooms', price: 899, originalPrice: 1099, duration: '60 - 75 mins' }
         ],
         highlights: [
           'Regular hygiene wash using Taski R1 sanitizing detergent',
@@ -274,16 +304,17 @@ const SERVICES_CATALOG = [
         subtitle: 'Heavy oil and grease removal from tiles, stove, countertop, exhaust & chimney filters',
         rating: 4.89,
         reviewCount: '16.4K reviews',
-        duration: '2.5 hrs',
-        crew: '1 Professional',
+        duration: '2 - 3 hrs',
+        crew: '1 - 2 Professionals',
         image: 'images/service_kitchen.jpg',
         badge: 'Bestseller',
-        discountTag: '23% OFF',
+        discountTag: '20% OFF',
         hasVariants: true,
         defaultVariantIndex: 0,
         variants: [
-          { name: 'Standard Kitchen', price: 1299, originalPrice: 1699, duration: '2 - 2.5 hrs' },
-          { name: 'Large / Modular Kitchen', price: 1699, originalPrice: 2199, duration: '3 - 3.5 hrs' }
+          { name: 'Standard Kitchen Degrease', price: 1499, originalPrice: 1899, duration: '2 - 2.5 hrs' },
+          { name: 'Kitchen Chimney Only', price: 599, originalPrice: 799, duration: '45 mins' },
+          { name: 'Complete Modular Kitchen', price: 1999, originalPrice: 2499, duration: '3 - 3.5 hrs' }
         ],
         highlights: [
           'Chimney baffle filter hot chemical soak to dissolve sticky oil deposits',
@@ -316,10 +347,10 @@ const SERVICES_CATALOG = [
         crew: '1 Professional',
         image: 'images/service_kitchen.jpg',
         badge: 'Popular',
-        discountTag: '23% OFF',
+        discountTag: '20% OFF',
         hasVariants: false,
         variants: [
-          { name: 'All Modular Drawers', price: 999, originalPrice: 1299, duration: '2 hrs' }
+          { name: 'All Modular Drawers', price: 1199, originalPrice: 1499, duration: '2 hrs' }
         ],
         highlights: [
           'Food-safe antibacterial wipes for all cutlery trays and wire baskets',
@@ -351,17 +382,18 @@ const SERVICES_CATALOG = [
         subtitle: 'Foam shampooing and high-power vacuum extraction for deep dirt, sweat & odor',
         rating: 4.87,
         reviewCount: '18.1K reviews',
-        duration: '1 - 1.5 hrs',
-        crew: '1 Professional',
+        duration: '1 - 2 hrs',
+        crew: '1 - 2 Professionals',
         image: 'images/service_sofa.jpg',
         badge: 'Top Rated',
-        discountTag: '27% OFF',
+        discountTag: '20% OFF',
         hasVariants: true,
         defaultVariantIndex: 1,
         variants: [
-          { name: '3-Seater Sofa', price: 799, originalPrice: 1099, duration: '45 mins' },
-          { name: '5-Seater Sofa (3+1+1)', price: 1199, originalPrice: 1599, duration: '75 mins' },
-          { name: '7-Seater / L-Shaped Sofa', price: 1599, originalPrice: 2099, duration: '100 mins' }
+          { name: '3-Seater Sofa Set', price: 1199, originalPrice: 1499, duration: '60 mins' },
+          { name: '5-Seater Sofa Set', price: 1999, originalPrice: 2499, duration: '90 mins' },
+          { name: '7-Seater Sofa Set', price: 2499, originalPrice: 3199, duration: '120 mins' },
+          { name: 'Mattress Sanitization', price: 899, originalPrice: 1199, duration: '45 mins' }
         ],
         highlights: [
           'German injection-extraction machine with high-power moisture suction',
@@ -394,10 +426,9 @@ const SERVICES_CATALOG = [
         badge: 'Health Choice',
         discountTag: '22% OFF',
         hasVariants: true,
-        defaultVariantIndex: 1,
+        defaultVariantIndex: 0,
         variants: [
-          { name: 'Single Bed Mattress', price: 499, originalPrice: 699, duration: '35 mins' },
-          { name: 'Queen / King Bed Mattress', price: 699, originalPrice: 899, duration: '50 mins' }
+          { name: 'Single / Double Mattress', price: 899, originalPrice: 1199, duration: '45 mins' }
         ],
         highlights: [
           'HEPA vacuum extraction of dead skin cells and dust mites',
@@ -406,9 +437,6 @@ const SERVICES_CATALOG = [
         ],
         inclusions: [
           'Top and side surface vacuuming and stain extraction'
-        ],
-        exclusions: [
-          'Old aged oxidation yellowing from years of foam breakdown'
         ],
         procedure: [
           { step: 1, title: 'UV & HEPA Vacuum', desc: 'Removal of microscopic allergens and dead skin cells.' }
@@ -420,29 +448,30 @@ const SERVICES_CATALOG = [
     categoryId: 'pest',
     categoryName: 'Pest Control Services',
     categoryIcon: '🪳',
-    categorySubtitle: 'Odorless Bayer gel baiting, termite drilling, and 90-day warranty',
+    categorySubtitle: 'Odorless Bayer gel baiting, termite drilling, and 3-year warranty',
     services: [
       {
         id: 'pc-cockroach',
-        name: 'Odorless Cockroach & Ant Control',
+        name: 'Odorless Cockroach Control',
         subtitle: 'Advanced herbal gel baiting & crack-and-crevice odorless spray with 90-day warranty',
         rating: 4.92,
         reviewCount: '21.3K reviews',
-        duration: '45 mins',
-        crew: '1 Professional',
-        image: 'images/service_pest_control.jpg',
+        duration: '45 - 60 mins',
+        crew: '1 Certified Pest Technician',
+        image: 'images/service_cockroach.jpg',
         badge: '90-Day Warranty',
-        discountTag: '23% OFF',
+        discountTag: '20% OFF',
         hasVariants: true,
         defaultVariantIndex: 1,
         variants: [
-          { name: '1 BHK', price: 999, originalPrice: 1299, duration: '30 mins' },
-          { name: '2 BHK', price: 1299, originalPrice: 1699, duration: '45 mins' },
-          { name: '3 BHK', price: 1599, originalPrice: 2099, duration: '60 mins' },
-          { name: '4 BHK / Villa', price: 1999, originalPrice: 2599, duration: '75 mins' }
+          { name: 'Kitchen Only', price: 1199, originalPrice: 1499, duration: '30 mins' },
+          { name: '1 BHK', price: 1499, originalPrice: 1899, duration: '45 mins' },
+          { name: '2 BHK', price: 1999, originalPrice: 2499, duration: '60 mins' },
+          { name: '3 BHK', price: 2499, originalPrice: 2999, duration: '75 mins' },
+          { name: 'Annual Contract (3 Visits)', price: 4999, originalPrice: 5999, duration: '1 Year' }
         ],
         highlights: [
-          '100% odorless Bayer Maxforce / Syngenta certified gel dots in kitchen corners',
+          '100% odorless Bayer Maxforce certified gel dots in kitchen corners',
           'No need to empty cupboards, move heavy utensils or leave the house',
           'Secondary odorless spray along skirting boards and bathroom drains',
           'Free re-service warranty if cockroaches reappear within 90 days'
@@ -463,37 +492,124 @@ const SERVICES_CATALOG = [
       },
       {
         id: 'pc-termite',
-        name: 'Complete Anti-Termite Injection Treatment',
-        subtitle: 'Drill-fill-seal subterranean termite barrier for doors, frames, and skirting',
+        name: 'Anti-Termite Drill Treatment',
+        subtitle: '6mm to 8mm drill-and-inject barrier for skirting tiles and wooden door frames',
         rating: 4.95,
         reviewCount: '6.2K reviews',
-        duration: '2 - 3 hrs',
-        crew: '2 Professionals',
-        image: 'images/service_pest_control.jpg',
-        badge: 'Long Term Barrier',
-        discountTag: '22% OFF',
+        duration: '3 - 5 hrs',
+        crew: '2 Certified Drilling Technicians',
+        image: 'images/service_termite.jpg',
+        badge: '3-Year Warranty',
+        discountTag: '18% OFF',
         hasVariants: true,
         defaultVariantIndex: 1,
         variants: [
-          { name: '1 BHK Protection', price: 2499, originalPrice: 3199, duration: '2 hrs' },
-          { name: '2 BHK Protection', price: 3499, originalPrice: 4499, duration: '2.5 hrs' },
-          { name: '3 BHK Protection', price: 4499, originalPrice: 5699, duration: '3.5 hrs' },
-          { name: 'Villa Protection', price: 6999, originalPrice: 8899, duration: '5 hrs' }
+          { name: '1 BHK Protection', price: 2999, originalPrice: 3699, duration: '2.5 hrs' },
+          { name: '2 BHK Protection', price: 3499, originalPrice: 4299, duration: '3.5 hrs' },
+          { name: '3 BHK Protection', price: 4499, originalPrice: 5499, duration: '4.5 hrs' },
+          { name: 'Villa / Duplex Protection', price: 7499, originalPrice: 8999, duration: '6 hrs' }
         ],
         highlights: [
-          'Precision 6mm drilling near wooden door frames and skirting boards',
-          'High-pressure chemical injection using govt-approved Premise termiticide',
-          'Holes sealed neatly with matching white cement / wood filler'
+          'Precision 6mm to 8mm drilling along wall skirtings and door frames',
+          'High-pressure chemical injection using Bayer Premise termiticide',
+          'Holes sealed neatly with matching white cement / wood filler',
+          'Official 3-year warranty certificate with free annual audits'
         ],
         inclusions: [
           'All door frames, window sills and wardrobe base perimeters',
-          '1-year chemical warranty with free re-treatment if active tubes found'
+          '3-Year chemical warranty with free re-treatment if active tubes found'
         ],
         exclusions: [
           'Structural timber replacement of hollowed-out frames'
         ],
         procedure: [
-          { step: 1, title: 'Drilling & Injection', desc: 'Drill 6mm holes every 1 foot along wall-floor junction and infuse termiticide.' }
+          { step: 1, title: 'Drilling & Injection', desc: 'Drill 6mm to 8mm holes every 1 foot along wall-floor junction and infuse termiticide.' }
+        ]
+      },
+      {
+        id: 'pc-commercial',
+        name: 'Commercial Pest Control (B2B)',
+        subtitle: 'Customized IPM for corporate offices, IT parks, retail malls, restaurants & clinics',
+        rating: 4.96,
+        reviewCount: '460+ commercial premises',
+        duration: 'Flexible / After-Hours Shifts',
+        crew: 'Commercial IPM Crew (2 - 6 Specialists)',
+        image: 'images/service_cockroach.jpg',
+        badge: 'Custom Quote',
+        discountTag: 'Site Survey',
+        hasVariants: true,
+        isCustomQuote: true,
+        priceLabel: 'Custom Quote / Price on Request',
+        variants: [
+          { name: 'Corporate Office / IT Park', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' },
+          { name: 'Restaurant & Cloud Kitchen IPM', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' },
+          { name: 'Retail Showroom & Shopping Store', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' },
+          { name: 'Hospital, Clinic & Diagnostic Center', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' }
+        ],
+        highlights: [
+          '100% odorless German Fipronil gel for server rooms, pantries & workstations',
+          'Tamper-evident child & pet safe rodent bait stations for utility ducts',
+          'FSSAI & ISO audit-ready digital pest logs and compliance certificates',
+          'Flexible night & weekend shifts with zero business disruption'
+        ],
+        inclusions: [
+          'Inspection of workstations, false ceilings, cafeteria, server rooms & restrooms',
+          'Odorless Maxforce gel baiting in pantries and drawer joints',
+          'Concealed rodent multi-catch glue boards and tamper-resistant bait stations',
+          'FSSAI, ISO & audit compliance certificate'
+        ]
+      },
+      {
+        id: 'pc-industrial',
+        name: 'Industrial Pest Control & Fumigation',
+        subtitle: 'Heavy-duty pest proofing, godown fumigation & manufacturing plant pest eradication',
+        rating: 4.94,
+        reviewCount: '210+ factories & godowns',
+        duration: 'Scheduled by Facility Acreage',
+        crew: 'Industrial Pest Crew & Safety Supervisor (3 - 8 Pros)',
+        image: 'images/service_pest_control.jpg',
+        badge: 'Heavy-Duty',
+        discountTag: 'Site Survey',
+        hasVariants: true,
+        isCustomQuote: true,
+        priceLabel: 'Custom Quote / Price on Request',
+        variants: [
+          { name: 'Logistics Warehouse & Godown', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' },
+          { name: 'Manufacturing & Production Facility', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' },
+          { name: 'Cold Storage & Agro-Processing Unit', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' }
+        ],
+        highlights: [
+          'Heavy-duty warehouse fumigation & thermal fogging for high-bay trusses',
+          'Subterranean rodent burrow gassing & exterior perimeter bait stations',
+          'Stored-product pest eradication for raw materials & pallets',
+          'PPE-equipped technicians with Factory Inspectorate & ISO audit clearance'
+        ]
+      },
+      {
+        id: 'pc-amc',
+        name: 'Pest Control AMC (Annual Maintenance Contract)',
+        subtitle: 'Scheduled recurring 365-day pest protection with 4-hour emergency SLA callouts',
+        rating: 4.98,
+        reviewCount: '380+ active annual contracts',
+        duration: 'Monthly / Quarterly Cycles',
+        crew: 'Dedicated Account Manager & Assigned Technicians',
+        image: 'images/service_pest_control.jpg',
+        badge: 'Zero-Pest SLA',
+        discountTag: 'Save 30%',
+        hasVariants: true,
+        isCustomQuote: true,
+        priceLabel: 'Custom Quote / Price on Request',
+        variants: [
+          { name: 'Residential Villa / Home AMC (Quarterly)', price: 0, priceDisplay: 'Custom Quote', duration: 'Annual' },
+          { name: 'Apartment Society Common Areas AMC', price: 0, priceDisplay: 'Custom Quote', duration: 'Annual' },
+          { name: 'Corporate Office / Retail AMC (Monthly)', price: 0, priceDisplay: 'Custom Quote', duration: 'Annual' },
+          { name: 'Restaurant & Hospitality AMC (Bi-Monthly)', price: 0, priceDisplay: 'Custom Quote', duration: 'Annual' }
+        ],
+        highlights: [
+          'Scheduled recurring visits without follow-up hassles',
+          'Unlimited free emergency callouts within 4-hour SLA response',
+          'Multi-pest coverage: roaches, ants, termites, rodents, drain flies & mosquitoes',
+          'Up to 30% savings compared to ad-hoc individual treatments'
         ]
       }
     ]
@@ -506,21 +622,22 @@ const SERVICES_CATALOG = [
     services: [
       {
         id: 'wt-tank',
-        name: 'Overhead Tank & Sump High-Pressure Jet Wash',
-        subtitle: '6-stage dewatering, sludge vacuum, rotary jet wash & antibacterial UV treatment',
+        name: 'Water Tank Jet Wash',
+        subtitle: 'Overhead sintex tanks and underground sumps mechanized rotary pressure wash',
         rating: 4.93,
         reviewCount: '7.4K reviews',
-        duration: '1.5 hrs',
-        crew: '2 Professionals',
+        duration: '1.5 - 2 hrs',
+        crew: '2 Certified Tank Technicians',
         image: 'images/service_water_tank.jpg',
-        badge: 'Pure Water',
-        discountTag: '25% OFF',
+        badge: 'UV Sterilized',
+        discountTag: '20% OFF',
         hasVariants: true,
         defaultVariantIndex: 0,
         variants: [
-          { name: 'Overhead Sintex Tank (up to 2000L)', price: 899, originalPrice: 1199, duration: '60 mins' },
-          { name: 'Sump + Overhead Combo (up to 7000L)', price: 1499, originalPrice: 1999, duration: '100 mins' },
-          { name: 'Apartment Large Sump (10,000L+)', price: 2499, originalPrice: 3299, duration: '150 mins' }
+          { name: 'Overhead Tank (Up to 1,000L)', price: 1199, originalPrice: 1499, duration: '60 mins' },
+          { name: 'Overhead Tank (Up to 2,000L)', price: 1999, originalPrice: 2499, duration: '90 mins' },
+          { name: 'Underground Sump (Up to 2,000L)', price: 1499, originalPrice: 1899, duration: '90 mins' },
+          { name: 'Sump + Overhead Combo', price: 2499, originalPrice: 3199, duration: '120 mins' }
         ],
         highlights: [
           'Submersible dewatering pump to quickly evacuate murky stagnant water',
@@ -543,23 +660,24 @@ const SERVICES_CATALOG = [
       },
       {
         id: 'wt-balcony',
-        name: 'Balcony & Window Mesh Deep Wash',
+        name: 'Balcony, Window & Mesh Cleaning',
         subtitle: 'Pressure cleaning of balcony tiles, railing, sliding glass and mosquito mesh',
         rating: 4.81,
         reviewCount: '5.8K reviews',
-        duration: '45 mins',
-        crew: '1 Professional',
+        duration: '45 - 60 mins',
+        crew: '1 - 2 Professionals',
         image: 'images/hero_team.jpg',
-        badge: 'Gleam',
-        discountTag: '25% OFF',
+        badge: 'Streak-Free',
+        discountTag: '20% OFF',
         hasVariants: true,
         defaultVariantIndex: 0,
         variants: [
-          { name: '1 Balcony', price: 499, originalPrice: 699, duration: '45 mins' },
-          { name: '2 Balconies', price: 849, originalPrice: 1199, duration: '75 mins' }
+          { name: '1 Balcony Deep Wash', price: 499, originalPrice: 699, duration: '45 mins' },
+          { name: '2 Balconies Combo', price: 899, originalPrice: 1199, duration: '75 mins' },
+          { name: 'Full Home Windows & Tracks', price: 1499, originalPrice: 1899, duration: '90 mins' }
         ],
         highlights: [
-          'Floor tile scrubbing and mud stain removal',
+          'Floor tile scrubbing and bird mess removal',
           'Railing dusting, spiderweb clearing and glass slider gleam',
           'Mosquito mesh screen vacuuming'
         ],
@@ -571,6 +689,91 @@ const SERVICES_CATALOG = [
         ],
         procedure: [
           { step: 1, title: 'Pressure Wash & Polish', desc: 'Tile scrubbing and glass wiping with streak-free squeegee.' }
+        ]
+      }
+    ]
+  },
+  {
+    categoryId: 'b2b-commercial',
+    categoryName: 'Commercial, Industrial & AMC',
+    categoryIcon: '🏢',
+    categorySubtitle: 'Corporate offices, factories, warehouses and Annual Maintenance Contracts (Custom Quote)',
+    services: [
+      {
+        id: 'comm-office',
+        name: 'Commercial Office Deep Cleaning',
+        subtitle: 'Workstation sanitization, single-disc floor buffing, restrooms & cafeteria degreasing',
+        rating: 4.96,
+        reviewCount: '580+ offices cleaned',
+        duration: 'Flexible / After-Hours',
+        crew: 'Dedicated Commercial Crew (4 - 10 Specialists)',
+        image: 'images/service_floor.jpg',
+        badge: 'Custom Quote',
+        discountTag: 'Site Survey',
+        hasVariants: true,
+        isCustomQuote: true,
+        priceLabel: 'Custom Quote / Price on Request',
+        variants: [
+          { name: 'Corporate Office / IT Park', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' },
+          { name: 'Retail Showroom & Shop', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' },
+          { name: 'Clinic & Hospital Space', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' }
+        ],
+        highlights: [
+          'Workstation, cubicle & IT equipment safe wipedown',
+          'High-torque rotary floor scrubbing & mirror buffing',
+          'Touch-point sanitization & deep washroom descaling',
+          'Flexible night-shift or weekend execution'
+        ]
+      },
+      {
+        id: 'ind-warehouse',
+        name: 'Industrial & Warehouse Cleaning',
+        subtitle: 'Epoxy floor auto-scrubbing, heavy machine degreasing, high rafters and trusses',
+        rating: 4.94,
+        reviewCount: '210+ factories serviced',
+        duration: 'Scheduled by Facility Size',
+        crew: 'Industrial Crew & Supervisor',
+        image: 'images/service_floor.jpg',
+        badge: 'Heavy-Duty',
+        discountTag: 'Site Survey',
+        hasVariants: true,
+        isCustomQuote: true,
+        priceLabel: 'Custom Quote / Price on Request',
+        variants: [
+          { name: 'Logistics Warehouse & Godown', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' },
+          { name: 'Manufacturing & Production Floor', price: 0, priceDisplay: 'Custom Quote', duration: 'Custom' }
+        ],
+        highlights: [
+          'Heavy industrial grease and oil emulsification',
+          'Epoxy floor automatic scrubber-drier operation',
+          'High-bay structural rafters & duct dusting',
+          'Safety PPE compliance and on-site supervisor'
+        ]
+      },
+      {
+        id: 'amc-contract',
+        name: 'AMC (Annual Maintenance Contract)',
+        subtitle: 'Year-round scheduled deep cleaning, pest shield visits, and priority SLA callouts',
+        rating: 4.98,
+        reviewCount: '340+ active contracts',
+        duration: 'Monthly / Quarterly Cycles',
+        crew: 'Dedicated Account Manager & Crew',
+        image: 'images/hero_team.jpg',
+        badge: 'Zero-Downtime Care',
+        discountTag: 'Save 30%',
+        hasVariants: true,
+        isCustomQuote: true,
+        priceLabel: 'Custom Quote / Price on Request',
+        variants: [
+          { name: 'Residential Villa AMC (Quarterly)', price: 0, priceDisplay: 'Custom Quote', duration: 'Annual' },
+          { name: 'Apartment Society Common Areas AMC', price: 0, priceDisplay: 'Custom Quote', duration: 'Annual' },
+          { name: 'Corporate Office AMC (Monthly)', price: 0, priceDisplay: 'Custom Quote', duration: 'Annual' }
+        ],
+        highlights: [
+          'Pre-scheduled quarterly or monthly deep clean cycles',
+          'Integrated scheduled cockroach, ant and drain fly pest shield',
+          'Free emergency callout within 4 hours',
+          'Save up to 30% compared to ad-hoc individual bookings'
         ]
       }
     ]
@@ -737,6 +940,101 @@ const SEED_BOOKINGS = [
     status: 'Pending',
     createdAt: '2026-10-03T11:45:00Z',
     notes: 'General pest and termite prevention inspection needed.'
+  },
+  {
+    id: 'CSP-84922',
+    customerName: 'V. Satyanarayana',
+    phone: '+91 94403 78912',
+    email: 'satya.palakollu@gmail.com',
+    locality: 'Palakollu',
+    address: 'Near Ksheera Ramalingeswara Temple, Palakollu, West Godavari',
+    service: 'Home Deep Cleaning',
+    bhk: '3 BHK',
+    addons: ['Balcony Cleaning'],
+    amount: 6000,
+    date: '2026-10-07',
+    timeSlot: '09:00 AM - 01:00 PM',
+    paymentMethod: 'UPI (PhonePe)',
+    paymentStatus: 'Paid',
+    status: 'Confirmed',
+    createdAt: '2026-10-04T10:00:00Z',
+    notes: 'Full house cleaning before family function in Palakollu.'
+  },
+  {
+    id: 'CSP-84923',
+    customerName: 'Ch. Madhava Rao',
+    phone: '+91 98488 45671',
+    email: 'madhav.narsapur@gmail.com',
+    locality: 'Narasapuram',
+    address: 'Opp. Taylor High School, Steamer Road, Narasapuram, West Godavari',
+    service: 'Pest Control',
+    bhk: '2 BHK',
+    addons: [],
+    amount: 5000,
+    date: '2026-10-08',
+    timeSlot: '02:00 PM - 05:00 PM',
+    paymentMethod: 'Cash on Delivery (COD)',
+    paymentStatus: 'Pending',
+    status: 'Confirmed',
+    createdAt: '2026-10-04T12:30:00Z',
+    notes: 'Odorless cockroach and termite barrier treatment for Narasapuram residence.'
+  },
+  {
+    id: 'CSP-84924',
+    customerName: 'P. Venkata Ramana',
+    phone: '+91 99890 34211',
+    email: 'ramana.jaggampeta@gmail.com',
+    locality: 'Jaggampeta',
+    address: 'Near National Highway Junction, Main Bazar, Jaggampeta, East Godavari',
+    service: 'Home Deep Cleaning',
+    bhk: '2 BHK',
+    addons: ['Kitchen Chimney'],
+    amount: 5100,
+    date: '2026-10-08',
+    timeSlot: '08:30 AM - 12:30 PM',
+    paymentMethod: 'UPI (PhonePe)',
+    paymentStatus: 'Paid',
+    status: 'In Progress',
+    createdAt: '2026-10-05T08:45:00Z',
+    notes: 'Kitchen chimney degreasing and floor machine scrubbing in Jaggampeta.'
+  },
+  {
+    id: 'CSP-84925',
+    customerName: 'K. Subba Raju',
+    phone: '+91 97033 65421',
+    email: 'subbaraju.eg@gmail.com',
+    locality: 'East Godavari',
+    address: 'Collectorate Road, East Godavari Regional Zone',
+    service: 'Home Deep Cleaning',
+    bhk: '4 BHK+',
+    addons: ['Balcony Cleaning', 'Fridge Cleaning'],
+    amount: 8400,
+    date: '2026-10-09',
+    timeSlot: '09:00 AM - 02:00 PM',
+    paymentMethod: 'UPI (PhonePe)',
+    paymentStatus: 'Paid',
+    status: 'Confirmed',
+    createdAt: '2026-10-05T14:10:00Z',
+    notes: 'Duplex villa deep cleaning unit dispatched from East Godavari hub.'
+  },
+  {
+    id: 'CSP-84926',
+    customerName: 'M. Krishna Mohan',
+    phone: '+91 98661 22334',
+    email: 'krishnamohan.wg@gmail.com',
+    locality: 'West Godavari',
+    address: 'Bhimavaram Road, West Godavari Hub Center',
+    service: 'Pest Control',
+    bhk: '3 BHK',
+    addons: [],
+    amount: 6000,
+    date: '2026-10-09',
+    timeSlot: '11:00 AM - 02:00 PM',
+    paymentMethod: 'Cash on Delivery (COD)',
+    paymentStatus: 'Pending',
+    status: 'Confirmed',
+    createdAt: '2026-10-05T16:20:00Z',
+    notes: 'Comprehensive odorless pest control for West Godavari residential quarter.'
   }
 ];
 
@@ -816,6 +1114,21 @@ class CleanShieldDB {
   static init() {
     if (!localStorage.getItem(STORAGE_KEYS.BOOKINGS)) {
       localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(SEED_BOOKINGS));
+    } else {
+      try {
+        const current = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS)) || [];
+        const existingIds = new Set(current.map(b => b.id));
+        let changed = false;
+        SEED_BOOKINGS.forEach(seed => {
+          if (!existingIds.has(seed.id)) {
+            current.push(seed);
+            changed = true;
+          }
+        });
+        if (changed) {
+          localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(current));
+        }
+      } catch (e) {}
     }
     if (!localStorage.getItem(STORAGE_KEYS.ENQUIRIES)) {
       localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(SEED_ENQUIRIES));
