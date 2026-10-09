@@ -19,7 +19,7 @@ if (process.platform === 'win32') {
 
 const connectDB = async () => {
   try {
-    const defaultUri = 'mongodb+srv://sairamvemula15_db_user:msnCp0ST9JIdFS8Y@cluster0.uyjt7lp.mongodb.net/clean_shield_pro?retryWrites=true&w=majority';
+    const defaultUri = 'mongodb+srv://sairamvemula15_db_user:xHJjICKtI6rXalNR@cluster0.uyjt7lp.mongodb.net/clean_shield_pro?retryWrites=true&w=majority';
     const uri = process.env.MONGODB_URI || defaultUri;
 
     const conn = await mongoose.connect(uri, {

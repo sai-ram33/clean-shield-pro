@@ -11,7 +11,7 @@ services:
       - key: CLIENT_ORIGIN
         value: '*'
       - key: MONGODB_URI
-        value: mongodb+srv://sairamvemula15_db_user:msnCp0ST9JIdFS8Y@cluster0.uyjt7lp.mongodb.net/clean_shield_pro?retryWrites=true&w=majority
+        value: mongodb+srv://sairamvemula15_db_user:xHJjICKtI6rXalNR@cluster0.uyjt7lp.mongodb.net/clean_shield_pro?retryWrites=true&w=majority
       - key: ADMIN_EMAIL
         value: madhuripaka756@gmail.com
       - key: ADMIN_SECONDARY_EMAIL
