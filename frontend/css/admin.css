@@ -543,8 +543,8 @@ body {
    =================================================================== */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
   margin-bottom: 24px;
 }
 
@@ -557,6 +557,7 @@ body {
   display: flex;
   flex-direction: column;
   transition: transform 0.2s, box-shadow 0.2s;
+  min-width: 0;
 }
 
 .kpi-card:hover {
@@ -1683,7 +1684,7 @@ body {
 /* ===================================================================
    Responsive Breakpoints
    =================================================================== */
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
   .kpi-grid {
     grid-template-columns: repeat(2, 1fr);
   }
