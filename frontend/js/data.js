@@ -8,6 +8,7 @@ const STORAGE_KEYS = {
   ENQUIRIES: 'csp_enquiries',
   REVIEWS: 'csp_reviews',
   PRICING: 'csp_pricing',
+  PACKAGES: 'csp_service_packages',
   ALERTS: 'csp_alerts'
 };
 
@@ -79,6 +80,245 @@ const DEFAULT_PRICING = {
     mattressSanitization: 899
   }
 };
+
+// Master Services & Packages Catalog with Editable Pricing
+const DEFAULT_SERVICE_PACKAGES = [
+  // 1. Home Deep Cleaning Services
+  {
+    category: 'Home Deep Cleaning',
+    categoryIcon: '🏠',
+    serviceId: 'full-home',
+    serviceName: 'Full Home Deep Cleaning',
+    packages: [
+      { id: 'fh-1bhk', name: '1 BHK', price: 3499, originalPrice: 4199, unit: 'Flat/Apt' },
+      { id: 'fh-2bhk', name: '2 BHK', price: 5499, originalPrice: 6499, unit: 'Flat/Apt' },
+      { id: 'fh-3bhk', name: '3 BHK', price: 5999, originalPrice: 7199, unit: 'Flat/Apt' },
+      { id: 'fh-4bhk', name: '4 BHK+ / Villa', price: 7499, originalPrice: 8999, unit: 'Villa/Flat' }
+    ]
+  },
+  {
+    category: 'Home Deep Cleaning',
+    categoryIcon: '🏠',
+    serviceId: 'vacant-home',
+    serviceName: 'Move-in / Vacant Flat Cleaning',
+    packages: [
+      { id: 'vac-1bhk', name: '1 BHK (Empty)', price: 2999, originalPrice: 3599, unit: 'Flat' },
+      { id: 'vac-2bhk', name: '2 BHK (Empty)', price: 3999, originalPrice: 4799, unit: 'Flat' },
+      { id: 'vac-3bhk', name: '3 BHK (Empty)', price: 4999, originalPrice: 5999, unit: 'Flat' },
+      { id: 'vac-4bhk', name: '4 BHK (Empty)', price: 6999, originalPrice: 8299, unit: 'Flat' },
+      { id: 'vac-duplex', name: 'Duplex Empty Flat', price: 7999, originalPrice: 9499, unit: 'Duplex' }
+    ]
+  },
+  {
+    category: 'Home Deep Cleaning',
+    categoryIcon: '🏠',
+    serviceId: 'villa-deep',
+    serviceName: 'Independent Villa / Duplex House Cleaning',
+    packages: [
+      { id: 'villa-3bhk', name: '3 BHK Villa', price: 7999, originalPrice: 9499, unit: 'Villa' },
+      { id: 'villa-4bhk', name: '4 BHK Villa', price: 9999, originalPrice: 11999, unit: 'Villa' },
+      { id: 'villa-5bhk', name: '5 BHK+ Luxury Estate', price: 13499, originalPrice: 15999, unit: 'Estate' }
+    ]
+  },
+  {
+    category: 'Home Deep Cleaning',
+    categoryIcon: '🚿',
+    serviceId: 'bathroom-clean',
+    serviceName: 'Bathroom & Toilet Descaling (Intense)',
+    packages: [
+      { id: 'bt-1', name: '1 Bathroom', price: 599, originalPrice: 749, unit: 'Bath' },
+      { id: 'bt-2', name: '2 Bathrooms', price: 1099, originalPrice: 1299, unit: 'Baths' },
+      { id: 'bt-3', name: '3 Bathrooms', price: 1599, originalPrice: 1899, unit: 'Baths' },
+      { id: 'bt-4', name: '4 Bathrooms', price: 2099, originalPrice: 2499, unit: 'Baths' }
+    ]
+  },
+  {
+    category: 'Home Deep Cleaning',
+    categoryIcon: '🚿',
+    serviceId: 'classic-bath',
+    serviceName: 'Classic Bathroom Cleaning (Standard)',
+    packages: [
+      { id: 'cbt-1', name: '1 Bathroom', price: 499, originalPrice: 599, unit: 'Bath' },
+      { id: 'cbt-2', name: '2 Bathrooms', price: 899, originalPrice: 1099, unit: 'Baths' }
+    ]
+  },
+  {
+    category: 'Home Deep Cleaning',
+    categoryIcon: '🍳',
+    serviceId: 'kitchen-clean',
+    serviceName: 'Kitchen & Chimney Degreasing',
+    packages: [
+      { id: 'kt-std', name: 'Standard Kitchen Degrease', price: 1499, originalPrice: 1899, unit: 'Kitchen' },
+      { id: 'kt-chm', name: 'Kitchen Chimney Only', price: 599, originalPrice: 799, unit: 'Chimney' },
+      { id: 'kt-mod', name: 'Complete Modular Kitchen', price: 1999, originalPrice: 2499, unit: 'Kitchen' },
+      { id: 'kt-lrg', name: 'Large 4 BHK+ Kitchen', price: 2999, originalPrice: 3499, unit: 'Kitchen' }
+    ]
+  },
+  {
+    category: 'Home Deep Cleaning',
+    categoryIcon: '🛋️',
+    serviceId: 'sofa-clean',
+    serviceName: 'Sofa & Upholstery Shampooing',
+    packages: [
+      { id: 'sf-3s', name: '3-Seater Sofa Set', price: 1199, originalPrice: 1499, unit: 'Set' },
+      { id: 'sf-5s', name: '5-Seater Sofa Set', price: 1999, originalPrice: 2499, unit: 'Set' },
+      { id: 'sf-7s', name: '7-Seater Sofa Set', price: 2499, originalPrice: 3199, unit: 'Set' },
+      { id: 'sf-mat', name: 'Single/Double Mattress', price: 899, originalPrice: 1199, unit: 'Mattress' }
+    ]
+  },
+  {
+    category: 'Home Deep Cleaning',
+    categoryIcon: '🚰',
+    serviceId: 'water-tank',
+    serviceName: 'Water Tank Jet Wash',
+    packages: [
+      { id: 'wt-1000', name: 'Overhead Tank (Up to 1,000L)', price: 1199, originalPrice: 1499, unit: 'Tank' },
+      { id: 'wt-2000', name: 'Overhead Tank (Up to 2,000L)', price: 1999, originalPrice: 2499, unit: 'Tank' },
+      { id: 'wt-sump', name: 'Underground Sump (Up to 2,000L)', price: 1499, originalPrice: 1899, unit: 'Sump' },
+      { id: 'wt-combo', name: 'Sump + Overhead Combo', price: 2499, originalPrice: 3199, unit: 'Combo' }
+    ]
+  },
+  {
+    category: 'Home Deep Cleaning',
+    categoryIcon: '✨',
+    serviceId: 'floor-buff',
+    serviceName: 'Floor Scrubbing & Machine Buffing',
+    packages: [
+      { id: 'fl-1bhk', name: '1 BHK Floor Buffing', price: 1999, originalPrice: 2499, unit: 'Floor' },
+      { id: 'fl-2bhk', name: '2 BHK Floor Buffing', price: 2999, originalPrice: 3599, unit: 'Floor' },
+      { id: 'fl-3bhk', name: '3 BHK Floor Buffing', price: 4499, originalPrice: 5299, unit: 'Floor' },
+      { id: 'fl-4bhk', name: '4 BHK+ / Villa Floor Buffing', price: 5999, originalPrice: 6999, unit: 'Floor' }
+    ]
+  },
+  {
+    category: 'Home Deep Cleaning',
+    categoryIcon: '🪟',
+    serviceId: 'balcony-window',
+    serviceName: 'Balcony, Window & Mesh Cleaning',
+    packages: [
+      { id: 'bw-1', name: '1 Balcony Deep Wash', price: 499, originalPrice: 699, unit: 'Balcony' },
+      { id: 'bw-2', name: '2 Balconies Combo', price: 899, originalPrice: 1199, unit: 'Balconies' },
+      { id: 'bw-win', name: 'Full Home Windows & Tracks', price: 1499, originalPrice: 1899, unit: 'Home' }
+    ]
+  },
+
+  // 2. Pest Control Services
+  {
+    category: 'Pest Control Services',
+    categoryIcon: '🪳',
+    serviceId: 'pest-cockroach',
+    serviceName: 'Odorless Cockroach Control',
+    packages: [
+      { id: 'ck-kit', name: 'Kitchen Only', price: 1199, originalPrice: 1499, unit: 'Kitchen' },
+      { id: 'ck-1bhk', name: '1 BHK', price: 1499, originalPrice: 1899, unit: 'Home' },
+      { id: 'ck-2bhk', name: '2 BHK', price: 1999, originalPrice: 2499, unit: 'Home' },
+      { id: 'ck-3bhk', name: '3 BHK', price: 2499, originalPrice: 2999, unit: 'Home' },
+      { id: 'ck-ann', name: 'Annual Contract (3 Visits)', price: 4999, originalPrice: 5999, unit: 'Annual' }
+    ]
+  },
+  {
+    category: 'Pest Control Services',
+    categoryIcon: '🪵',
+    serviceId: 'pest-termite',
+    serviceName: 'Anti-Termite Drill Treatment (3-Year Warranty)',
+    packages: [
+      { id: 'tm-1bhk', name: '1 BHK Protection', price: 2999, originalPrice: 3699, unit: 'Home' },
+      { id: 'tm-2bhk', name: '2 BHK Protection', price: 3499, originalPrice: 4299, unit: 'Home' },
+      { id: 'tm-3bhk', name: '3 BHK Protection', price: 4499, originalPrice: 5499, unit: 'Home' },
+      { id: 'tm-villa', name: 'Villa / Duplex Protection', price: 7499, originalPrice: 8999, unit: 'Villa' }
+    ]
+  },
+  {
+    category: 'Pest Control Services',
+    categoryIcon: '🛏️',
+    serviceId: 'pest-bedbug',
+    serviceName: 'Bed Bug Eradication (2 Visits)',
+    packages: [
+      { id: 'bb-1bhk', name: '1 BHK (2 Visits)', price: 1999, originalPrice: 2499, unit: 'Home' },
+      { id: 'bb-2bhk', name: '2 BHK (2 Visits)', price: 2699, originalPrice: 3299, unit: 'Home' },
+      { id: 'bb-3bhk', name: '3 BHK (2 Visits)', price: 3399, originalPrice: 3999, unit: 'Home' },
+      { id: 'bb-4bhk', name: '4 BHK+ (2 Visits)', price: 4299, originalPrice: 4999, unit: 'Home' }
+    ]
+  },
+  {
+    category: 'Pest Control Services',
+    categoryIcon: '🦟',
+    serviceId: 'pest-mosquito',
+    serviceName: 'Mosquito & Drain Fly Fogging',
+    packages: [
+      { id: 'mq-1bhk', name: '1 BHK Fogging', price: 1299, originalPrice: 1599, unit: 'Home' },
+      { id: 'mq-2bhk', name: '2 BHK Fogging', price: 1699, originalPrice: 2099, unit: 'Home' },
+      { id: 'mq-3bhk', name: '3 BHK Fogging', price: 2199, originalPrice: 2699, unit: 'Home' },
+      { id: 'mq-4bhk', name: '4 BHK+ Fogging', price: 2999, originalPrice: 3499, unit: 'Home' }
+    ]
+  },
+  {
+    category: 'Pest Control Services',
+    categoryIcon: '🐜',
+    serviceId: 'pest-ants',
+    serviceName: 'Ants Perimeter Barrier',
+    packages: [
+      { id: 'at-1bhk', name: '1 BHK Barrier', price: 1499, originalPrice: 1899, unit: 'Home' },
+      { id: 'at-2bhk', name: '2 BHK Barrier', price: 1999, originalPrice: 2499, unit: 'Home' },
+      { id: 'at-3bhk', name: '3 BHK Barrier', price: 2499, originalPrice: 2999, unit: 'Home' },
+      { id: 'at-4bhk', name: '4 BHK+ Barrier', price: 3499, originalPrice: 4199, unit: 'Home' }
+    ]
+  },
+  {
+    category: 'Pest Control Services',
+    categoryIcon: '🐀',
+    serviceId: 'pest-rodent',
+    serviceName: 'Rodent & Rat Proofing',
+    packages: [
+      { id: 'rd-1bhk', name: '1 BHK Proofing', price: 1699, originalPrice: 2099, unit: 'Home' },
+      { id: 'rd-2bhk', name: '2 BHK Proofing', price: 2199, originalPrice: 2699, unit: 'Home' },
+      { id: 'rd-3bhk', name: '3 BHK Proofing', price: 2699, originalPrice: 3299, unit: 'Home' },
+      { id: 'rd-4bhk', name: '4 BHK+ Proofing', price: 3499, originalPrice: 4199, unit: 'Home' }
+    ]
+  },
+  {
+    category: 'Pest Control Services',
+    categoryIcon: '🛡️',
+    serviceId: 'pest-combo',
+    serviceName: 'Full House Pest Shield Combo (Cockroach + Ants + Drains)',
+    packages: [
+      { id: 'cb-1bhk', name: '1 BHK Combo', price: 2499, originalPrice: 3199, unit: 'Home' },
+      { id: 'cb-2bhk', name: '2 BHK Combo', price: 3299, originalPrice: 3999, unit: 'Home' },
+      { id: 'cb-3bhk', name: '3 BHK Combo', price: 3999, originalPrice: 4799, unit: 'Home' },
+      { id: 'cb-4bhk', name: '4 BHK+ Combo', price: 5499, originalPrice: 6499, unit: 'Home' }
+    ]
+  },
+
+  // 3. Add-ons & Mini Services
+  {
+    category: 'Add-ons & Mini Services',
+    categoryIcon: '⚡',
+    serviceId: 'addons-pack',
+    serviceName: '1-Click Add-on Services',
+    packages: [
+      { id: 'ao-balcony', name: 'Balcony Washing Add-on', price: 499, originalPrice: 699, unit: 'Add-on' },
+      { id: 'ao-fridge', name: 'Refrigerator Deep Clean', price: 399, originalPrice: 499, unit: 'Add-on' },
+      { id: 'ao-chimney', name: 'Chimney Filter Degrease', price: 499, originalPrice: 649, unit: 'Add-on' },
+      { id: 'ao-mattress', name: 'Mattress Sanitization', price: 899, originalPrice: 1199, unit: 'Add-on' },
+      { id: 'ao-microwave', name: 'Microwave & OTG Interior', price: 299, originalPrice: 399, unit: 'Add-on' },
+      { id: 'ao-fans', name: 'Ceiling Fans Scrub (Up to 3)', price: 199, originalPrice: 299, unit: 'Add-on' }
+    ]
+  },
+
+  // 4. Commercial, Industrial & AMC
+  {
+    category: 'Commercial & AMC',
+    categoryIcon: '🏢',
+    serviceId: 'commercial-amc',
+    serviceName: 'Commercial & Facility Contracts',
+    packages: [
+      { id: 'b2b-office', name: 'Corporate Office Cleaning', price: 0, customQuote: true, unit: 'Site Survey' },
+      { id: 'b2b-warehouse', name: 'Industrial & Warehouse Cleaning', price: 0, customQuote: true, unit: 'Site Survey' },
+      { id: 'b2b-pest', name: 'Commercial Pest Control (B2B)', price: 0, customQuote: true, unit: 'Site Survey' },
+      { id: 'b2b-amc', name: 'Annual Maintenance Contract (AMC)', price: 0, customQuote: true, unit: '365-Day SLA' }
+    ]
+  }
+];
 
 // Full Services Catalog for Urban Company Journey / Cart Flow
 const SERVICES_CATALOG = [
@@ -934,6 +1174,10 @@ class CleanShieldDB {
       localStorage.setItem(STORAGE_KEYS.PRICING, JSON.stringify(DEFAULT_PRICING));
     }
 
+    if (!localStorage.getItem(STORAGE_KEYS.PACKAGES)) {
+      localStorage.setItem(STORAGE_KEYS.PACKAGES, JSON.stringify(DEFAULT_SERVICE_PACKAGES));
+    }
+
     // Background sync from MongoDB if available
     this.syncFromBackend();
   }
@@ -962,6 +1206,19 @@ class CleanShieldDB {
         if (rData.success && Array.isArray(rData.data)) {
           localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(rData.data));
           window.dispatchEvent(new CustomEvent('csp_reviews_synced', { detail: rData.data }));
+        }
+      }
+      const pRes = await fetch(`${API_BASE_URL}/pricing`);
+      if (pRes.ok) {
+        const pData = await pRes.json();
+        if (pData.success && pData.data) {
+          if (Array.isArray(pData.data.packages) && pData.data.packages.length > 0) {
+            localStorage.setItem(STORAGE_KEYS.PACKAGES, JSON.stringify(pData.data.packages));
+          }
+          if (pData.data.deepCleaning) {
+            localStorage.setItem(STORAGE_KEYS.PRICING, JSON.stringify(pData.data));
+          }
+          window.dispatchEvent(new CustomEvent('csp_pricing_synced', { detail: pData.data }));
         }
       }
     } catch (e) {
@@ -1247,7 +1504,107 @@ class CleanShieldDB {
     return true;
   }
 
-  // Pricing
+  // Master Service Packages & Pricing
+  static getServicePackages() {
+    this.init();
+    try {
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEYS.PACKAGES));
+      return (Array.isArray(stored) && stored.length > 0) ? stored : DEFAULT_SERVICE_PACKAGES;
+    } catch (e) {
+      return DEFAULT_SERVICE_PACKAGES;
+    }
+  }
+
+  static getPackagePrice(serviceName, packageName) {
+    const list = this.getServicePackages();
+    if (!serviceName) return null;
+    const sNorm = serviceName.trim().toLowerCase();
+    const pNorm = (packageName || '').trim().toLowerCase();
+
+    for (const item of list) {
+      const itemNameNorm = item.serviceName.trim().toLowerCase();
+      if (itemNameNorm.includes(sNorm) || sNorm.includes(itemNameNorm)) {
+        if (item.packages) {
+          const found = item.packages.find(p => {
+            const pNameNorm = p.name.trim().toLowerCase();
+            return pNameNorm === pNorm || pNameNorm.includes(pNorm) || pNorm.includes(pNameNorm);
+          });
+          if (found && typeof found.price === 'number') {
+            return found.price;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  static saveServicePackagePrice(packageId, newPrice) {
+    const list = this.getServicePackages();
+    let updated = false;
+    for (const item of list) {
+      if (item.packages) {
+        const pkg = item.packages.find(p => p.id === packageId);
+        if (pkg) {
+          pkg.price = Number(newPrice);
+          updated = true;
+          break;
+        }
+      }
+    }
+    if (updated) {
+      this.saveAllServicePackages(list);
+    }
+    return updated;
+  }
+
+  static saveAllServicePackages(packagesList) {
+    localStorage.setItem(STORAGE_KEYS.PACKAGES, JSON.stringify(packagesList));
+
+    // Also update legacy pricing map for backward compatibility
+    const legacyPricing = this.getPricing();
+    const fullHome = packagesList.find(s => s.serviceId === 'full-home');
+    if (fullHome && fullHome.packages) {
+      fullHome.packages.forEach(p => {
+        if (p.name.includes('1 BHK')) legacyPricing.deepCleaning['1 BHK'] = p.price;
+        if (p.name.includes('2 BHK')) legacyPricing.deepCleaning['2 BHK'] = p.price;
+        if (p.name.includes('3 BHK')) legacyPricing.deepCleaning['3 BHK'] = p.price;
+        if (p.name.includes('4 BHK')) legacyPricing.deepCleaning['4 BHK+'] = p.price;
+      });
+    }
+    const pest = packagesList.find(s => s.serviceId === 'pest-cockroach');
+    if (pest && pest.packages) {
+      pest.packages.forEach(p => {
+        if (p.name.includes('1 BHK')) legacyPricing.pestControl['1 BHK'] = p.price;
+        if (p.name.includes('2 BHK')) legacyPricing.pestControl['2 BHK'] = p.price;
+        if (p.name.includes('3 BHK')) legacyPricing.pestControl['3 BHK'] = p.price;
+      });
+    }
+    localStorage.setItem(STORAGE_KEYS.PRICING, JSON.stringify(legacyPricing));
+
+    // Sync to backend MongoDB Atlas
+    fetch(`${API_BASE_URL}/pricing`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...legacyPricing,
+        packages: packagesList
+      })
+    }).then(r => r.json()).then(res => {
+      console.log('✅ Service packages saved in MongoDB Atlas:', res);
+    }).catch(err => console.warn('Pricing cloud sync queued:', err.message));
+
+    window.dispatchEvent(new CustomEvent('csp_pricing_updated', { detail: packagesList }));
+    return true;
+  }
+
+  static resetServicePackages() {
+    localStorage.setItem(STORAGE_KEYS.PACKAGES, JSON.stringify(DEFAULT_SERVICE_PACKAGES));
+    localStorage.setItem(STORAGE_KEYS.PRICING, JSON.stringify(DEFAULT_PRICING));
+    this.saveAllServicePackages(DEFAULT_SERVICE_PACKAGES);
+    return DEFAULT_SERVICE_PACKAGES;
+  }
+
+  // Legacy Pricing Helpers
   static getPricing() {
     this.init();
     try {
@@ -1259,6 +1616,11 @@ class CleanShieldDB {
 
   static updatePricing(newPricing) {
     localStorage.setItem(STORAGE_KEYS.PRICING, JSON.stringify(newPricing));
+    fetch(`${API_BASE_URL}/pricing`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newPricing)
+    }).catch(err => console.warn('Pricing cloud sync queued:', err.message));
   }
 
   // Live Alerts & Broadcasts
@@ -1384,4 +1746,5 @@ CleanShieldDB.init();
 // Export to window for vanilla JS access
 window.CleanShieldDB = CleanShieldDB;
 window.SERVICES_CATALOG = SERVICES_CATALOG;
+window.DEFAULT_SERVICE_PACKAGES = DEFAULT_SERVICE_PACKAGES;
 window.PROMO_COUPONS = PROMO_COUPONS;

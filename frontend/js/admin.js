@@ -250,6 +250,10 @@ function switchTab(tabId, el) {
   if (titleEl && titles[tabId]) {
     titleEl.textContent = titles[tabId];
   }
+
+  if (tabId === 'tabPricing') {
+    renderPricingManager();
+  }
 }
 
 /* ===================================================================
@@ -929,48 +933,223 @@ function toggleReview(reviewId) {
 }
 
 /* ===================================================================
-   Pricing Configuration
+   Master Service & Package Pricing Manager
    =================================================================== */
 function loadPricingForm() {
-  const pricing = window.CleanShieldDB.getPricing();
-  if (!pricing) return;
+  renderPricingManager();
+}
 
-  document.getElementById('priceDeep1Bhk').value = pricing.deepCleaning['1 BHK'] || 3499;
-  document.getElementById('priceDeep2Bhk').value = pricing.deepCleaning['2 BHK'] || 5499;
-  document.getElementById('priceDeep3Bhk').value = pricing.deepCleaning['3 BHK'] || 5999;
-  document.getElementById('priceDeep4Bhk').value = pricing.deepCleaning['4 BHK+'] || 7499;
+function renderPricingManager(filterCategory = 'All', searchQuery = '') {
+  const container = document.getElementById('pricingCatalogContainer');
+  if (!container) return;
 
-  document.getElementById('pricePest1Bhk').value = pricing.pestControl['1 BHK'] || 1499;
-  document.getElementById('pricePest2Bhk').value = pricing.pestControl['2 BHK'] || 1999;
-  document.getElementById('pricePest3Bhk').value = pricing.pestControl['3 BHK'] || 2499;
-  document.getElementById('pricePestVilla').value = pricing.pestControl['Villas'] || 7499;
+  const servicesList = window.CleanShieldDB ? window.CleanShieldDB.getServicePackages() : (window.DEFAULT_SERVICE_PACKAGES || []);
+  const categoryFilter = filterCategory || document.getElementById('filterPricingCategory')?.value || 'All';
+  const query = (searchQuery !== undefined ? searchQuery : (document.getElementById('searchPricingInput')?.value || '')).trim().toLowerCase();
+
+  // Filter services
+  const filtered = servicesList.filter(service => {
+    // 1. Category filter
+    if (categoryFilter !== 'All' && service.category !== categoryFilter) {
+      return false;
+    }
+    // 2. Search query filter
+    if (query) {
+      const matchName = service.serviceName.toLowerCase().includes(query);
+      const matchCat = service.category.toLowerCase().includes(query);
+      const matchPkg = service.packages && service.packages.some(p => p.name.toLowerCase().includes(query));
+      if (!matchName && !matchCat && !matchPkg) return false;
+    }
+    return true;
+  });
+
+  const countBadge = document.getElementById('pricingServicesCountBadge');
+  if (countBadge) {
+    countBadge.textContent = `${filtered.length} of ${servicesList.length} Services`;
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 48px 20px; background: #FFFFFF; border: 1px dashed var(--admin-border); border-radius: 12px;">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🔍</div>
+        <h4 style="color: var(--admin-primary); margin-bottom: 6px;">No Services Found</h4>
+        <p style="color: var(--admin-text-muted); font-size: 0.88rem;">No service or package matching "${query}" in category "${categoryFilter}".</p>
+        <button type="button" class="btn-action-secondary" onclick="resetPricingFilters()" style="margin-top: 14px;">Clear Search & Filters</button>
+      </div>
+    `;
+    return;
+  }
+
+  // Group filtered by category
+  const categories = {};
+  filtered.forEach(service => {
+    if (!categories[service.category]) {
+      categories[service.category] = {
+        icon: service.categoryIcon || '🛡️',
+        services: []
+      };
+    }
+    categories[service.category].services.push(service);
+  });
+
+  let html = '';
+  for (const [catName, catData] of Object.entries(categories)) {
+    html += `
+      <div class="pricing-category-block">
+        <div class="pricing-category-header">
+          <div class="pricing-category-title">
+            <span>${catData.icon}</span>
+            <span>${catName}</span>
+          </div>
+          <span class="pricing-category-count">${catData.services.length} Service${catData.services.length > 1 ? 's' : ''}</span>
+        </div>
+        <div class="pricing-services-grid">
+    `;
+
+    catData.services.forEach(service => {
+      html += `
+        <div class="pricing-service-card" data-service-id="${service.serviceId}">
+          <div class="pricing-service-card-header">
+            <span class="pricing-service-name">${service.serviceName}</span>
+            <span class="badge badge-info" style="font-size: 0.68rem; font-weight: 700;">${service.packages ? service.packages.length : 0} Packages</span>
+          </div>
+          <div class="pricing-packages-list">
+      `;
+
+      if (service.packages && service.packages.length > 0) {
+        service.packages.forEach(pkg => {
+          if (pkg.customQuote) {
+            html += `
+              <div class="pricing-package-row">
+                <div class="pkg-info">
+                  <span class="pkg-name">${pkg.name}</span>
+                  <span class="pkg-unit">${pkg.unit || 'Contract'}</span>
+                </div>
+                <div class="pkg-controls">
+                  <span class="badge badge-warning" style="font-size: 0.72rem; font-weight: 700; padding: 6px 12px;">Custom Quote / Free Proposal</span>
+                </div>
+              </div>
+            `;
+          } else {
+            html += `
+              <div class="pricing-package-row">
+                <div class="pkg-info">
+                  <span class="pkg-name">${pkg.name}</span>
+                  <span class="pkg-unit">${pkg.unit ? 'per ' + pkg.unit : 'Standard'}</span>
+                </div>
+                <div class="pkg-controls">
+                  <div class="pkg-currency-input">
+                    <span class="pkg-currency-prefix">₹</span>
+                    <input type="number" 
+                      class="pkg-price-field" 
+                      id="input_pkg_${pkg.id}" 
+                      data-pkg-id="${pkg.id}" 
+                      value="${pkg.price}" 
+                      min="0" 
+                      step="50" 
+                      oninput="handlePriceInputChange(this, '${pkg.id}')">
+                  </div>
+                  <button type="button" class="btn-pkg-save" onclick="handleQuickPackageSave('${pkg.id}')" title="Save this package price">
+                    Save
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+        });
+      }
+
+      html += `
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
+function filterPricingServices() {
+  const category = document.getElementById('filterPricingCategory')?.value || 'All';
+  const query = document.getElementById('searchPricingInput')?.value || '';
+  renderPricingManager(category, query);
+}
+
+function resetPricingFilters() {
+  const catEl = document.getElementById('filterPricingCategory');
+  const searchEl = document.getElementById('searchPricingInput');
+  if (catEl) catEl.value = 'All';
+  if (searchEl) searchEl.value = '';
+  renderPricingManager('All', '');
+}
+
+function handlePriceInputChange(inputEl, pkgId) {
+  if (inputEl) {
+    inputEl.classList.add('dirty');
+  }
+}
+
+function handleQuickPackageSave(pkgId) {
+  const inputEl = document.getElementById(`input_pkg_${pkgId}`);
+  if (!inputEl) return;
+  const newPrice = Number(inputEl.value);
+  if (isNaN(newPrice) || newPrice < 0) {
+    alert('Please enter a valid price amount in INR.');
+    return;
+  }
+
+  if (window.CleanShieldDB && window.CleanShieldDB.saveServicePackagePrice) {
+    window.CleanShieldDB.saveServicePackagePrice(pkgId, newPrice);
+    inputEl.classList.remove('dirty');
+    showToast(`Package price updated to ₹${newPrice.toLocaleString('en-IN')} and synced!`);
+  }
+}
+
+function handleAllPricingSave() {
+  if (!window.CleanShieldDB) return;
+  const allServices = window.CleanShieldDB.getServicePackages();
+
+  // Read all inputs on screen
+  let updatedCount = 0;
+  allServices.forEach(service => {
+    if (service.packages) {
+      service.packages.forEach(pkg => {
+        const inputEl = document.getElementById(`input_pkg_${pkg.id}`);
+        if (inputEl) {
+          const val = Number(inputEl.value);
+          if (!isNaN(val) && val >= 0) {
+            pkg.price = val;
+            inputEl.classList.remove('dirty');
+            updatedCount++;
+          }
+        }
+      });
+    }
+  });
+
+  window.CleanShieldDB.saveAllServicePackages(allServices);
+  showToast(`✅ Successfully saved & synced pricing for all ${updatedCount} packages to MongoDB Atlas & live website!`);
+}
+
+function handleResetDefaultPricing() {
+  if (!confirm('Reset all service packages and pricing back to Clean Shield Pro factory defaults?')) {
+    return;
+  }
+  if (window.CleanShieldDB && window.CleanShieldDB.resetServicePackages) {
+    window.CleanShieldDB.resetServicePackages();
+    resetPricingFilters();
+    showToast('All service prices have been reset to factory defaults.');
+  }
 }
 
 function handlePricingSave(e) {
-  e.preventDefault();
-  const newPricing = {
-    deepCleaning: {
-      '1 BHK': Number(document.getElementById('priceDeep1Bhk').value),
-      '2 BHK': Number(document.getElementById('priceDeep2Bhk').value),
-      '3 BHK': Number(document.getElementById('priceDeep3Bhk').value),
-      '4 BHK+': Number(document.getElementById('priceDeep4Bhk').value)
-    },
-    pestControl: {
-      '1 BHK': Number(document.getElementById('pricePest1Bhk').value),
-      '2 BHK': Number(document.getElementById('pricePest2Bhk').value),
-      '3 BHK': Number(document.getElementById('pricePest3Bhk').value),
-      'Villas': Number(document.getElementById('pricePestVilla').value)
-    },
-    addons: {
-      balconyCleaning: 499,
-      fridgeDeepClean: 399,
-      chimneyDegrease: 599,
-      mattressSanitization: 899
-    }
-  };
-
-  window.CleanShieldDB.updatePricing(newPricing);
-  showToast('Pricing configuration updated! Live booking calculators synchronized.');
+  if (e && e.preventDefault) e.preventDefault();
+  handleAllPricingSave();
 }
 
 /* ===================================================================

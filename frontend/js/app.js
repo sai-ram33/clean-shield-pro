@@ -347,15 +347,29 @@ function calculateBookingPrice() {
   const isB2B = service.includes('Commercial') || service.includes('Industrial') || service.includes('AMC');
 
   let basePrice = 5499;
-  if (SERVICE_PRICING_TABLE[service] && SERVICE_PRICING_TABLE[service][bhk] !== undefined) {
+  if (window.CleanShieldDB && typeof window.CleanShieldDB.getPackagePrice === 'function') {
+    const customPrice = window.CleanShieldDB.getPackagePrice(service, bhk);
+    if (customPrice !== null) {
+      basePrice = customPrice;
+    } else if (SERVICE_PRICING_TABLE[service] && SERVICE_PRICING_TABLE[service][bhk] !== undefined) {
+      basePrice = SERVICE_PRICING_TABLE[service][bhk];
+    }
+  } else if (SERVICE_PRICING_TABLE[service] && SERVICE_PRICING_TABLE[service][bhk] !== undefined) {
     basePrice = SERVICE_PRICING_TABLE[service][bhk];
   }
 
   let addOnTotal = 0;
-  if (document.getElementById('addonBalcony')?.checked) addOnTotal += 499;
-  if (document.getElementById('addonFridge')?.checked) addOnTotal += 399;
-  if (document.getElementById('addonChimney')?.checked) addOnTotal += 599;
-  if (document.getElementById('addonMattress')?.checked) addOnTotal += 899;
+  const getAddonPrice = (name, fallback) => {
+    if (window.CleanShieldDB && window.CleanShieldDB.getPackagePrice) {
+      const p = window.CleanShieldDB.getPackagePrice('Add-on', name);
+      if (p !== null) return p;
+    }
+    return fallback;
+  };
+  if (document.getElementById('addonBalcony')?.checked) addOnTotal += getAddonPrice('Balcony', 499);
+  if (document.getElementById('addonFridge')?.checked) addOnTotal += getAddonPrice('Refrigerator', 399);
+  if (document.getElementById('addonChimney')?.checked) addOnTotal += getAddonPrice('Chimney', 599);
+  if (document.getElementById('addonMattress')?.checked) addOnTotal += getAddonPrice('Mattress', 899);
 
   const total = isB2B ? 0 : (basePrice + addOnTotal);
 

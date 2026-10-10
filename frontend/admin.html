@@ -413,54 +413,62 @@
         <div class="tab-panel" id="tabPricing">
           <div class="admin-card">
             <div class="card-header">
-              <h3 class="card-title">Base Pricing Configuration</h3>
-            </div>
-            <div style="padding:24px;">
-              <form id="pricingForm" onsubmit="handlePricingSave(event)">
-                <h4 style="color:var(--admin-primary); margin-bottom:14px; font-size:1.05rem;">Home Deep Cleaning Pricing (₹ INR)</h4>
-                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:24px;">
-                  <div>
-                    <label class="form-label">1 BHK Base Price</label>
-                    <input type="number" class="form-control" id="priceDeep1Bhk" required>
-                  </div>
-                  <div>
-                    <label class="form-label">2 BHK Base Price</label>
-                    <input type="number" class="form-control" id="priceDeep2Bhk" required>
-                  </div>
-                  <div>
-                    <label class="form-label">3 BHK Base Price</label>
-                    <input type="number" class="form-control" id="priceDeep3Bhk" required>
-                  </div>
-                  <div>
-                    <label class="form-label">4 BHK+ / Villa Price</label>
-                    <input type="number" class="form-control" id="priceDeep4Bhk" required>
-                  </div>
+              <div class="card-header-left">
+                <h3 class="card-title">All Services & Packages Pricing Manager</h3>
+                <span class="card-count-badge" id="pricingServicesCountBadge">21 Services</span>
+              </div>
+              <div class="card-actions-bar">
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                  <input type="text" class="search-input" id="searchPricingInput" placeholder="Search service, package, BHK..." oninput="filterPricingServices()">
                 </div>
-
-                <h4 style="color:var(--admin-primary); margin-bottom:14px; font-size:1.05rem;">Pest Control Pricing (₹ INR)</h4>
-                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:24px;">
-                  <div>
-                    <label class="form-label">1 BHK Pest Control</label>
-                    <input type="number" class="form-control" id="pricePest1Bhk" required>
-                  </div>
-                  <div>
-                    <label class="form-label">2 BHK Pest Control</label>
-                    <input type="number" class="form-control" id="pricePest2Bhk" required>
-                  </div>
-                  <div>
-                    <label class="form-label">3 BHK Pest Control</label>
-                    <input type="number" class="form-control" id="pricePest3Bhk" required>
-                  </div>
-                  <div>
-                    <label class="form-label">Villas Pest Control</label>
-                    <input type="number" class="form-control" id="pricePestVilla" required>
-                  </div>
+                <div class="filter-select-wrapper">
+                  <select class="filter-select" id="filterPricingCategory" onchange="filterPricingServices()">
+                    <option value="All">All Categories</option>
+                    <option value="Home Deep Cleaning">Home Deep Cleaning</option>
+                    <option value="Pest Control Services">Pest Control Services</option>
+                    <option value="Add-ons & Mini Services">Add-ons & Mini Services</option>
+                    <option value="Commercial & AMC">Commercial & AMC</option>
+                  </select>
                 </div>
-
-                <button type="submit" class="btn-manual-booking" style="padding:10px 24px;">
-                  Save Updated Pricing & Sync Website
+                <button type="button" class="btn-action-primary" onclick="handleAllPricingSave()" id="btnSaveAllPricingTop">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+                  <span>Save All Changes</span>
                 </button>
-              </form>
+                <button type="button" class="btn-action-secondary" onclick="handleResetDefaultPricing()" title="Reset all prices to default">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                  <span>Reset Defaults</span>
+                </button>
+              </div>
+            </div>
+
+            <div style="padding: 20px 24px;">
+              <div class="pricing-helper-banner">
+                <div class="pricing-helper-icon">💡</div>
+                <div class="pricing-helper-text">
+                  <strong>Owner Pricing Control:</strong> You can edit the price of <em>any service or package below</em> (e.g. 1 BHK, 2 BHK, 3 BHK, 4 BHK+, Villas, Add-ons). Click <strong>"Save All Changes"</strong> or save individual packages. Your changes instantly synchronize with the live website booking calculator and your MongoDB Atlas cloud database.
+                </div>
+                <div class="pricing-sync-pill">
+                  <span class="badge-dot"></span>
+                  <span>MongoDB Live Sync</span>
+                </div>
+              </div>
+
+              <!-- Container where all services and packages are rendered -->
+              <div id="pricingCatalogContainer" class="pricing-catalog-container">
+                <!-- Dynamically rendered via renderPricingManager() -->
+              </div>
+
+              <!-- Bottom Action Bar -->
+              <div class="pricing-bottom-actions">
+                <button type="button" class="btn-action-primary" onclick="handleAllPricingSave()" style="padding: 12px 28px; font-size: 0.95rem;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+                  <span>Save All Changes & Sync Live Website</span>
+                </button>
+                <button type="button" class="btn-action-secondary" onclick="handleResetDefaultPricing()" style="padding: 12px 20px;">
+                  <span>Reset All to Defaults</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -18,9 +18,12 @@ const pricingSchema = new mongoose.Schema({
     fridgeDeepClean: { type: Number, default: 399 },
     chimneyDegrease: { type: Number, default: 599 },
     mattressSanitization: { type: Number, default: 899 }
-  }
+  },
+  packages: { type: mongoose.Schema.Types.Mixed, default: [] },
+  servicesTable: { type: mongoose.Schema.Types.Mixed, default: {} }
 }, {
-  timestamps: true
+  timestamps: true,
+  strict: false
 });
 
 module.exports = mongoose.model('Pricing', pricingSchema);
