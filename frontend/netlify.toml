@@ -1,0 +1,20 @@
+# Netlify Configuration inside frontend folder (handles Base directory: frontend)
+
+[build]
+  command = ""
+  publish = "."
+
+# Proxy /api requests to live Render Express API
+[[redirects]]
+  from = "/api/*"
+  to = "https://clean-shield-pro.onrender.com/api/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify-Proxy"}
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
