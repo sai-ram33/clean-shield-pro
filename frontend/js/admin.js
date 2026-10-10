@@ -447,6 +447,10 @@ function renderBookingsTable(filteredList = null) {
             <a href="${emailUrl}" class="btn-table-email" title="Email confirmation to ${cfg.email1} & ${cfg.email2}">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
             </a>
+            <button class="btn-table-delete" onclick="handleDeleteBooking('${b.id}', '${(b.customerName || '').replace(/'/g, "\\'")}', '${(b.service || '').replace(/'/g, "\\'")}')" title="Delete this service booking">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+              <span>Delete</span>
+            </button>
           </div>
         </td>
       </tr>
@@ -480,6 +484,19 @@ function changeBookingStatus(bookingId, newStatus) {
     showToast(`Booking ${bookingId} updated to "${newStatus}"`);
     renderKPIs();
     renderBookingsTable();
+  }
+}
+
+function handleDeleteBooking(bookingId, customerName, service) {
+  const confirmed = window.confirm(`Are you sure you want to delete this booking?\n\nID: ${bookingId}\nCustomer: ${customerName}\nService: ${service}\n\nThis will permanently delete this service order from MongoDB Atlas.`);
+  if (!confirmed) return;
+
+  const deleted = window.CleanShieldDB.deleteBooking(bookingId);
+  if (deleted) {
+    showToast(`Booking ${bookingId} deleted permanently.`);
+    renderKPIs();
+    renderBookingsTable();
+    renderCustomersTable();
   }
 }
 
@@ -543,9 +560,15 @@ function showBookingDetail(bookingId) {
       </small>
     </div>
 
-    <div style="display:flex; justify-content:flex-end; gap:12px;">
-      <button class="btn-action-sm" onclick="closeModal('modalAdminBookingDetail')">Close</button>
-      <button class="btn-action-sm" onclick="window.print()" style="background:#0D3B2E; color:#FFFFFF;">Print Details</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:16px;">
+      <button class="btn-table-delete" onclick="closeModal('modalAdminBookingDetail'); handleDeleteBooking('${b.id}', '${(b.customerName || '').replace(/'/g, "\\'")}', '${(b.service || '').replace(/'/g, "\\'")}')" style="padding:7px 14px; font-size:0.82rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+        <span>Delete Service Booking</span>
+      </button>
+      <div style="display:flex; gap:10px;">
+        <button class="btn-action-sm" onclick="closeModal('modalAdminBookingDetail')">Close</button>
+        <button class="btn-action-sm" onclick="window.print()" style="background:#0D3B2E; color:#FFFFFF;">Print Details</button>
+      </div>
     </div>
   `;
 
@@ -638,6 +661,10 @@ function renderEnquiriesTable(filteredList = null) {
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
               <span>Reply WA</span>
             </a>
+            <button class="btn-table-delete" onclick="handleDeleteEnquiry('${e.id}', '${(e.name || '').replace(/'/g, "\\'")}', '${(e.service || '').replace(/'/g, "\\'")}')" title="Delete lead">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+              <span>Delete</span>
+            </button>
           </div>
         </td>
       </tr>
@@ -663,6 +690,19 @@ function changeEnquiryStatus(enquiryId, newStatus) {
   showToast(`Enquiry ${enquiryId} marked as "${newStatus}"`);
   renderKPIs();
   renderEnquiriesTable();
+}
+
+function handleDeleteEnquiry(enquiryId, name, service) {
+  const confirmed = window.confirm(`Are you sure you want to delete lead ${enquiryId} from "${name}" (${service || 'Enquiry'})?\n\nThis will permanently delete it from MongoDB Atlas.`);
+  if (!confirmed) return;
+
+  const deleted = window.CleanShieldDB.deleteEnquiry(enquiryId);
+  if (deleted) {
+    showToast(`Lead ${enquiryId} deleted.`);
+    renderKPIs();
+    renderEnquiriesTable();
+    renderCustomersTable();
+  }
 }
 
 /* ===================================================================
@@ -764,10 +804,39 @@ function renderCustomersTable() {
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
             <span>WhatsApp</span>
           </a>
+          <button class="btn-table-delete" onclick="handleDeleteCustomerBookings('${c.phone}', '${(c.name || '').replace(/'/g, "\\'")}')" title="Delete all service bookings for this customer">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            <span>Delete</span>
+          </button>
         </div>
       </td>
     </tr>
   `).join('');
+}
+
+function handleDeleteCustomerBookings(phone, customerName) {
+  const confirmed = window.confirm(`Are you sure you want to delete all bookings & services for customer "${customerName}" (${phone})?\n\nThis will remove their entire service history from MongoDB Atlas.`);
+  if (!confirmed) return;
+
+  const allBookings = window.CleanShieldDB.getBookings();
+  const normalizedPhone = (phone || '').replace(/\D/g, '');
+  const toDelete = allBookings.filter(b => (b.phone || '').replace(/\D/g, '') === normalizedPhone);
+
+  toDelete.forEach(b => {
+    window.CleanShieldDB.deleteBooking(b.id);
+  });
+
+  const allEnquiries = window.CleanShieldDB.getEnquiries();
+  const enqToDelete = allEnquiries.filter(e => (e.phone || '').replace(/\D/g, '') === normalizedPhone);
+  enqToDelete.forEach(e => {
+    window.CleanShieldDB.deleteEnquiry(e.id);
+  });
+
+  showToast(`Deleted ${toDelete.length} service records for ${customerName}.`);
+  renderKPIs();
+  renderBookingsTable();
+  renderEnquiriesTable();
+  renderCustomersTable();
 }
 
 /* ===================================================================
@@ -823,13 +892,31 @@ function renderReviewsTable() {
         <div class="review-quote-box">"${r.review}"</div>
       </td>
       <td>
-        <button class="btn-visibility-toggle ${r.approved ? 'is-visible' : 'is-hidden'}" onclick="toggleReview('${r.id}')">
-          <span class="vis-dot"></span>
-          <span>${r.approved ? 'Visible on Website' : 'Hidden from Live'}</span>
-        </button>
+        <div class="action-btn-group">
+          <button class="btn-visibility-toggle ${r.approved ? 'is-visible' : 'is-hidden'}" onclick="toggleReview('${r.id}')">
+            <span class="vis-dot"></span>
+            <span>${r.approved ? 'Visible' : 'Hidden'}</span>
+          </button>
+          <button class="btn-table-delete" onclick="handleDeleteReview('${r.id}')" title="Delete Review">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            <span>Delete</span>
+          </button>
+        </div>
       </td>
     </tr>
   `).join('');
+}
+
+function handleDeleteReview(reviewId) {
+  const confirmed = window.confirm(`Are you sure you want to delete review ${reviewId}?\n\nThis will permanently delete it from MongoDB Atlas.`);
+  if (!confirmed) return;
+
+  const deleted = window.CleanShieldDB.deleteReview(reviewId);
+  if (deleted) {
+    showToast(`Review ${reviewId} deleted.`);
+    renderKPIs();
+    renderReviewsTable();
+  }
 }
 
 function toggleReview(reviewId) {

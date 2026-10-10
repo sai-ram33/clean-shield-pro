@@ -1053,6 +1053,24 @@ class CleanShieldDB {
     return null;
   }
 
+  static deleteBooking(bookingId) {
+    const bookings = this.getBookings();
+    const idx = bookings.findIndex(b => b.id === bookingId);
+    if (idx !== -1) {
+      const removed = bookings.splice(idx, 1)[0];
+      localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+
+      // Asynchronously delete from MongoDB Atlas
+      fetch(`${API_BASE_URL}/bookings/${bookingId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      }).catch(err => console.warn('Booking delete sync error:', err.message));
+
+      return removed;
+    }
+    return null;
+  }
+
   static findBooking(query) {
     const bookings = this.getBookings();
     const q = query.trim().toLowerCase();
@@ -1126,6 +1144,23 @@ class CleanShieldDB {
       }).catch(err => console.warn('Enquiry status sync error:', err.message));
 
       return enquiries[idx];
+    }
+    return null;
+  }
+
+  static deleteEnquiry(enquiryId) {
+    const enquiries = this.getEnquiries();
+    const idx = enquiries.findIndex(e => e.id === enquiryId);
+    if (idx !== -1) {
+      const removed = enquiries.splice(idx, 1)[0];
+      localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(enquiries));
+
+      fetch(`${API_BASE_URL}/enquiries/${enquiryId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      }).catch(err => console.warn('Enquiry delete sync error:', err.message));
+
+      return removed;
     }
     return null;
   }

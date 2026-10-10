@@ -1101,6 +1101,27 @@ body {
   border-color: var(--admin-primary-light);
 }
 
+.btn-table-delete {
+  background-color: #FDEDEC;
+  color: var(--admin-danger);
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(231, 76, 60, 0.25);
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-table-delete:hover {
+  background-color: var(--admin-danger);
+  color: #FFFFFF;
+  border-color: var(--admin-danger);
+}
+
 .cell-details-note {
   max-width: 220px;
   font-size: 0.8rem;
