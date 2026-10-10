@@ -2,6 +2,7 @@
 # Serves frontend static assets and proxies /api requests to Render
 
 [build]
+  command = ""
   publish = "frontend"
 
 # Proxy /api requests to live Render Express API
