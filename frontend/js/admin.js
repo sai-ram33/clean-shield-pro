@@ -284,6 +284,10 @@ function renderKPIs() {
   const sidebarBookingsBadge = document.getElementById('sidebarBookingsBadge');
   if (sidebarBookingsBadge) sidebarBookingsBadge.textContent = bookings.length;
 
+  // Card header count badge
+  const bookingsCountBadge = document.getElementById('bookingsCountBadge');
+  if (bookingsCountBadge) bookingsCountBadge.textContent = bookings.length;
+
   // Total revenue
   const totalRev = bookings.reduce((sum, b) => sum + (Number(b.amount) || 0), 0);
   const kpiTotalRevenue = document.getElementById('kpiTotalRevenue');
@@ -298,9 +302,22 @@ function renderKPIs() {
   const sidebarEnquiriesBadge = document.getElementById('sidebarEnquiriesBadge');
   if (sidebarEnquiriesBadge) sidebarEnquiriesBadge.textContent = activeEnq;
 
+  const enquiriesCountBadge = document.getElementById('enquiriesCountBadge');
+  if (enquiriesCountBadge) enquiriesCountBadge.textContent = enquiries.length;
+
+  // Customers unique phone count
+  const customersCountBadge = document.getElementById('customersCountBadge');
+  if (customersCountBadge) {
+    const phones = new Set([...bookings.map(b => (b.phone || '').replace(/\D/g, '')), ...enquiries.map(e => (e.phone || '').replace(/\D/g, ''))]);
+    customersCountBadge.textContent = phones.size;
+  }
+
   // Sidebar reviews badge
   const sidebarReviewsBadge = document.getElementById('sidebarReviewsBadge');
   if (sidebarReviewsBadge) sidebarReviewsBadge.textContent = reviews.length;
+
+  const reviewsCountBadge = document.getElementById('reviewsCountBadge');
+  if (reviewsCountBadge) reviewsCountBadge.textContent = reviews.length;
 
   // Avg rating
   const kpiAvgRating = document.getElementById('kpiAvgRating');
@@ -309,10 +326,10 @@ function renderKPIs() {
   if (reviews.length > 0) {
     const avg = (reviews.reduce((s, r) => s + (r.rating || 5), 0) / reviews.length).toFixed(1);
     if (kpiAvgRating) kpiAvgRating.textContent = `${avg} ★`;
-    if (kpiAvgRatingMeta) kpiAvgRatingMeta.textContent = `${reviews.length} Verified Review${reviews.length > 1 ? 's' : ''}`;
+    if (kpiAvgRatingMeta) kpiAvgRatingMeta.innerHTML = `<span class="kpi-meta-badge purple">${reviews.length} Verified Review${reviews.length > 1 ? 's' : ''}</span>`;
   } else {
     if (kpiAvgRating) kpiAvgRating.textContent = `0.0 ★`;
-    if (kpiAvgRatingMeta) kpiAvgRatingMeta.textContent = `0 Customer Reviews`;
+    if (kpiAvgRatingMeta) kpiAvgRatingMeta.innerHTML = `<span class="kpi-meta-badge purple">0 Reviews</span>`;
   }
 }
 
@@ -324,20 +341,22 @@ function renderBookingsTable(filteredList = null) {
   if (!tbody) return;
 
   const bookings = filteredList || window.CleanShieldDB.getBookings();
+  const countBadge = document.getElementById('bookingsCountBadge');
+  if (countBadge) countBadge.textContent = bookings.length;
 
   if (bookings.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="9" style="text-align:center; padding:48px 20px;">
-          <div style="max-width:440px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:12px;">
-            <div style="width:58px; height:58px; border-radius:50%; background:#EAF6F1; display:flex; align-items:center; justify-content:center; color:#185D4A;">
+        <td colspan="9" class="empty-table-cell">
+          <div class="empty-state-wrap">
+            <div class="empty-icon-circle">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
             </div>
-            <strong style="color:var(--admin-primary); font-size:1.05rem;">No Active Bookings in Database Yet</strong>
-            <p style="color:var(--admin-text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
+            <strong class="empty-title">No Active Bookings in Database Yet</strong>
+            <p class="empty-desc">
               The portal is connected to <strong>MongoDB Atlas</strong>. When customers book any service on the website, their orders are added dynamically to the database and will appear here instantly.
             </p>
-            <button class="btn-manual-booking" onclick="openManualBookingModal()" style="margin-top:6px; padding:8px 16px;">
+            <button class="btn-manual-booking" onclick="openManualBookingModal()">
               + Create Phone Booking
             </button>
           </div>
@@ -348,53 +367,66 @@ function renderBookingsTable(filteredList = null) {
   }
 
   tbody.innerHTML = bookings.map(b => {
-    const statusClass = {
-      'Pending': 'badge-pending',
-      'Confirmed': 'badge-confirmed',
-      'In Progress': 'badge-inprogress',
-      'Completed': 'badge-completed',
-      'Cancelled': 'badge-cancelled'
-    }[b.status] || 'badge-pending';
+    const statusPillClass = {
+      'Pending': 'status-pending',
+      'Confirmed': 'status-confirmed',
+      'In Progress': 'status-inprogress',
+      'Completed': 'status-completed',
+      'Cancelled': 'status-cancelled'
+    }[b.status] || 'status-pending';
 
     const cfg = window.CleanShieldDB.getBusinessConfig();
     const waText = `Namaste ${b.customerName}! 🙏 Clean Shield Pro update regarding your booking ${b.id} for ${b.service} (${b.bhk || ''}) on ${b.date}. Current status: *${b.status}*. Address: ${b.address}. Helplines: ${cfg.phone1} / ${cfg.phone2}.`;
     const waUrl = window.CleanShieldDB.getWhatsAppLink(b.phone, waText);
     const emailUrl = window.CleanShieldDB.getEmailConfirmationLink(b);
+    const bookingDateStr = b.createdAt ? new Date(b.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : 'Recent';
 
     return `
       <tr>
         <td>
-          <strong style="color:var(--admin-primary);">${b.id}</strong><br>
-          <small style="color:var(--admin-text-muted); font-size:0.75rem;">${new Date(b.createdAt).toLocaleDateString()}</small>
+          <div class="cell-id-wrap">
+            <span class="id-tag">${b.id}</span>
+            <span class="id-date">${bookingDateStr}</span>
+          </div>
         </td>
         <td>
-          <strong>${b.customerName}</strong><br>
-          <a href="tel:${b.phone.replace(/\s+/g, '')}" style="color:var(--admin-text-muted); font-size:0.8rem;">${b.phone}</a>
+          <div class="cell-customer">
+            <strong class="customer-name">${b.customerName}</strong>
+            <a href="tel:${b.phone.replace(/\s+/g, '')}" class="customer-phone" title="Call customer">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+              <span>${b.phone}</span>
+            </a>
+          </div>
         </td>
         <td>
-          <span style="font-weight:600; color:var(--admin-primary);">${b.service}</span><br>
-          <small style="color:var(--admin-text-muted);">${b.bhk || 'Standard'}</small>
+          <div class="cell-service">
+            <span class="service-title">${b.service}</span>
+            <span class="service-bhk-pill">${b.bhk || 'Standard'}</span>
+          </div>
         </td>
         <td>
-          <strong>${b.date}</strong><br>
-          <small style="color:var(--admin-text-muted);">${b.timeSlot}</small>
+          <div class="cell-schedule">
+            <span class="schedule-date">📅 ${b.date}</span>
+            <span class="schedule-slot">${b.timeSlot}</span>
+          </div>
         </td>
         <td>
-          <span style="background:#EAF6F1; color:#1E8262; padding:2px 8px; border-radius:12px; font-size:0.78rem; font-weight:600;">
+          <span class="locality-pill">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
             ${b.locality}
           </span>
         </td>
         <td>
-          <strong style="color:var(--admin-primary);">₹${Number(b.amount).toLocaleString('en-IN')}</strong>
+          <span class="amount-val">₹${Number(b.amount).toLocaleString('en-IN')}</span>
         </td>
         <td>
-          <span style="font-size:0.8rem; display:block; font-weight:600; color:${b.paymentStatus === 'Paid' ? '#1E8449' : '#B7950B'}">
-            ${b.paymentStatus || 'Pending'}
-          </span>
-          <small style="color:var(--admin-text-muted); font-size:0.75rem;">${b.paymentMethod}</small>
+          <div class="cell-payment">
+            <span class="payment-badge ${b.paymentStatus === 'Paid' ? 'paid' : 'pending'}">${b.paymentStatus || 'Pending'}</span>
+            <span class="payment-method-label">${b.paymentMethod}</span>
+          </div>
         </td>
         <td>
-          <select class="status-dropdown-select" onchange="changeBookingStatus('${b.id}', this.value)">
+          <select class="status-select-pill ${statusPillClass}" onchange="changeBookingStatus('${b.id}', this.value)">
             <option value="Pending" ${b.status === 'Pending' ? 'selected' : ''}>Pending</option>
             <option value="Confirmed" ${b.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
             <option value="In Progress" ${b.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
@@ -403,15 +435,18 @@ function renderBookingsTable(filteredList = null) {
           </select>
         </td>
         <td>
-          <div style="display:flex; gap:5px; flex-wrap:wrap;">
-            <a href="${waUrl}" target="_blank" rel="noopener" class="btn-action-wa" title="WhatsApp Customer (${b.phone})">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
-              WA
+          <div class="action-btn-group">
+            <a href="${waUrl}" target="_blank" rel="noopener" class="btn-table-wa" title="WhatsApp Customer (${b.phone})">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
+              <span>WhatsApp</span>
             </a>
-            <a href="${emailUrl}" class="btn-action-sm" title="Email confirmation to ${cfg.email1} & ${cfg.email2}">
-              ✉️
+            <button class="btn-table-info" onclick="showBookingDetail('${b.id}')" title="View Full Details">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              <span>Info</span>
+            </button>
+            <a href="${emailUrl}" class="btn-table-email" title="Email confirmation to ${cfg.email1} & ${cfg.email2}">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
             </a>
-            <button class="btn-action-sm" onclick="showBookingDetail('${b.id}')">Info</button>
           </div>
         </td>
       </tr>
@@ -444,6 +479,7 @@ function changeBookingStatus(bookingId, newStatus) {
   if (updated) {
     showToast(`Booking ${bookingId} updated to "${newStatus}"`);
     renderKPIs();
+    renderBookingsTable();
   }
 }
 
@@ -524,18 +560,20 @@ function renderEnquiriesTable(filteredList = null) {
   if (!tbody) return;
 
   const enquiries = filteredList || window.CleanShieldDB.getEnquiries();
+  const countBadge = document.getElementById('enquiriesCountBadge');
+  if (countBadge) countBadge.textContent = enquiries.length;
 
   if (enquiries.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="8" style="text-align:center; padding:48px 20px;">
-          <div style="max-width:440px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:12px;">
-            <div style="width:58px; height:58px; border-radius:50%; background:#EAF6F1; display:flex; align-items:center; justify-content:center; color:#185D4A;">
+        <td colspan="8" class="empty-table-cell">
+          <div class="empty-state-wrap">
+            <div class="empty-icon-circle">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
             </div>
-            <strong style="color:var(--admin-primary); font-size:1.05rem;">No Inbound Enquiries Yet</strong>
-            <p style="color:var(--admin-text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
-              Custom quote inquiries submitted through the website will be dynamically logged into <strong>MongoDB Atlas</strong> and will appear here in real time.
+            <strong class="empty-title">No Inbound Enquiries in Database Yet</strong>
+            <p class="empty-desc">
+              Custom quote inquiries submitted through the website are logged dynamically into <strong>MongoDB Atlas</strong> and will appear here in real time.
             </p>
           </div>
         </td>
@@ -547,35 +585,60 @@ function renderEnquiriesTable(filteredList = null) {
   tbody.innerHTML = enquiries.map(e => {
     const waText = `Namaste ${e.name}! 🙏 Thank you for reaching out to Clean Shield Pro Rajamahendravaram regarding *${e.service}* in ${e.locality}. We received your requirement: "${e.details}". We are ready to provide a custom quotation. May we discuss the specifics?`;
     const waUrl = window.CleanShieldDB.getWhatsAppLink(e.phone, waText);
+    const dateStr = e.createdAt ? new Date(e.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : 'Recent';
+    const statusClass = {
+      'New': 'status-pending',
+      'Contacted': 'status-inprogress',
+      'Converted': 'status-completed'
+    }[e.status] || 'status-pending';
 
     return `
       <tr>
-        <td><strong style="color:var(--admin-primary);">${e.id}</strong></td>
         <td>
-          <strong>${e.name}</strong><br>
-          <small style="color:var(--admin-text-muted);">${e.phone}</small>
+          <div class="cell-id-wrap">
+            <span class="id-tag lead-tag">${e.id}</span>
+          </div>
         </td>
-        <td><strong style="color:var(--admin-primary);">${e.service}</strong></td>
         <td>
-          <span style="background:#EAF6F1; color:#1E8262; padding:2px 8px; border-radius:12px; font-size:0.78rem; font-weight:600;">
+          <div class="cell-customer">
+            <strong class="customer-name">${e.name}</strong>
+            <a href="tel:${e.phone.replace(/\s+/g, '')}" class="customer-phone" title="Call lead">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+              <span>${e.phone}</span>
+            </a>
+          </div>
+        </td>
+        <td>
+          <span class="service-title">${e.service}</span>
+        </td>
+        <td>
+          <span class="locality-pill">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
             ${e.locality}
           </span>
         </td>
-        <td style="max-width:240px; font-size:0.82rem; color:var(--admin-text-muted);">
-          ${e.details}
-        </td>
-        <td><small>${new Date(e.createdAt).toLocaleDateString()}</small></td>
         <td>
-          <select class="status-dropdown-select" onchange="changeEnquiryStatus('${e.id}', this.value)">
+          <div class="cell-details-note" title="${e.details || ''}">
+            ${e.details || 'Standard enquiry'}
+          </div>
+        </td>
+        <td>
+          <span class="schedule-date">${dateStr}</span>
+        </td>
+        <td>
+          <select class="status-select-pill ${statusClass}" onchange="changeEnquiryStatus('${e.id}', this.value)">
             <option value="New" ${e.status === 'New' ? 'selected' : ''}>New Lead</option>
             <option value="Contacted" ${e.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
             <option value="Converted" ${e.status === 'Converted' ? 'selected' : ''}>Converted</option>
           </select>
         </td>
         <td>
-          <a href="${waUrl}" target="_blank" rel="noopener" class="btn-action-wa" title="Reply on WhatsApp">
-            Reply on WA
-          </a>
+          <div class="action-btn-group">
+            <a href="${waUrl}" target="_blank" rel="noopener" class="btn-table-wa" title="Reply on WhatsApp">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
+              <span>Reply WA</span>
+            </a>
+          </div>
         </td>
       </tr>
     `;
@@ -599,6 +662,7 @@ function changeEnquiryStatus(enquiryId, newStatus) {
   window.CleanShieldDB.updateEnquiryStatus(enquiryId, newStatus);
   showToast(`Enquiry ${enquiryId} marked as "${newStatus}"`);
   renderKPIs();
+  renderEnquiriesTable();
 }
 
 /* ===================================================================
@@ -615,7 +679,8 @@ function renderCustomersTable() {
   const map = new Map();
 
   bookings.forEach(b => {
-    const key = b.phone.replace(/\D/g, '');
+    const key = (b.phone || '').replace(/\D/g, '');
+    if (!key) return;
     if (!map.has(key)) {
       map.set(key, {
         name: b.customerName,
@@ -631,7 +696,8 @@ function renderCustomersTable() {
   });
 
   enquiries.forEach(e => {
-    const key = e.phone.replace(/\D/g, '');
+    const key = (e.phone || '').replace(/\D/g, '');
+    if (!key) return;
     if (!map.has(key)) {
       map.set(key, {
         name: e.name,
@@ -644,17 +710,19 @@ function renderCustomersTable() {
   });
 
   const list = Array.from(map.values());
+  const countBadge = document.getElementById('customersCountBadge');
+  if (countBadge) countBadge.textContent = list.length;
 
   if (list.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="6" style="text-align:center; padding:48px 20px;">
-          <div style="max-width:440px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:10px;">
-            <div style="width:58px; height:58px; border-radius:50%; background:#EAF6F1; display:flex; align-items:center; justify-content:center; color:#185D4A;">
+        <td colspan="6" class="empty-table-cell">
+          <div class="empty-state-wrap">
+            <div class="empty-icon-circle">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
             </div>
-            <strong style="color:var(--admin-primary); font-size:1.05rem;">No Customer Records Yet</strong>
-            <p style="color:var(--admin-text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
+            <strong class="empty-title">No Customer Records Yet</strong>
+            <p class="empty-desc">
               Customer contact information and repeat order frequency compile dynamically once bookings are received.
             </p>
           </div>
@@ -666,19 +734,37 @@ function renderCustomersTable() {
 
   tbody.innerHTML = list.map(c => `
     <tr>
-      <td><strong>${c.name}</strong></td>
-      <td>${c.phone}</td>
       <td>
-        <span style="background:#EAF6F1; color:#1E8262; padding:2px 8px; border-radius:12px; font-size:0.78rem; font-weight:600;">
+        <div class="cell-customer">
+          <strong class="customer-name">${c.name}</strong>
+          <span class="customer-type-tag">${c.bookingsCount > 1 ? 'Repeat Client' : 'Direct Customer'}</span>
+        </div>
+      </td>
+      <td>
+        <a href="tel:${c.phone.replace(/\s+/g, '')}" class="customer-phone" title="Call customer">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          <span>${c.phone}</span>
+        </a>
+      </td>
+      <td>
+        <span class="locality-pill">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
           ${c.locality}
         </span>
       </td>
-      <td><strong>${c.bookingsCount}</strong> orders</td>
-      <td><strong style="color:var(--admin-primary);">₹${c.totalSpent.toLocaleString('en-IN')}</strong></td>
       <td>
-        <a href="${window.CleanShieldDB.getWhatsAppLink(c.phone, `Namaste ${c.name}, greetings from Clean Shield Pro Rajamahendravaram!`)}" target="_blank" rel="noopener" class="btn-action-wa">
-          WhatsApp
-        </a>
+        <span class="order-count-badge">${c.bookingsCount} booking${c.bookingsCount === 1 ? '' : 's'}</span>
+      </td>
+      <td>
+        <span class="amount-val">₹${c.totalSpent.toLocaleString('en-IN')}</span>
+      </td>
+      <td>
+        <div class="action-btn-group">
+          <a href="${window.CleanShieldDB.getWhatsAppLink(c.phone, `Namaste ${c.name}, greetings from Clean Shield Pro Rajamahendravaram!`)}" target="_blank" rel="noopener" class="btn-table-wa">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
+            <span>WhatsApp</span>
+          </a>
+        </div>
       </td>
     </tr>
   `).join('');
@@ -692,18 +778,20 @@ function renderReviewsTable() {
   if (!tbody) return;
 
   const reviews = window.CleanShieldDB.getReviews(false);
+  const countBadge = document.getElementById('reviewsCountBadge');
+  if (countBadge) countBadge.textContent = reviews.length;
 
   if (reviews.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="6" style="text-align:center; padding:48px 20px;">
-          <div style="max-width:440px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:10px;">
-            <div style="width:58px; height:58px; border-radius:50%; background:#FAF0E6; display:flex; align-items:center; justify-content:center; color:#B7791F;">
+        <td colspan="6" class="empty-table-cell">
+          <div class="empty-state-wrap">
+            <div class="empty-icon-circle" style="background:#FAF0E6; color:#B7791F;">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
             </div>
-            <strong style="color:var(--admin-primary); font-size:1.05rem;">No Customer Reviews in Database Yet</strong>
-            <p style="color:var(--admin-text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
-              Reviews submitted dynamically by clients on the website will be stored in <strong>MongoDB Atlas</strong> and appear here for moderation.
+            <strong class="empty-title">No Customer Reviews in Database Yet</strong>
+            <p class="empty-desc">
+              Reviews submitted dynamically by clients on the website are stored in <strong>MongoDB Atlas</strong> and appear here for moderation.
             </p>
           </div>
         </td>
@@ -714,21 +802,30 @@ function renderReviewsTable() {
 
   tbody.innerHTML = reviews.map(r => `
     <tr>
-      <td><strong>${r.id}</strong></td>
       <td>
-        <strong>${r.customerName}</strong><br>
-        <small style="color:var(--admin-text-muted);">${r.locality}</small>
-      </td>
-      <td>${r.service}</td>
-      <td>
-        <span style="color:#E6A117; font-weight:700;">${r.rating} ★</span>
-      </td>
-      <td style="max-width:280px; font-size:0.84rem; color:var(--admin-text-main);">
-        "${r.review}"
+        <span class="id-tag">${r.id}</span>
       </td>
       <td>
-        <button class="btn-action-sm" onclick="toggleReview('${r.id}')" style="background:${r.approved ? '#EAF6F1' : '#FADBD8'}; color:${r.approved ? '#1E8449' : '#922B21'};">
-          ${r.approved ? 'Visible on Website' : 'Hidden'}
+        <div class="cell-customer">
+          <strong class="customer-name">${r.customerName}</strong>
+          <span class="locality-pill" style="font-size:0.72rem; padding:1px 6px;">${r.locality}</span>
+        </div>
+      </td>
+      <td>
+        <span class="service-title">${r.service}</span>
+      </td>
+      <td>
+        <div class="rating-stars-pill">
+          <span>★</span> ${r.rating} / 5
+        </div>
+      </td>
+      <td>
+        <div class="review-quote-box">"${r.review}"</div>
+      </td>
+      <td>
+        <button class="btn-visibility-toggle ${r.approved ? 'is-visible' : 'is-hidden'}" onclick="toggleReview('${r.id}')">
+          <span class="vis-dot"></span>
+          <span>${r.approved ? 'Visible on Website' : 'Hidden from Live'}</span>
         </button>
       </td>
     </tr>

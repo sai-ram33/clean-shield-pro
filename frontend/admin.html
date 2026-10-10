@@ -148,30 +148,32 @@
       <!-- Topbar -->
       <header class="admin-topbar">
         <div class="topbar-left">
-          <h2 class="topbar-title" id="pageTitle">Bookings & Operations Management</h2>
-          <span class="live-indicator">Rajamahendravaram & 15+ Branches Live</span>
+          <div class="topbar-heading-group">
+            <div class="topbar-breadcrumb">OPERATIONS CONSOLE &bull; RAJAMAHENDRAVARAM</div>
+            <h1 class="topbar-title" id="pageTitle">Bookings & Operations</h1>
+          </div>
+          <div class="topbar-status-group">
+            <span class="live-indicator"><span class="pulse-dot"></span>15+ AP Hubs</span>
+            <div class="db-status-pill" id="dbStatusPill" title="Connected to MongoDB Atlas Cluster">
+              <span class="badge-dot"></span>
+              <span>Atlas Live</span>
+            </div>
+          </div>
         </div>
 
         <div class="topbar-right">
-          <!-- MongoDB Atlas Live Badge -->
-          <div class="db-status-pill" id="dbStatusPill" title="Connected to MongoDB Atlas Cluster">
-            <span class="badge-dot"></span>
-            <span>MongoDB Live</span>
+          <div class="topbar-actions-cluster">
+            <button class="btn-refresh-data" onclick="manualSyncDashboard()" title="Fetch latest data from MongoDB Atlas">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+              <span>Sync</span>
+            </button>
+
+            <button class="notification-bell-btn" onclick="showRecentAlerts()" title="Notifications">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              <span class="notification-badge" id="topbarAlertCount">0</span>
+            </button>
           </div>
 
-          <!-- Refresh Data Button -->
-          <button class="btn-refresh-data" onclick="manualSyncDashboard()" title="Fetch latest data from MongoDB Atlas">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-            <span>Sync</span>
-          </button>
-
-          <!-- Notification Bell -->
-          <button class="notification-bell-btn" onclick="showRecentAlerts()" title="Notifications">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-            <span class="notification-badge" id="topbarAlertCount">0</span>
-          </button>
-
-          <!-- Owner Profile & Logout -->
           <div class="owner-profile-chip" id="ownerProfileChip">
             <div class="owner-avatar" id="ownerAvatarLetter">M</div>
             <div class="owner-info">
@@ -182,8 +184,8 @@
           </div>
 
           <button class="btn-manual-booking" onclick="openManualBookingModal()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            + New Phone Booking
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            <span>+ New Booking</span>
           </button>
         </div>
       </header>
@@ -194,16 +196,19 @@
         <div class="live-lead-banner" id="liveLeadBanner" style="display:none;">
           <div class="lead-banner-left">
             <div class="lead-pulse-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
             </div>
-            <div>
+            <div class="lead-banner-content">
               <div class="lead-banner-title" id="leadBannerTitle">New Booking Alert!</div>
               <div class="lead-banner-desc" id="leadBannerDesc">A new lead has arrived from Rajamahendravaram.</div>
             </div>
           </div>
-          <div style="display:flex; gap:10px;">
-            <a href="javascript:void(0)" id="leadBannerWaBtn" class="btn-action-wa" target="_blank">Chat on WhatsApp</a>
-            <button class="btn-action-sm" onclick="dismissLeadBanner()">Dismiss</button>
+          <div class="lead-banner-actions">
+            <a href="javascript:void(0)" id="leadBannerWaBtn" class="btn-action-wa" target="_blank">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
+              <span>Chat on WhatsApp</span>
+            </a>
+            <button class="btn-dismiss-banner" onclick="dismissLeadBanner()" title="Dismiss">&times;</button>
           </div>
         </div>
 
@@ -213,44 +218,44 @@
             <div class="kpi-header">
               <span class="kpi-title">Total Bookings</span>
               <div class="kpi-icon-wrap kpi-icon-green">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
               </div>
             </div>
             <div class="kpi-value" id="kpiTotalBookings">0</div>
-            <div class="kpi-meta">Dynamic from MongoDB</div>
+            <div class="kpi-meta"><span class="kpi-meta-badge green">MongoDB Atlas</span></div>
           </div>
 
           <div class="kpi-card">
             <div class="kpi-header">
               <span class="kpi-title">Gross Revenue</span>
               <div class="kpi-icon-wrap kpi-icon-gold">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
               </div>
             </div>
             <div class="kpi-value" id="kpiTotalRevenue">₹0</div>
-            <div class="kpi-meta">All confirmed bookings</div>
+            <div class="kpi-meta"><span class="kpi-meta-badge gold">All Confirmed</span></div>
           </div>
 
           <div class="kpi-card">
             <div class="kpi-header">
               <span class="kpi-title">Active Enquiries</span>
               <div class="kpi-icon-wrap kpi-icon-blue">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
               </div>
             </div>
             <div class="kpi-value" id="kpiActiveEnquiries">0</div>
-            <div class="kpi-meta">Price on Request leads</div>
+            <div class="kpi-meta"><span class="kpi-meta-badge blue">Custom Quotes</span></div>
           </div>
 
           <div class="kpi-card">
             <div class="kpi-header">
-              <span class="kpi-title">Avg. Customer Rating</span>
+              <span class="kpi-title">Customer Rating</span>
               <div class="kpi-icon-wrap kpi-icon-purple">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
               </div>
             </div>
             <div class="kpi-value" id="kpiAvgRating">0.0 ★</div>
-            <div class="kpi-meta" id="kpiAvgRatingMeta">0 Customer Reviews</div>
+            <div class="kpi-meta" id="kpiAvgRatingMeta"><span class="kpi-meta-badge purple">0 Reviews</span></div>
           </div>
         </div>
 
@@ -260,16 +265,25 @@
         <div class="tab-panel active" id="tabBookings">
           <div class="admin-card">
             <div class="card-header">
-              <h3 class="card-title">All Bookings & Dispatches</h3>
+              <div class="card-header-left">
+                <h3 class="card-title">All Bookings & Dispatches</h3>
+                <span class="card-count-badge" id="bookingsCountBadge">0</span>
+              </div>
               <div class="card-actions-bar">
-                <input type="text" class="search-input" id="searchBookingsInput" placeholder="Search customer, ID, phone..." oninput="filterBookings()">
-                <select class="filter-select" id="statusFilterSelect" onchange="filterBookings()">
-                  <option value="All">All Statuses</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Confirmed">Confirmed</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Completed">Completed</option>
-                </select>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                  <input type="text" class="search-input" id="searchBookingsInput" placeholder="Search customer, ID, phone, locality..." oninput="filterBookings()">
+                </div>
+                <div class="filter-select-wrapper">
+                  <select class="filter-select" id="statusFilterSelect" onchange="filterBookings()">
+                    <option value="All">All Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -302,9 +316,15 @@
         <div class="tab-panel" id="tabEnquiries">
           <div class="admin-card">
             <div class="card-header">
-              <h3 class="card-title">Custom Quote Requests & Leads</h3>
+              <div class="card-header-left">
+                <h3 class="card-title">Custom Quote Requests & Leads</h3>
+                <span class="card-count-badge" id="enquiriesCountBadge">0</span>
+              </div>
               <div class="card-actions-bar">
-                <input type="text" class="search-input" id="searchEnquiriesInput" placeholder="Search enquiries..." oninput="filterEnquiries()">
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                  <input type="text" class="search-input" id="searchEnquiriesInput" placeholder="Search leads by customer, phone, locality..." oninput="filterEnquiries()">
+                </div>
               </div>
             </div>
 
@@ -336,7 +356,13 @@
         <div class="tab-panel" id="tabCustomers">
           <div class="admin-card">
             <div class="card-header">
-              <h3 class="card-title">Customer Directory (Rajamahendravaram & 15+ Branches Network • 10,000+ Customers)</h3>
+              <div class="card-header-left">
+                <h3 class="card-title">Customer Directory</h3>
+                <span class="card-count-badge" id="customersCountBadge">0</span>
+              </div>
+              <div class="topbar-status-group">
+                <span class="locality-pill" style="margin:0;">15+ Branches Network • 10,000+ Serviced</span>
+              </div>
             </div>
             <div class="table-responsive">
               <table class="admin-table">
@@ -364,7 +390,10 @@
         <div class="tab-panel" id="tabReviews">
           <div class="admin-card">
             <div class="card-header">
-              <h3 class="card-title">Customer Reviews & Testimonials</h3>
+              <div class="card-header-left">
+                <h3 class="card-title">Customer Reviews & Moderation</h3>
+                <span class="card-count-badge" id="reviewsCountBadge">0</span>
+              </div>
             </div>
             <div class="table-responsive">
               <table class="admin-table">
@@ -530,7 +559,7 @@ Email: madhuripaka756@gmail.com / prasadanem777@gmail.com</div>
 Thank you for choosing Clean Shield Pro! We hope your home feels clean, fresh and healthy.
 
 Could you please take 30 seconds to share your experience with fellow neighbors in Rajamahendravaram?
-Click here to rate us: http://localhost:8080/#reviews
+Click here to rate us: https://cleanshieldpro.netlify.app/#reviews
 
 "We Don't Just Clean, We Care."</div>
                 </div>
