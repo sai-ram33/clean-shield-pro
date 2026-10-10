@@ -150,43 +150,31 @@
         <div class="topbar-left">
           <div class="topbar-heading-group">
             <div class="topbar-breadcrumb">OPERATIONS CONSOLE &bull; RAJAMAHENDRAVARAM</div>
-            <h1 class="topbar-title" id="pageTitle">Bookings & Operations</h1>
+            <h1 class="topbar-title" id="pageTitle">Bookings & Operations Management</h1>
           </div>
           <div class="topbar-status-group">
             <span class="live-indicator"><span class="pulse-dot"></span>15+ AP Hubs</span>
             <div class="db-status-pill" id="dbStatusPill" title="Connected to MongoDB Atlas Cluster">
               <span class="badge-dot"></span>
-              <span>Atlas Live</span>
+              <span>MongoDB Live</span>
             </div>
           </div>
         </div>
 
         <div class="topbar-right">
-          <div class="topbar-actions-cluster">
-            <button class="btn-refresh-data" onclick="manualSyncDashboard()" title="Fetch latest data from MongoDB Atlas">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-              <span>Sync</span>
-            </button>
-
-            <button class="notification-bell-btn" onclick="showRecentAlerts()" title="Notifications">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-              <span class="notification-badge" id="topbarAlertCount">0</span>
-            </button>
-          </div>
+          <button class="notification-bell-btn" onclick="showRecentAlerts()" title="Notifications" aria-label="Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span class="notification-badge" id="topbarAlertCount">0</span>
+          </button>
 
           <div class="owner-profile-chip" id="ownerProfileChip">
             <div class="owner-avatar" id="ownerAvatarLetter">M</div>
             <div class="owner-info">
-              <span class="owner-name" id="ownerDisplayName">Madhuri Paka</span>
+              <span class="owner-name" id="ownerDisplayName">Madhuri Paka (Owner)</span>
               <span class="owner-role-badge">Owner Admin</span>
             </div>
             <button class="btn-logout" onclick="handleOwnerLogout()" title="Logout from Admin Portal">Logout</button>
           </div>
-
-          <button class="btn-manual-booking" onclick="openManualBookingModal()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            <span>+ New Booking</span>
-          </button>
         </div>
       </header>
 
