@@ -1705,39 +1705,468 @@ body {
   }
 }
 
+/* ===================================================================
+   Mobile Optimized View (@media max-width: 768px)
+   System/Desktop View remains completely untouched!
+   =================================================================== */
 @media (max-width: 768px) {
+  /* Layout Architecture */
   .admin-layout {
     flex-direction: column;
+    min-height: 100vh;
   }
+
+  /* Compact Sticky Sidebar & Horizontal Tab Bar */
   .admin-sidebar {
     width: 100%;
     min-height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--admin-border);
+    position: sticky;
+    top: 0;
+    z-index: 990;
+    background: #0D3B2E;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
   }
+
+  .sidebar-header {
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .sidebar-logo {
+    gap: 10px;
+  }
+
+  .sidebar-logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .sidebar-brand-name {
+    font-size: 0.95rem;
+  }
+
+  .sidebar-brand-tag {
+    font-size: 0.62rem;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  /* Modern Horizontal Scrollable Nav Tabs Strip */
+  .sidebar-nav {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 10px 8px;
+    gap: 6px;
+    scrollbar-width: none;
+  }
+
+  .sidebar-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar-nav-item {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 7px 11px;
+    font-size: 0.78rem;
+    border-radius: 20px;
+    gap: 6px;
+  }
+
+  .sidebar-nav-item svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-nav-badge {
+    font-size: 0.65rem;
+    padding: 1px 5px;
+    border-radius: 8px;
+    margin-left: 4px;
+  }
+
+  /* Topbar Mobile Polish */
   .admin-topbar {
-    padding: 12px 16px;
+    padding: 12px 14px;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 10px;
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--admin-border);
   }
+
+  .topbar-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+  }
+
+  .topbar-breadcrumb {
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+  }
+
+  .topbar-title {
+    font-size: 1.15rem;
+    line-height: 1.25;
+  }
+
+  .topbar-status-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+  }
+
+  .live-indicator,
+  .db-status-pill {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+
+  /* Topbar Right - Actions & User Chip */
   .topbar-right {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-top: 6px;
+    border-top: 1px solid #EDF3F0;
+  }
+
+  .notification-bell-btn {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+
+  .owner-profile-chip {
+    padding: 3px 8px 3px 4px;
+    gap: 6px;
+    max-width: 100%;
+  }
+
+  .owner-avatar {
+    width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+  }
+
+  .owner-name {
+    font-size: 0.74rem;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .owner-role-badge {
+    display: none;
+  }
+
+  .btn-logout {
+    padding: 2px 6px;
+    font-size: 0.68rem;
+  }
+
+  .btn-manual-booking {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    gap: 4px;
+  }
+
+  /* Main Content Area */
+  .admin-content {
+    padding: 12px 10px;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  /* Live Lead Banner */
+  .live-lead-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .lead-banner-left {
+    width: 100%;
+  }
+
+  .lead-banner-actions {
     width: 100%;
     justify-content: space-between;
   }
-  .admin-content {
+
+  /* KPI Cards 2-column Compact App Grid */
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .kpi-card {
+    padding: 12px 12px;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  }
+
+  .kpi-header {
+    margin-bottom: 4px;
+  }
+
+  .kpi-title {
+    font-size: 0.68rem;
+    letter-spacing: 0.3px;
+  }
+
+  .kpi-icon-wrap {
+    width: 30px;
+    height: 30px;
+  }
+
+  .kpi-icon-wrap svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .kpi-value {
+    font-size: 1.35rem;
+    margin-bottom: 4px;
+  }
+
+  .kpi-meta-badge {
+    font-size: 0.64rem;
+    padding: 2px 6px;
+  }
+
+  /* Cards & Filter Architecture */
+  .admin-card {
+    border-radius: 10px;
+    margin-bottom: 16px;
+  }
+
+  .card-header {
+    padding: 12px 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .card-header-left {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .card-actions-bar {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .search-input-wrapper,
+  .filter-select-wrapper {
+    width: 100%;
+  }
+
+  .search-input,
+  .filter-select {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 0.82rem;
+  }
+
+  .card-actions-bar .btn-action-primary,
+  .card-actions-bar .btn-action-secondary {
+    width: 100%;
+    justify-content: center;
+    padding: 9px 14px;
+  }
+
+  /* Tables Mobile Touch Optimization */
+  .table-responsive {
+    border-radius: 0 0 10px 10px;
+    margin: 0 -1px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 9px 8px;
+    font-size: 0.76rem;
+  }
+
+  .table-actions {
+    gap: 4px;
+  }
+
+  .btn-action-sm,
+  .btn-action-delete {
+    padding: 4px 8px;
+    font-size: 0.72rem;
+  }
+
+  /* Service & Package Pricing Manager Mobile Layout */
+  .pricing-catalog-container {
+    gap: 16px;
+  }
+
+  .pricing-category-block {
+    border-radius: 10px;
+  }
+
+  .pricing-category-header {
+    padding: 10px 12px;
+  }
+
+  .pricing-category-title {
+    font-size: 0.92rem;
+    gap: 8px;
+  }
+
+  .pricing-services-grid {
+    grid-template-columns: 1fr;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .pricing-service-card {
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .pricing-service-name {
+    font-size: 0.88rem;
+  }
+
+  .pricing-helper-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 14px;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .pricing-sync-pill {
+    align-self: flex-start;
+  }
+
+  .pricing-package-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .pkg-info {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .pkg-name {
+    font-size: 0.84rem;
+  }
+
+  .pkg-controls {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .pkg-currency-input {
+    flex: 1;
+  }
+
+  .pkg-price-field {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 0.92rem;
+    padding: 7px 8px 7px 22px;
+  }
+
+  .btn-pkg-save {
+    padding: 7px 16px;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .pricing-bottom-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 14px;
+  }
+
+  .pricing-bottom-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Modals on Mobile */
+  .modal-overlay {
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .modal-card {
+    max-height: 94vh;
+    border-radius: 16px 16px 0 0;
+    width: 100%;
+  }
+
+  .modal-header {
+    padding: 14px 16px;
+  }
+
+  .modal-body {
     padding: 16px;
   }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+/* Extra Small Phones (<380px) */
+@media (max-width: 380px) {
   .kpi-grid {
     grid-template-columns: 1fr;
   }
-  .card-header {
-    flex-direction: column;
-    align-items: flex-start;
+
+  .topbar-right {
+    justify-content: center;
   }
-  .card-actions-bar {
-    width: 100%;
-  }
-  .search-input {
-    width: 100%;
-    min-width: unset;
+
+  .owner-name {
+    max-width: 85px;
   }
 }
 
