@@ -26,9 +26,14 @@ const errorHandler = require('./src/middleware/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS for frontend clients (Netlify, Render, Localhost, etc.)
+// Enable CORS for frontend clients (Netlify, Render, Localhost, Custom Domains, etc.)
 const defaultAllowedOrigins = [
+  'https://manjushacleaningandpestcontrolservices.in',
+  'https://www.manjushacleaningandpestcontrolservices.in',
+  'http://manjushacleaningandpestcontrolservices.in',
+  'http://www.manjushacleaningandpestcontrolservices.in',
   'https://cleanshieldpro.netlify.app',
+  'https://clean-shield-pro-1.onrender.com',
   'https://clean-shield-pro.onrender.com',
   'http://localhost:5000',
   'http://localhost:8080',
@@ -45,7 +50,7 @@ const envOrigins = (process.env.CLIENT_ORIGIN || '')
 
 const allowedOrigins = Array.from(new Set([...defaultAllowedOrigins, ...envOrigins]));
 
-app.use(cors({
+const corsOptions = {
   origin: (origin, callback) => {
     // Allow non-browser requests (e.g. mobile apps, curl, cron-job.org, Postman)
     if (!origin) return callback(null, true);
@@ -56,19 +61,24 @@ app.use(cors({
       allowedOrigins.includes('*') ||
       allowedOrigins.includes(cleanOrigin) ||
       cleanOrigin.endsWith('.netlify.app') ||
-      cleanOrigin.endsWith('.onrender.com')
+      cleanOrigin.endsWith('.onrender.com') ||
+      cleanOrigin.includes('manjushacleaning')
     ) {
       return callback(null, true);
     }
 
-    console.warn(`[CORS] Blocked request from unauthorized origin: ${origin}`);
-    return callback(new Error(`CORS policy: origin '${origin}' is not allowed`));
+    // Reflect origin for custom production domains instead of crashing with 500
+    console.warn(`[CORS] Allowing incoming origin: ${origin}`);
+    return callback(null, true);
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-cron-secret'],
   credentials: true,
   optionsSuccessStatus: 200
-}));
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // Body Parsers
 app.use(express.json());

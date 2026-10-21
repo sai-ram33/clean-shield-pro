@@ -1103,9 +1103,9 @@ const PROMO_COUPONS = {
   'CLEAN200': { code: 'CLEAN200', discountType: 'flat', value: 200, minOrder: 800, desc: 'Flat ₹200 OFF on your hygiene booking' }
 };
 
-// Production Render Backend URL: https://clean-shield-pro.onrender.com/api
+// Production Render Backend URL: https://clean-shield-pro-1.onrender.com/api
 // Local Express Backend URL:     http://localhost:5000/api
-const RENDER_PROD_API_URL = 'https://clean-shield-pro.onrender.com/api';
+const RENDER_PROD_API_URL = 'https://clean-shield-pro-1.onrender.com/api';
 
 function getApiBaseUrl() {
   if (typeof window === 'undefined') return RENDER_PROD_API_URL;
@@ -1130,12 +1130,16 @@ function getApiBaseUrl() {
     return 'http://localhost:5000/api';
   }
 
-  // 3. When served directly from Render domain
-  if (hostname.endsWith('onrender.com')) {
+  // 3. When served directly from Render domain or Netlify / custom domain (using Netlify /api proxy)
+  if (
+    hostname.endsWith('onrender.com') ||
+    hostname.endsWith('netlify.app') ||
+    hostname.includes('manjushacleaning')
+  ) {
     return '/api';
   }
 
-  // 4. Production on Netlify (cleanshieldpro.netlify.app) or any custom domain
+  // 4. Production fallback for direct API access
   return RENDER_PROD_API_URL;
 }
 
