@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setDefaultBookingDate();
   calculateBookingPrice();
   initUrlCategory();
+  updateMyServicesBadge();
+  window.addEventListener('csp_my_services_updated', updateMyServicesBadge);
 });
 
 /* ===================================================================
@@ -425,7 +427,7 @@ function handleBookingSubmit(e) {
   const dateEl = document.getElementById('bookingDate') || document.getElementById('bookDate');
   const timeEl = document.getElementById('bookingTime') || document.getElementById('bookTime');
   const localityEl = document.getElementById('bookingLocality');
-  const addressEl = document.getElementById('customerAddress') || document.getElementById('bookAddress');
+  const exactLocationEl = document.getElementById('customerExactLocation') || document.getElementById('customerAddress') || document.getElementById('bookAddress');
 
   const customerName = nameEl ? nameEl.value.trim() : '';
   const customerPhone = phoneEl ? phoneEl.value.trim() : '';
@@ -434,7 +436,8 @@ function handleBookingSubmit(e) {
   const date = dateEl ? dateEl.value : '';
   const timeSlot = timeEl ? timeEl.value : '09:00 AM';
   const locality = localityEl ? localityEl.value : 'Rajamahendravaram';
-  const streetAddress = addressEl ? addressEl.value.trim() : '';
+  const exactLocation = exactLocationEl ? exactLocationEl.value.trim() : '';
+  const fullAddress = exactLocation ? `${exactLocation}${locality ? ', ' + locality : ''}` : locality;
 
   const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'Cash on Delivery (COD)';
 
@@ -451,7 +454,8 @@ function handleBookingSubmit(e) {
     altPhone: customerAltPhone,
     email: customerEmail,
     locality,
-    address: localityEl ? `${streetAddress}, ${locality}` : streetAddress,
+    exactLocation,
+    address: fullAddress,
     service,
     bhk,
     addons,
@@ -498,9 +502,12 @@ function renderReceiptModal(booking) {
         </svg>
       </div>
       <h3 style="color:var(--color-primary); font-size:1.35rem; margin-bottom:4px;">Booking Reserved Successfully!</h3>
-      <p style="color:var(--color-text-muted); font-size:0.88rem;">Your booking reference number is:</p>
+      <p style="color:var(--color-text-muted); font-size:0.88rem;">Your unique booking reference number is:</p>
       <div style="font-size:1.5rem; font-weight:800; color:var(--color-primary); letter-spacing:1px; background:#F8FAF9; padding:6px 18px; border-radius:8px; display:inline-block; margin:6px 0; border:1.5px dashed #BED8CC;">
         ${booking.id}
+      </div>
+      <div style="font-size:0.8rem; color:#25A27A; font-weight:600; margin-top:4px;">
+        Saved to your "My Services" order history
       </div>
     </div>
 
@@ -521,15 +528,19 @@ function renderReceiptModal(booking) {
       </div>` : ''}
       <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
         <span style="color:var(--color-text-muted);">Service:</span>
-        <strong style="color:var(--color-primary);">${booking.service} (${booking.bhk})</strong>
+        <strong style="color:var(--color-primary);">${booking.service} (${booking.bhk || ''})</strong>
       </div>
       <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
         <span style="color:var(--color-text-muted);">Date & Slot:</span>
         <strong>${booking.date} | ${booking.timeSlot}</strong>
       </div>
       <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-        <span style="color:var(--color-text-muted);">Location:</span>
-        <span style="text-align:right; max-width:60%; font-weight:500;">${booking.address}</span>
+        <span style="color:var(--color-text-muted);">Locality:</span>
+        <strong style="color:var(--color-primary);">${booking.locality || 'Rajamahendravaram'}</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="color:var(--color-text-muted);">Exact Location:</span>
+        <span style="text-align:right; max-width:60%; font-weight:500;">${booking.exactLocation || booking.address}</span>
       </div>
       <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
         <span style="color:var(--color-text-muted);">Payment Mode:</span>
@@ -539,6 +550,17 @@ function renderReceiptModal(booking) {
         <strong style="color:var(--color-primary); font-size:1rem;">Total Service Fee:</strong>
         <strong style="color:var(--color-primary); font-size:1.2rem;">₹${Number(booking.amount).toLocaleString('en-IN')}</strong>
       </div>
+    </div>
+
+    <!-- Quick Navigation & Tracking Buttons -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px;">
+      <button type="button" class="btn-service-book" onclick="closeModal('modalReceipt'); trackFromMyServices('${booking.id}');" style="padding:10px 14px; font-size:0.86rem; justify-content:center; display:flex; align-items:center; gap:6px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        Track Live Status
+      </button>
+      <button type="button" onclick="closeModal('modalReceipt'); openMyServicesModal();" style="background:#FFFFFF; border:1.5px solid var(--color-primary); color:var(--color-primary); border-radius:8px; font-weight:700; padding:10px 14px; font-size:0.86rem; cursor:pointer;">
+        View in My Services
+      </button>
     </div>
 
     <!-- Confirmation Actions Section -->
@@ -626,21 +648,43 @@ function handleQuoteSubmit(e) {
 }
 
 /* ===================================================================
-   Track Booking
+   Track Booking (MongoDB Atlas Live Sync & Locality Display)
    =================================================================== */
-function handleTrackSubmit(e) {
-  e.preventDefault();
-  const query = document.getElementById('trackInput').value.trim();
+async function handleTrackSubmit(e, overrideQuery = null) {
+  if (e && e.preventDefault) e.preventDefault();
+  const queryInput = document.getElementById('trackInput');
+  const query = (overrideQuery || (queryInput ? queryInput.value.trim() : '')).trim();
+  if (queryInput && overrideQuery) queryInput.value = overrideQuery;
+
   const resultDiv = document.getElementById('trackResultContainer');
   if (!resultDiv) return;
 
-  const booking = window.CleanShieldDB.findBooking(query);
+  if (!query) {
+    resultDiv.innerHTML = `
+      <div style="background:#FFF3F3; border:1px solid #FFD0D0; border-radius:8px; padding:14px; color:#C0392B; text-align:center; font-size:0.9rem;">
+        Please enter your Booking ID (e.g. CSP-12345) or registered 10-digit mobile number.
+      </div>
+    `;
+    return;
+  }
+
+  resultDiv.innerHTML = `
+    <div style="text-align:center; padding:24px 16px; color:var(--color-text-muted);">
+      <div style="display:inline-block; width:28px; height:28px; border:3px solid #25A27A; border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite; margin-bottom:8px;"></div>
+      <div style="font-size:0.9rem; font-weight:600; color:var(--color-primary);">Checking live status in MongoDB...</div>
+    </div>
+  `;
+
+  const booking = await window.CleanShieldDB.findBookingAsync(query);
 
   if (!booking) {
     resultDiv.innerHTML = `
-      <div style="background:#FFF3F3; border:1px solid #FFD0D0; border-radius:8px; padding:16px; color:#C0392B; text-align:center;">
-        <strong>No booking found for "${query}"</strong><br>
-        <span style="font-size:0.88rem;">Please check your Booking ID (e.g. CSP-2026-1001) or 10-digit phone number.</span>
+      <div style="background:#FFF3F3; border:1px solid #FFD0D0; border-radius:10px; padding:18px; color:#C0392B; text-align:center;">
+        <strong style="font-size:1rem; display:block; margin-bottom:4px;">No booking found matching "${query}"</strong>
+        <span style="font-size:0.86rem; color:#666; display:block; margin-bottom:12px;">Please verify your Booking ID or registered 10-digit mobile number.</span>
+        <button type="button" onclick="openMyServicesModal()" class="btn-service-book" style="padding:6px 16px; font-size:0.82rem; background:var(--color-primary);">
+          View My Saved Services &rarr;
+        </button>
       </div>
     `;
     return;
@@ -661,10 +705,10 @@ function handleTrackSubmit(e) {
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #E2ECE7; padding-bottom:10px;">
         <div>
           <span style="font-size:0.8rem; color:var(--color-text-muted);">Booking Reference</span>
-          <div style="font-weight:800; font-size:1.15rem; color:var(--color-primary);">${booking.id}</div>
+          <div style="font-weight:800; font-size:1.25rem; color:var(--color-primary);">${booking.id}</div>
         </div>
-        <span class="status-badge status-${booking.status.toLowerCase().replace(' ', '')}" style="font-size:0.82rem; padding:4px 12px; border-radius:20px; font-weight:700;">
-          ${booking.status}
+        <span class="status-badge status-${(booking.status || 'Confirmed').toLowerCase().replace(/\s+/g, '')}" style="font-size:0.85rem; padding:4px 14px; border-radius:20px; font-weight:700;">
+          ${booking.status || 'Confirmed'}
         </span>
       </div>
 
@@ -678,7 +722,7 @@ function handleTrackSubmit(e) {
         <div class="timeline-step ${currentLevel >= 2 ? 'completed' : (currentLevel === 1 ? 'current' : '')}">
           <div class="timeline-step-dot"></div>
           <div class="timeline-step-title">Confirmed & Scheduled</div>
-          <div class="timeline-step-time">${booking.date} (${booking.timeSlot})</div>
+          <div class="timeline-step-time">${booking.date} (${booking.timeSlot || '09:00 AM'})</div>
         </div>
 
         <div class="timeline-step ${currentLevel >= 3 ? 'completed' : (currentLevel === 2 ? 'current' : '')}">
@@ -690,7 +734,7 @@ function handleTrackSubmit(e) {
         <div class="timeline-step ${currentLevel >= 4 ? 'completed' : (currentLevel === 3 ? 'current' : '')}">
           <div class="timeline-step-dot"></div>
           <div class="timeline-step-title">En Route / In Progress</div>
-          <div class="timeline-step-time">Dispatched to ${booking.locality}</div>
+          <div class="timeline-step-time">Dispatched to ${booking.locality || 'Customer Location'}</div>
         </div>
 
         <div class="timeline-step ${currentLevel >= 5 ? 'completed' : (currentLevel === 4 ? 'current' : '')}">
@@ -700,17 +744,199 @@ function handleTrackSubmit(e) {
         </div>
       </div>
 
-      <div style="margin-top:16px; padding-top:14px; border-top:1px solid #E2ECE7; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <div style="margin-top:16px; padding-top:14px; border-top:1px solid #E2ECE7; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
         <div>
-          <div style="font-weight:600; color:var(--color-primary);">${booking.service} (${booking.bhk || ''})</div>
-          <div style="font-size:0.85rem; color:var(--color-text-muted);">${booking.address}</div>
+          <div style="font-weight:700; color:var(--color-primary); font-size:1.02rem;">${booking.service} (${booking.bhk || ''})</div>
+          <div style="font-size:0.86rem; color:#444; margin-top:3px;">
+            <strong>Locality:</strong> ${booking.locality || 'Rajamahendravaram'}
+          </div>
+          <div style="font-size:0.86rem; color:#444; margin-top:2px;">
+            <strong>Exact Location:</strong> ${booking.exactLocation || booking.address}
+          </div>
+          <div style="font-size:0.86rem; color:var(--color-text-muted); margin-top:3px;">
+            <strong>Amount:</strong> ₹${Number(booking.amount || 0).toLocaleString('en-IN')} &bull; <em>${booking.paymentMethod || 'COD'}</em>
+          </div>
         </div>
-        <a href="${window.CleanShieldDB.getWhatsAppLink(window.CleanShieldDB.getBusinessConfig().whatsapp1, `Namaste Clean Shield Pro, checking live dispatch status for my booking ${booking.id}...`)}" target="_blank" rel="noopener" class="btn-service-book" style="padding:6px 14px; font-size:0.82rem;">
-          Chat with Support
-        </a>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <a href="${window.CleanShieldDB.getWhatsAppLink(window.CleanShieldDB.getBusinessConfig().whatsapp1, `Namaste Clean Shield Pro, checking live dispatch status for my booking ${booking.id}...`)}" target="_blank" rel="noopener" class="btn-action-wa" style="padding:7px 14px; font-size:0.82rem; text-decoration:none; justify-content:center;">
+            WhatsApp Support
+          </a>
+          <button type="button" onclick="closeModal('modalTrack'); openMyServicesModal();" style="background:#FFFFFF; border:1px solid var(--color-primary); color:var(--color-primary); border-radius:6px; font-size:0.8rem; font-weight:700; padding:6px 12px; cursor:pointer;">
+            View in My Services &rarr;
+          </button>
+        </div>
       </div>
     </div>
   `;
+}
+
+/* ===================================================================
+   MY SERVICES (Amazon "My Orders" Style User Portal)
+   =================================================================== */
+function updateMyServicesBadge() {
+  const list = window.CleanShieldDB ? window.CleanShieldDB.getMyServices() : [];
+  const badges = document.querySelectorAll('.my-services-badge');
+  badges.forEach(b => {
+    b.textContent = list.length;
+    b.style.display = list.length > 0 ? 'inline-flex' : 'none';
+  });
+}
+
+function openMyServicesModal() {
+  renderMyServicesList();
+  openModal('modalMyServices');
+}
+
+function renderMyServicesList() {
+  const container = document.getElementById('myServicesListContainer');
+  const countBadge = document.getElementById('myServicesHeaderCount');
+  if (!container) return;
+
+  const bookings = window.CleanShieldDB ? window.CleanShieldDB.getMyServices() : [];
+
+  if (countBadge) {
+    countBadge.textContent = `${bookings.length} ${bookings.length === 1 ? 'Booking' : 'Bookings'}`;
+  }
+  updateMyServicesBadge();
+
+  if (bookings.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:38px 16px;">
+        <div style="width:68px; height:68px; background:#F0F6F3; border-radius:50%; margin:0 auto 14px; display:flex; align-items:center; justify-content:center; color:#25A27A;">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+          </svg>
+        </div>
+        <h4 style="color:var(--color-primary); font-size:1.2rem; margin-bottom:6px;">No Service Bookings Yet</h4>
+        <p style="color:var(--color-text-muted); font-size:0.88rem; max-width:340px; margin:0 auto 18px;">
+          When you place a booking for cleaning or odorless pest control, it will automatically appear here just like Amazon "My Orders".
+        </p>
+        <button type="button" class="btn-service-book" onclick="closeModal('modalMyServices'); openBookingModal('Full Home Deep Cleaning', '2 BHK');" style="padding:10px 24px;">
+          Book a Service Now
+        </button>
+
+        <div style="margin-top:28px; padding-top:20px; border-top:1px dashed #D6E5DE;">
+          <div style="font-weight:600; font-size:0.86rem; color:var(--color-primary); margin-bottom:6px;">
+            Booked on another phone or browser?
+          </div>
+          <p style="font-size:0.82rem; color:var(--color-text-muted); margin-bottom:10px;">
+            Enter your registered 10-digit mobile number to pull your bookings:
+          </p>
+          <div style="display:flex; max-width:320px; margin:0 auto; gap:6px;">
+            <input type="tel" id="myServicesPhoneLookup" class="form-control" placeholder="10-digit mobile number" style="padding:8px 12px; font-size:0.88rem;">
+            <button type="button" id="myServicesLookupBtn" onclick="lookupMyServicesByPhone()" class="btn-service-book" style="white-space:nowrap; padding:8px 16px; font-size:0.84rem;">
+              Find
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = bookings.map(b => {
+    const statusClass = (b.status || 'Confirmed').toLowerCase().replace(/\s+/g, '');
+    const amountStr = Number(b.amount || 0) > 0 ? `₹${Number(b.amount).toLocaleString('en-IN')}` : 'Free Inspection / Quote';
+    const locStr = b.locality || 'Rajamahendravaram';
+    const exactStr = b.exactLocation || b.address || 'Standard Location';
+
+    return `
+      <div class="my-service-card" style="background:#FFFFFF; border:1px solid #DFECE6; border-radius:12px; padding:16px; margin-bottom:14px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px; border-bottom:1px solid #EDF3F0; padding-bottom:10px; margin-bottom:12px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--color-text-muted); font-weight:700;">BOOKING REFERENCE</span>
+              <span style="font-size:0.78rem; color:#666;">Placed on ${b.createdAt ? new Date(b.createdAt).toLocaleDateString() : (b.date || 'Recent')}</span>
+            </div>
+            <div style="font-size:1.15rem; font-weight:800; color:var(--color-primary); margin-top:2px;">
+              ${b.id}
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <span class="status-badge status-${statusClass}" style="font-size:0.8rem; padding:4px 12px; border-radius:20px; font-weight:700;">
+              ${b.status || 'Confirmed'}
+            </span>
+            <div style="font-size:1rem; font-weight:800; color:var(--color-primary); margin-top:3px;">
+              ${amountStr}
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr; gap:8px; margin-bottom:14px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:1.15rem;">🧹</span>
+            <strong style="color:var(--color-primary); font-size:0.98rem;">${b.service}</strong>
+            ${b.bhk ? `<span style="font-size:0.8rem; background:#EBF4F0; color:var(--color-primary); padding:2px 8px; border-radius:6px; font-weight:700;">${b.bhk}</span>` : ''}
+          </div>
+
+          <div style="font-size:0.86rem; color:#555; display:flex; align-items:center; gap:6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#25A27A"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+            <strong>Scheduled:</strong> ${b.date} &bull; ${b.timeSlot || '09:00 AM'}
+          </div>
+
+          <div style="font-size:0.86rem; color:#555; display:flex; align-items:flex-start; gap:6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#25A27A" style="flex-shrink:0; margin-top:2px;"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            <div>
+              <strong>Locality:</strong> ${locStr}<br>
+              <strong>Exact Location:</strong> ${exactStr}
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-top:1px solid #EDF3F0; padding-top:12px;">
+          <button type="button" class="btn-service-book" onclick="trackFromMyServices('${b.id}')" style="padding:7px 16px; font-size:0.84rem; display:inline-flex; align-items:center; gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            Track Status
+          </button>
+          
+          <a href="${window.CleanShieldDB.getWhatsAppLink(window.CleanShieldDB.getBusinessConfig().whatsapp1, `Namaste Clean Shield Pro, inquiring on my booking ${b.id} (${b.service})...`)}" target="_blank" rel="noopener" class="btn-action-wa" style="padding:7px 14px; font-size:0.82rem; text-decoration:none;">
+            WhatsApp Support
+          </a>
+
+          <button type="button" onclick="closeModal('modalMyServices'); openBookingModal('${b.service}', '${b.bhk || '2 BHK'}');" style="background:#FFFFFF; border:1px solid #CBDCD4; color:var(--color-primary); padding:6px 12px; border-radius:6px; font-size:0.8rem; font-weight:700; cursor:pointer;">
+            Book Again
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function trackFromMyServices(bookingId) {
+  closeModal('modalMyServices');
+  openModal('modalTrack');
+  const trackInput = document.getElementById('trackInput');
+  if (trackInput) trackInput.value = bookingId;
+  handleTrackSubmit(null, bookingId);
+}
+
+async function lookupMyServicesByPhone() {
+  const input = document.getElementById('myServicesPhoneLookup');
+  const phone = input ? input.value.trim() : '';
+  const btn = document.getElementById('myServicesLookupBtn');
+  if (!phone || phone.length < 7) {
+    alert('Please enter your 10-digit mobile number.');
+    return;
+  }
+  if (btn) btn.textContent = 'Searching...';
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/bookings/track/${encodeURIComponent(phone)}`);
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && json.data) {
+        window.CleanShieldDB.saveToMyServices(json.data);
+        renderMyServicesList();
+        showToast(`Found booking ${json.data.id}! Added to My Services.`);
+        return;
+      }
+    }
+    alert(`No bookings found matching mobile number "${phone}".`);
+  } catch (err) {
+    alert('Could not connect to database. Please check your connection.');
+  } finally {
+    if (btn) btn.textContent = 'Find';
+  }
 }
 
 /* ===================================================================

@@ -33,6 +33,11 @@ const bookingSchema = new mongoose.Schema({
     required: true,
     default: 'Rajamahendravaram'
   },
+  exactLocation: {
+    type: String,
+    default: '',
+    trim: true
+  },
   address: {
     type: String,
     required: [true, 'Address is required'],

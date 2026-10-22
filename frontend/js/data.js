@@ -9,7 +9,8 @@ const STORAGE_KEYS = {
   REVIEWS: 'csp_reviews',
   PRICING: 'csp_pricing',
   PACKAGES: 'csp_service_packages',
-  ALERTS: 'csp_alerts'
+  ALERTS: 'csp_alerts',
+  MY_SERVICES: 'csp_my_services'
 };
 
 // Official Business Contact Configuration
@@ -1256,16 +1257,33 @@ class CleanShieldDB {
 
   static addBooking(bookingData) {
     const bookings = this.getBookings();
-    const newId = 'CSP-' + Math.floor(10000 + Math.random() * 90000);
+    const newId = (bookingData.id && String(bookingData.id).trim())
+      ? String(bookingData.id).trim()
+      : ('CSP-' + Math.floor(10000 + Math.random() * 90000));
+
+    const locality = (bookingData.locality || 'Rajamahendravaram').trim();
+    const exactLocation = (bookingData.exactLocation || bookingData.address || '').trim();
+    const fullAddress = bookingData.address && bookingData.address.trim()
+      ? bookingData.address.trim()
+      : `${exactLocation}${locality ? ', ' + locality : ''}`;
+
     const newBooking = {
       id: newId,
       createdAt: new Date().toISOString(),
       status: 'Confirmed',
       paymentStatus: (Number(bookingData.amount) === 0) ? 'Site Survey Scheduled' : (bookingData.paymentMethod && bookingData.paymentMethod.includes('Cash') ? 'Pending' : 'Paid'),
-      ...bookingData
+      ...bookingData,
+      id: newId,
+      locality,
+      exactLocation,
+      address: fullAddress
     };
+
     bookings.unshift(newBooking);
     localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+
+    // Save automatically to user's "My Services" order history
+    this.saveToMyServices(newBooking);
 
     // Asynchronously save to MongoDB Atlas
     fetch(`${API_BASE_URL}/bookings`, {
@@ -1275,6 +1293,12 @@ class CleanShieldDB {
     }).then(r => r.json()).then(res => {
       if (res.success && res.data) {
         console.log('✅ Booking successfully stored in MongoDB:', res.data.id);
+        if (res.data.id && res.data.id !== newId) {
+          // If server normalized ID, synchronize local copies
+          newBooking.id = res.data.id;
+          localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+          this.saveToMyServices(res.data);
+        }
       }
     }).catch(err => console.warn('Backend sync queued:', err.message));
 
@@ -1301,6 +1325,9 @@ class CleanShieldDB {
         bookings[idx].paymentStatus = 'Paid';
       }
       localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+
+      // Also update in My Services if present
+      this.saveToMyServices(bookings[idx]);
 
       // Asynchronously update in MongoDB Atlas
       fetch(`${API_BASE_URL}/bookings/${bookingId}/status`, {
@@ -1334,11 +1361,84 @@ class CleanShieldDB {
 
   static findBooking(query) {
     const bookings = this.getBookings();
-    const q = query.trim().toLowerCase();
-    return bookings.find(b => 
+    const q = (query || '').trim().toLowerCase();
+    const cleanQ = q.replace(/\D/g, '');
+    
+    // Check main bookings
+    let match = bookings.find(b => 
       b.id.toLowerCase() === q || 
-      (b.phone && b.phone.replace(/\D/g, '').includes(q.replace(/\D/g, '')))
+      (cleanQ.length >= 7 && b.phone && b.phone.replace(/\D/g, '').includes(cleanQ))
     );
+    if (match) return match;
+
+    // Check user's My Services
+    const myServices = this.getMyServices();
+    return myServices.find(b =>
+      b.id.toLowerCase() === q ||
+      (cleanQ.length >= 7 && b.phone && b.phone.replace(/\D/g, '').includes(cleanQ))
+    );
+  }
+
+  // Live Async Tracking (falls back to backend API if not in local browser cache)
+  static async findBookingAsync(query) {
+    const localMatch = this.findBooking(query);
+    if (localMatch) return localMatch;
+
+    try {
+      const trimmed = (query || '').trim();
+      if (!trimmed) return null;
+
+      const res = await fetch(`${API_BASE_URL}/bookings/track/${encodeURIComponent(trimmed)}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          // Sync into local bookings & My Services
+          const bookings = this.getBookings();
+          const existingIdx = bookings.findIndex(b => b.id === json.data.id);
+          if (existingIdx !== -1) {
+            bookings[existingIdx] = json.data;
+          } else {
+            bookings.unshift(json.data);
+          }
+          localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+          this.saveToMyServices(json.data);
+          return json.data;
+        }
+      }
+    } catch (err) {
+      console.warn('Live backend track error:', err.message);
+    }
+    return null;
+  }
+
+  // ===================================================================
+  // MY SERVICES & ORDERS MANAGEMENT (Amazon-style User Order History)
+  // ===================================================================
+  static getMyServices() {
+    this.init();
+    try {
+      const data = JSON.parse(localStorage.getItem(STORAGE_KEYS.MY_SERVICES) || '[]');
+      return Array.isArray(data) ? data : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static saveToMyServices(booking) {
+    if (!booking || !booking.id) return;
+    try {
+      const list = this.getMyServices();
+      const idx = list.findIndex(b => b.id.toLowerCase() === booking.id.toLowerCase());
+      if (idx !== -1) {
+        list[idx] = { ...list[idx], ...booking };
+      } else {
+        list.unshift(booking);
+      }
+      localStorage.setItem(STORAGE_KEYS.MY_SERVICES, JSON.stringify(list));
+      window.dispatchEvent(new CustomEvent('csp_my_services_updated', { detail: list }));
+    } catch (e) {
+      console.warn('saveToMyServices error:', e.message);
+    }
   }
 
   // Enquiries

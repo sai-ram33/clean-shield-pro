@@ -417,8 +417,9 @@ function renderBookingsTable(filteredList = null) {
         <td>
           <span class="locality-pill">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-            ${b.locality}
+            ${b.locality || 'Rajamahendravaram'}
           </span>
+          ${b.exactLocation ? `<div style="font-size:0.75rem; color:#4B5563; margin-top:4px; max-width:170px; line-height:1.2;" title="${b.exactLocation}">📍 ${b.exactLocation}</div>` : ''}
         </td>
         <td>
           <span class="amount-val">₹${Number(b.amount).toLocaleString('en-IN')}</span>
@@ -517,8 +518,9 @@ function showBookingDetail(bookingId) {
       <h4 style="color:var(--admin-primary); margin-bottom:6px;">Customer Information</h4>
       <p><strong>Name:</strong> ${b.customerName}</p>
       <p><strong>Phone:</strong> ${b.phone}</p>
-      <p><strong>Locality:</strong> ${b.locality}, Rajamahendravaram</p>
-      <p><strong>Full Address:</strong> ${b.address}</p>
+      <p><strong>Locality & Branch:</strong> ${b.locality || 'Rajamahendravaram'}, Andhra Pradesh</p>
+      <p><strong>Exact Location / House & Landmark:</strong> ${b.exactLocation || b.address || 'N/A'}</p>
+      ${b.exactLocation && b.address && b.address !== b.exactLocation ? `<p><strong>Complete Address:</strong> ${b.address}</p>` : ''}
     </div>
 
     <div style="background:#F8FAF9; padding:18px; border-radius:10px; margin-bottom:16px;">

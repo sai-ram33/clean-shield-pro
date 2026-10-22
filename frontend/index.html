@@ -36,13 +36,18 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
           Track Booking
         </a>
+        <a href="javascript:void(0)" onclick="openMyServicesModal()" class="top-link" title="Amazon-style My Services & Orders" style="font-weight:700; color:var(--color-accent-gold);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+          <span>My Services</span>
+          <span class="my-services-badge" style="display:none; background:var(--color-accent-gold); color:#0D3B2E; font-size:0.7rem; font-weight:800; border-radius:10px; padding:1px 6px; margin-left:3px;">0</span>
+        </a>
       </div>
     </div>
   </div>
 
   <!-- Main Navigation Header -->
   <header class="site-header" id="siteHeader">
-    <div class="container header-inner">
+    <div class="container header-inner" style="display:flex; justify-content:space-between; align-items:center;">
       <a href="index.html" class="brand-logo" aria-label="Clean Shield Pro Home">
         <div class="logo-shield-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
@@ -54,6 +59,25 @@
           <div class="brand-slogan">Clean Home • Healthy Life</div>
         </div>
       </a>
+
+      <!-- Header Navigation Bar -->
+      <nav class="header-nav-menu" style="display:flex; align-items:center; gap:16px;">
+        <a href="services.html" class="nav-item-link" style="color:#FFFFFF; font-weight:600; font-size:0.92rem; text-decoration:none; padding:6px 10px; border-radius:6px; transition:all 0.2s;">
+          Explore Services
+        </a>
+        <a href="javascript:void(0)" onclick="openModal('modalTrack')" class="nav-item-link" style="color:#D1E5DC; font-weight:500; font-size:0.92rem; text-decoration:none; display:flex; align-items:center; gap:5px; padding:6px 10px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          Track
+        </a>
+        <button type="button" onclick="openMyServicesModal()" class="nav-my-services-btn" style="background:rgba(212,163,89,0.15); border:1.5px solid var(--color-accent-gold); color:var(--color-accent-gold); padding:7px 16px; border-radius:24px; font-weight:700; font-size:0.88rem; cursor:pointer; display:inline-flex; align-items:center; gap:7px; transition:all 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+          <span>My Services</span>
+          <span class="my-services-badge" style="display:none; background:var(--color-accent-gold); color:#0D3B2E; font-size:0.72rem; font-weight:800; border-radius:10px; padding:1px 7px;">0</span>
+        </button>
+        <button type="button" class="btn-hero-primary" onclick="openBookingModal('Full Home Deep Cleaning', '2 BHK')" style="padding:8px 18px; font-size:0.88rem;">
+          Book Service
+        </button>
+      </nav>
     </div>
   </header>
 
@@ -693,11 +717,12 @@
           <input type="email" class="form-control" id="customerEmail" placeholder="yourname@gmail.com">
         </div>
 
+        <!-- Locality & Exact Location -->
         <div class="form-group">
-          <label class="form-label" for="bookingLocality">Select City / Branch & Locality *</label>
+          <label class="form-label" for="bookingLocality">Select Locality & Branch <span style="color:#E53935;">*</span></label>
           <select class="form-control" id="bookingLocality" required>
             <optgroup label="Headquarters (Rajahmundry)">
-              <option value="Rajahmundry - Danavaipeta">Rajahmundry - Danavaipeta</option>
+              <option value="Rajahmundry - Danavaipeta" selected>Rajahmundry - Danavaipeta</option>
               <option value="Rajahmundry - Prakash Nagar">Rajahmundry - Prakash Nagar</option>
               <option value="Rajahmundry - Morampudi">Rajahmundry - Morampudi</option>
               <option value="Rajahmundry - Lalacheruvu">Rajahmundry - Lalacheruvu</option>
@@ -706,6 +731,8 @@
               <option value="Rajahmundry - Aryapuram">Rajahmundry - Aryapuram</option>
               <option value="Rajahmundry - Innespeta">Rajahmundry - Innespeta</option>
               <option value="Rajahmundry - Katheru">Rajahmundry - Katheru</option>
+              <option value="Rajahmundry - Bommuru">Rajahmundry - Bommuru</option>
+              <option value="Rajahmundry - Hukumpeta">Rajahmundry - Hukumpeta</option>
               <option value="Rajahmundry - Other Locality">Rajahmundry - Other Area</option>
             </optgroup>
             <optgroup label="Regional Operational Branches">
@@ -729,8 +756,11 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="customerAddress">Location / Main Address <span style="color:#E53935;">*</span></label>
-          <input type="text" class="form-control" id="customerAddress" placeholder="House / Flat No., Apartment Name, Street, Landmark..." required>
+          <label class="form-label" for="customerExactLocation">Exact Location / House Address & Landmark <span style="color:#E53935;">*</span></label>
+          <input type="text" class="form-control" id="customerExactLocation" placeholder="Flat / House No., Apartment Name, Street, Landmark..." required>
+          <small style="color:var(--color-text-muted); font-size:0.78rem; display:block; margin-top:4px;">
+            📍 Enter your exact building, flat number, street name, and nearest landmark for our team.
+          </small>
         </div>
 
         <!-- Payment Options -->
@@ -949,6 +979,32 @@
 
         <button type="submit" class="modal-submit-btn">Submit Review &rarr;</button>
       </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       MODAL 6: MY SERVICES (Amazon "My Orders" Style History & Tracker)
+       =================================================================== -->
+  <div class="modal-overlay" id="modalMyServices">
+    <div class="modal-box" style="max-width: 680px; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header" style="border-bottom: 1px solid #E1ECE6; padding-bottom: 14px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:40px; height:40px; background:#EAF4F0; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#25A27A;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="modal-title" style="margin:0; font-size:1.25rem;">My Services & Bookings</h3>
+            <span style="font-size:0.8rem; color:var(--color-text-muted);" id="myServicesHeaderCount">0 Bookings</span>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal('modalMyServices')">&times;</button>
+      </div>
+
+      <div style="padding: 16px 4px 6px; overflow-y: auto; flex: 1;" id="myServicesListContainer">
+        <!-- Rendered dynamically by app.js like Amazon Orders -->
+      </div>
     </div>
   </div>
 

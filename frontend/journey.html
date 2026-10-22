@@ -25,6 +25,10 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
           +91 90596 39955 / +91 88973 12523
         </a>
+        <a href="#my-services" onclick="openMyServicesModal(); return false;" class="top-link" title="View My Bookings & Orders">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          My Services <span class="badge-my-services-count" id="topMyServicesCount" style="display:none; background:var(--color-accent-gold); color:#0D3B2E; font-size:10px; font-weight:800; padding:1px 6px; border-radius:10px; margin-left:3px;">0</span>
+        </a>
         <a href="#track-booking" onclick="openModal('modalTrack'); return false;" class="top-link">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
           Track Booking
@@ -67,6 +71,10 @@
 
       <!-- Header Actions -->
       <div class="header-actions">
+        <button class="btn-top-cta" onclick="openMyServicesModal()" title="View your placed bookings (like Amazon My Orders)" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:#fff; display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:30px; font-weight:600; cursor:pointer;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          <span>My Services</span>
+        </button>
         <button class="btn-header-cart" onclick="document.getElementById('ucCartSidebar').scrollIntoView({behavior:'smooth'}); openMobileCart();" aria-label="View Cart">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
@@ -445,6 +453,39 @@
           </div>
           <button type="submit" class="modal-submit-btn">Submit Verified Review</button>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Services / My Orders Modal (Customer Dashboard) -->
+  <div class="modal-overlay" id="modalMyServices">
+    <div class="modal-card" style="max-width: 680px; width: 92%;">
+      <div class="modal-header" style="background: linear-gradient(135deg, #0D3B2E 0%, #155745 100%); color: #fff; border-bottom: 2px solid var(--color-accent-gold);">
+        <div>
+          <h3 style="display: flex; align-items: center; gap: 8px; color: #fff; margin-bottom: 4px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#D4A359"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            My Booked Services
+          </h3>
+          <p style="color: #A3C9B8; font-size: 0.85rem; margin: 0;">Live order status, scheduled date/time, service address & dispatch tracking</p>
+        </div>
+        <button class="btn-close-modal" onclick="closeModal('modalMyServices')" style="color: #fff;">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 20px; max-height: 75vh; overflow-y: auto;">
+        <!-- Phone Search for Previous Bookings -->
+        <div style="background: #F4FAF6; border: 1px solid #D5E8DF; border-radius: 10px; padding: 12px 14px; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <div style="font-size: 0.85rem; color: #0D3B2E; font-weight: 600; flex: 1 1 200px;">
+            Looking for an order placed from another browser or phone?
+          </div>
+          <div style="display: flex; gap: 6px; flex: 1 1 240px;">
+            <input type="tel" id="myServicesPhoneSearch" class="form-control" placeholder="Enter 10-digit phone" style="padding: 7px 10px; font-size: 0.85rem;" maxlength="10">
+            <button type="button" class="btn-hero-primary" onclick="lookupMyServicesByPhone()" style="padding: 7px 14px; font-size: 0.82rem; white-space: nowrap;">Find Bookings</button>
+          </div>
+        </div>
+
+        <!-- Bookings Container -->
+        <div id="myServicesListContainer">
+          <!-- Dynamically populated -->
+        </div>
       </div>
     </div>
   </div>
