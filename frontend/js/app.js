@@ -396,9 +396,12 @@ function calculateBookingPrice() {
   return { service, bhk, basePrice, addOnTotal, total, isB2B };
 }
 
-function handleBookingSubmit(e) {
+async function handleBookingSubmit(e) {
   e.preventDefault();
   
+  const submitBtn = e.target.querySelector('button[type="submit"]') || document.querySelector('.modal-submit-btn');
+  const originalBtnHtml = submitBtn ? submitBtn.innerHTML : 'Confirm Booking Request &rarr;';
+
   let service = 'Full Home Deep Cleaning';
   let bhk = '2 BHK';
   let total = 4500;
@@ -434,10 +437,48 @@ function handleBookingSubmit(e) {
   const customerAltPhone = altPhoneEl ? altPhoneEl.value.trim() : '';
   const customerEmail = emailEl ? emailEl.value.trim() : '';
   const date = dateEl ? dateEl.value : '';
-  const timeSlot = timeEl ? timeEl.value : '09:00 AM';
-  const locality = localityEl ? localityEl.value : 'Rajamahendravaram';
+  const timeSlot = timeEl ? timeEl.value : '08:30 AM - 12:30 PM';
+  const locality = localityEl ? localityEl.value : 'Rajahmundry - Danavaipeta';
   const exactLocation = exactLocationEl ? exactLocationEl.value.trim() : '';
   const fullAddress = exactLocation ? `${exactLocation}${locality ? ', ' + locality : ''}` : locality;
+
+  // Frontend Validation
+  if (!customerName) {
+    alert('Please enter your full name.');
+    if (nameEl) nameEl.focus();
+    return;
+  }
+
+  let rawDigits = customerPhone.replace(/\D/g, '');
+  if (rawDigits.length === 12 && rawDigits.startsWith('91')) rawDigits = rawDigits.slice(2);
+  if (rawDigits.length === 11 && rawDigits.startsWith('0')) rawDigits = rawDigits.slice(1);
+
+  if (!/^[6-9]\d{9}$/.test(rawDigits)) {
+    alert('Please enter a valid 10-digit Indian mobile number (e.g. 9848012345 or +919848012345).');
+    if (phoneEl) phoneEl.focus();
+    return;
+  }
+
+  if (!date) {
+    alert('Please select your preferred service date.');
+    if (dateEl) dateEl.focus();
+    return;
+  }
+
+  const chosenDate = new Date(date);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (chosenDate < today) {
+    alert('Preferred service date cannot be in the past.');
+    if (dateEl) dateEl.focus();
+    return;
+  }
+
+  if (!exactLocation) {
+    alert('Please enter your exact location (Flat/House No., Building Name, Street & Landmark).');
+    if (exactLocationEl) exactLocationEl.focus();
+    return;
+  }
 
   const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'Cash on Delivery (COD)';
 
@@ -450,7 +491,7 @@ function handleBookingSubmit(e) {
 
   const bookingData = {
     customerName,
-    phone: customerPhone,
+    phone: rawDigits,
     altPhone: customerAltPhone,
     email: customerEmail,
     locality,
@@ -465,50 +506,104 @@ function handleBookingSubmit(e) {
     paymentMethod: selectedPayment
   };
 
-  const newBooking = window.CleanShieldDB.addBooking(bookingData);
+  // Prevent multiple clicks
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span>⏳ Reserving Appointment...</span>`;
+  }
 
-  // Close booking modal
-  closeModal('modalBooking');
+  try {
+    const result = await window.CleanShieldDB.addBookingAsync(bookingData);
+    const newBooking = result.booking;
+    const whatsappUrl = result.whatsappUrl;
+    const whatsappMsg = result.whatsappConfirmationText;
 
-  // Render receipt modal if available, otherwise show confirmation toast
-  const receiptContainer = document.getElementById('receiptContent');
-  if (receiptContainer) {
-    renderReceiptModal(newBooking);
-  } else {
-    showToast(`Booking ${newBooking.id} created successfully! Our team will contact you on ${customerPhone}.`);
-    alert(`Booking Confirmed!\nBooking ID: ${newBooking.id}\nService: ${service}\nDate: ${date}\nThank you for choosing Clean Shield Pro!`);
+    // Close booking input modal
+    closeModal('modalBooking');
+
+    // Attempt to open WhatsApp in a new tab immediately
+    try {
+      const waWin = window.open(whatsappUrl, '_blank');
+      if (waWin) {
+        window.CleanShieldDB.recordWhatsAppInitiated(newBooking.id);
+      }
+    } catch (popupErr) {
+      console.warn('Popup blocked, fallback button is rendered on screen.');
+    }
+
+    // Render receipt confirmation modal
+    const receiptContainer = document.getElementById('receiptContent');
+    if (receiptContainer) {
+      renderReceiptModal(newBooking, whatsappUrl, whatsappMsg);
+    } else {
+      showToast(`Booking ${newBooking.id} reserved! Please confirm via WhatsApp.`);
+      alert(`Booking Reserved!\nBooking ID: ${newBooking.id}\nStatus: Pending WhatsApp Confirmation\n\nPlease send the WhatsApp message to confirm.`);
+    }
+  } catch (err) {
+    console.error('Booking submission error:', err);
+    alert(`Could not create booking: ${err.message || 'Please check your connection and try again.'}`);
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnHtml;
+    }
   }
 }
 
-function renderReceiptModal(booking) {
+function renderReceiptModal(booking, customWaUrl = null, customWaMsg = null) {
   const container = document.getElementById('receiptContent');
   if (!container) return;
 
   const cfg = window.CleanShieldDB.getBusinessConfig();
-  const waMsg = window.CleanShieldDB.getFormattedConfirmationText(booking);
+  const waUrl = customWaUrl || window.CleanShieldDB.getWhatsAppConfirmationUrl(booking);
+  const waMsg = customWaMsg || window.CleanShieldDB.getWhatsAppConfirmationText(booking);
 
-  // WhatsApp links to primary and secondary numbers
-  const waLink1 = window.CleanShieldDB.getWhatsAppLink(cfg.whatsapp1, waMsg);
-  const waLink2 = window.CleanShieldDB.getWhatsAppLink(cfg.whatsapp2, waMsg);
-  
   // Email confirmation link
   const emailLink = window.CleanShieldDB.getEmailConfirmationLink(booking);
 
   container.innerHTML = `
     <div style="text-align:center; padding:10px 0 16px;">
-      <div style="width:60px; height:60px; background:#EAF4F0; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; color:#25A27A;">
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      <div style="width:58px; height:58px; background:#FEF3C7; border:2px solid #F59E0B; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; color:#D97706;">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
         </svg>
       </div>
-      <h3 style="color:var(--color-primary); font-size:1.35rem; margin-bottom:4px;">Booking Reserved Successfully!</h3>
-      <p style="color:var(--color-text-muted); font-size:0.88rem;">Your unique booking reference number is:</p>
-      <div style="font-size:1.5rem; font-weight:800; color:var(--color-primary); letter-spacing:1px; background:#F8FAF9; padding:6px 18px; border-radius:8px; display:inline-block; margin:6px 0; border:1.5px dashed #BED8CC;">
+      <h3 style="color:var(--color-primary); font-size:1.35rem; margin-bottom:4px;">Booking Reserved • Awaiting WhatsApp Confirmation</h3>
+      <p style="color:var(--color-text-muted); font-size:0.86rem; margin-bottom:8px;">Your unique booking reference ID:</p>
+      <div style="font-size:1.45rem; font-weight:800; color:var(--color-primary); letter-spacing:1px; background:#F8FAF9; padding:6px 18px; border-radius:8px; display:inline-block; border:1.5px dashed #BED8CC;">
         ${booking.id}
       </div>
-      <div style="font-size:0.8rem; color:#25A27A; font-weight:600; margin-top:4px;">
-        Saved to your "My Services" order history
+      <div style="margin-top:6px;">
+        <span style="background:#FEF3C7; color:#92400E; border:1px solid #FCD34D; font-size:0.75rem; font-weight:800; padding:3px 10px; border-radius:12px; text-transform:uppercase; letter-spacing:0.5px;">
+          Status: Pending WhatsApp Confirmation
+        </span>
       </div>
+    </div>
+
+    <!-- PRIMARY ACTION: WHATSAPP CONFIRMATION BOX -->
+    <div style="background:#F0FDF4; border:2px solid #22C55E; border-radius:12px; padding:18px; margin-bottom:20px; box-shadow:0 4px 14px rgba(34,197,94,0.15);">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+        <span style="background:#22C55E; color:#FFFFFF; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:10px;">ACTION REQUIRED</span>
+        <strong style="color:#15803D; font-size:1rem;">Complete Confirmation in WhatsApp</strong>
+      </div>
+      <p style="font-size:0.86rem; color:#166534; margin:0 0 14px; line-height:1.4;">
+        To prevent fake bookings, please click the button below to open WhatsApp with your prefilled booking details, then press <strong>"Send"</strong>. Our operations desk will verify your message and confirm your appointment.
+      </p>
+
+      <a href="${waUrl}" target="_blank" rel="noopener" onclick="window.CleanShieldDB.recordWhatsAppInitiated('${booking.id}')" class="btn-action-wa" style="display:flex; align-items:center; justify-content:center; gap:10px; padding:12px 18px; font-size:1rem; font-weight:700; border-radius:8px; text-decoration:none; background:#25D366; color:#FFFFFF; box-shadow:0 3px 10px rgba(37,211,102,0.4); text-align:center;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
+        <span>Open WhatsApp & Send Confirmation</span>
+      </a>
+
+      <div style="font-size:0.78rem; color:#65A30D; margin-top:10px; line-height:1.3; text-align:center;">
+        🔒 <em>Note: Opening WhatsApp alone does not confirm your booking. You must press Send in WhatsApp.</em>
+      </div>
+
+      <!-- Prefilled Message Preview Accordion -->
+      <details style="margin-top:12px; background:#FFFFFF; border:1px solid #BBF7D0; border-radius:8px; padding:8px 12px; font-size:0.8rem; color:#374151;">
+        <summary style="cursor:pointer; font-weight:600; color:#15803D;">View prefilled WhatsApp message text</summary>
+        <pre style="white-space:pre-wrap; margin:8px 0 0; font-family:monospace; font-size:0.76rem; background:#F9FAFB; padding:8px; border-radius:6px; color:#1F2937;">${waMsg}</pre>
+      </details>
     </div>
 
     <!-- Booking Summary Details -->
@@ -563,38 +658,11 @@ function renderReceiptModal(booking) {
       </button>
     </div>
 
-    <!-- Confirmation Actions Section -->
-    <div style="background:#F4F8F6; border:1px solid #D5EDE3; border-radius:10px; padding:14px; margin-bottom:18px;">
-      <div style="font-weight:700; color:var(--color-primary); font-size:0.9rem; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
-        <span>📲 Send Confirmation Details</span>
-      </div>
-
-      <!-- WhatsApp Options -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
-        <a href="${waLink1}" target="_blank" rel="noopener" class="btn-action-wa" style="justify-content:center; padding:10px; font-size:0.84rem; text-decoration:none;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
-          WhatsApp (${cfg.whatsapp1})
-        </a>
-        <a href="${waLink2}" target="_blank" rel="noopener" class="btn-action-wa" style="justify-content:center; padding:10px; font-size:0.84rem; text-decoration:none; background-color:#1EBE5D;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
-          WhatsApp (${cfg.whatsapp2})
-        </a>
-      </div>
-
-      <!-- Email Confirmation Option -->
-      <a href="${emailLink}" class="modal-submit-btn" style="display:flex; align-items:center; justify-content:center; gap:8px; background:linear-gradient(135deg, #185644 0%, #0D3B2E 100%); color:#FFFFFF; text-decoration:none; padding:11px; font-size:0.88rem; margin:0 0 10px;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-        Send Email to Official Desk
+    <!-- Email Desk Fallback -->
+    <div style="text-align:center; padding-top:4px;">
+      <a href="${emailLink}" style="font-size:0.82rem; color:var(--color-primary); text-decoration:underline;">
+        Send copy via Email to desk (${cfg.email1})
       </a>
-      <small style="color:var(--color-text-muted); display:block; text-align:center; font-size:0.78rem;">
-        Recipients: ${cfg.email1}, ${cfg.email2}
-      </small>
-    </div>
-
-    <div style="display:flex; justify-content:center;">
-      <button onclick="window.print()" class="btn-service-book" style="padding:10px 24px;">
-        Print / Save PDF Receipt
-      </button>
     </div>
   `;
 
@@ -707,10 +775,21 @@ async function handleTrackSubmit(e, overrideQuery = null) {
           <span style="font-size:0.8rem; color:var(--color-text-muted);">Booking Reference</span>
           <div style="font-weight:800; font-size:1.25rem; color:var(--color-primary);">${booking.id}</div>
         </div>
-        <span class="status-badge status-${(booking.status || 'Confirmed').toLowerCase().replace(/\s+/g, '')}" style="font-size:0.85rem; padding:4px 14px; border-radius:20px; font-weight:700;">
-          ${booking.status || 'Confirmed'}
+        <span class="status-badge status-${(booking.status || 'Pending').toLowerCase().replace(/\s+/g, '')}" style="font-size:0.85rem; padding:4px 14px; border-radius:20px; font-weight:700;">
+          ${booking.status || 'Pending'}
         </span>
       </div>
+
+      ${booking.status === 'Pending' ? `
+      <div style="background:#FEF3C7; border:1.5px solid #FCD34D; border-radius:10px; padding:12px 14px; margin-bottom:14px; font-size:0.85rem; color:#92400E; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div style="max-width:70%;">
+          <strong>⚠️ Awaiting Customer WhatsApp Confirmation:</strong><br>
+          <span style="font-size:0.8rem; color:#78350F;">Please ensure you sent the prefilled WhatsApp message to our operations desk. Once verified, this booking will be marked as Confirmed.</span>
+        </div>
+        <a href="${window.CleanShieldDB.getWhatsAppConfirmationUrl(booking)}" target="_blank" rel="noopener" onclick="window.CleanShieldDB.recordWhatsAppInitiated('${booking.id}')" class="btn-action-wa" style="padding:6px 14px; font-size:0.82rem; text-decoration:none; white-space:nowrap; background:#25D366; color:#fff;">
+          Open WhatsApp to Confirm
+        </a>
+      </div>` : ''}
 
       <div class="tracking-timeline">
         <div class="timeline-step ${currentLevel >= 1 ? 'completed' : ''}">
@@ -882,6 +961,14 @@ function renderMyServicesList() {
             </div>
           </div>
         </div>
+
+        ${b.status === 'Pending' ? `
+        <div style="background:#FEF3C7; border:1px solid #FCD34D; border-radius:8px; padding:10px 12px; margin-bottom:12px; font-size:0.82rem; color:#92400E; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <span>⚠️ <strong>Awaiting WhatsApp Confirmation:</strong> Please send the prefilled WhatsApp message to verify your booking.</span>
+          <a href="${window.CleanShieldDB.getWhatsAppConfirmationUrl(b)}" target="_blank" rel="noopener" onclick="window.CleanShieldDB.recordWhatsAppInitiated('${b.id}')" style="background:#25D366; color:#fff; padding:5px 12px; border-radius:6px; font-weight:700; text-decoration:none; font-size:0.78rem; white-space:nowrap;">
+            Open WhatsApp
+          </a>
+        </div>` : ''}
 
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-top:1px solid #EDF3F0; padding-top:12px;">
           <button type="button" class="btn-service-book" onclick="trackFromMyServices('${b.id}')" style="padding:7px 16px; font-size:0.84rem; display:inline-flex; align-items:center; gap:6px;">

@@ -1270,10 +1270,11 @@ class CleanShieldDB {
     const newBooking = {
       id: newId,
       createdAt: new Date().toISOString(),
-      status: 'Confirmed',
+      status: 'Pending', // Default initial status is Pending
       paymentStatus: (Number(bookingData.amount) === 0) ? 'Site Survey Scheduled' : (bookingData.paymentMethod && bookingData.paymentMethod.includes('Cash') ? 'Pending' : 'Paid'),
       ...bookingData,
       id: newId,
+      status: bookingData.status || 'Pending',
       locality,
       exactLocation,
       address: fullAddress
@@ -1294,7 +1295,6 @@ class CleanShieldDB {
       if (res.success && res.data) {
         console.log('✅ Booking successfully stored in MongoDB:', res.data.id);
         if (res.data.id && res.data.id !== newId) {
-          // If server normalized ID, synchronize local copies
           newBooking.id = res.data.id;
           localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
           this.saveToMyServices(res.data);
@@ -1305,13 +1305,135 @@ class CleanShieldDB {
     // Trigger cross-tab notification
     this.triggerAlert({
       type: 'booking',
-      title: 'New Booking Received!',
-      message: `${newBooking.customerName} booked ${newBooking.service} (${newBooking.bhk || ''}) for ₹${newBooking.amount.toLocaleString('en-IN')}`,
+      title: 'New Booking Awaiting Confirmation',
+      message: `${newBooking.customerName} requested ${newBooking.service} (${newBooking.bhk || ''})`,
       id: newId,
       time: new Date().toLocaleTimeString()
     });
 
     return newBooking;
+  }
+
+  // Modern Asynchronous Booking Creator with strict backend validation & real MongoDB ID
+  static async addBookingAsync(bookingData) {
+    const locality = (bookingData.locality || 'Rajahmundry - Danavaipeta').trim();
+    const exactLocation = (bookingData.exactLocation || bookingData.address || '').trim();
+    const fullAddress = bookingData.address && bookingData.address.trim()
+      ? bookingData.address.trim()
+      : `${exactLocation}${locality ? ', ' + locality : ''}`;
+
+    // Normalize phone number: strip non-digits, accept 10 or 12 digits (with 91)
+    let rawPhone = (bookingData.phone || '').toString().replace(/\D/g, '');
+    if (rawPhone.length === 12 && rawPhone.startsWith('91')) rawPhone = rawPhone.slice(2);
+    if (rawPhone.length === 11 && rawPhone.startsWith('0')) rawPhone = rawPhone.slice(1);
+
+    if (!/^[6-9]\d{9}$/.test(rawPhone)) {
+      throw new Error('Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9.');
+    }
+
+    const payload = {
+      ...bookingData,
+      phone: rawPhone,
+      locality,
+      exactLocation,
+      address: fullAddress,
+      status: 'Pending'
+    };
+
+    const res = await fetch(`${API_BASE_URL}/bookings`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok || !data || !data.success) {
+      const errMsg = (data && data.message) ? data.message : `Unable to reserve booking (HTTP ${res.status}). Please check your connection.`;
+      throw new Error(errMsg);
+    }
+
+    const savedBooking = data.data;
+
+    // Save locally
+    const bookings = this.getBookings();
+    const existingIdx = bookings.findIndex(b => b.id === savedBooking.id);
+    if (existingIdx !== -1) {
+      bookings[existingIdx] = savedBooking;
+    } else {
+      bookings.unshift(savedBooking);
+    }
+    localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+
+    // Save to My Services
+    this.saveToMyServices(savedBooking);
+
+    // Alert
+    this.triggerAlert({
+      type: 'booking',
+      title: 'New Booking Awaiting Confirmation',
+      message: `${savedBooking.customerName} requested ${savedBooking.service} (${savedBooking.bhk || ''})`,
+      id: savedBooking.id,
+      time: new Date().toLocaleTimeString()
+    });
+
+    return {
+      booking: savedBooking,
+      whatsappUrl: data.whatsappUrl || this.getWhatsAppConfirmationUrl(savedBooking),
+      whatsappConfirmationText: data.whatsappConfirmationText || this.getWhatsAppConfirmationText(savedBooking),
+      isDuplicate: !!data.isDuplicate
+    };
+  }
+
+  // Record WhatsApp click event (does NOT confirm booking automatically)
+  static async recordWhatsAppInitiated(bookingId) {
+    if (!bookingId) return;
+    try {
+      await fetch(`${API_BASE_URL}/bookings/${bookingId}/whatsapp-initiated`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const bookings = this.getBookings();
+      const b = bookings.find(x => x.id === bookingId);
+      if (b) {
+        b.whatsappInitiated = true;
+        b.whatsappInitiatedAt = new Date().toISOString();
+        localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+        this.saveToMyServices(b);
+      }
+    } catch (e) {
+      // Background non-blocking ping
+    }
+  }
+
+  static getWhatsAppConfirmationText(booking) {
+    const serviceLine = booking.bhk && booking.bhk !== 'Standard'
+      ? `${booking.service} (${booking.bhk})`
+      : booking.service;
+    const addressLine = booking.exactLocation
+      ? `${booking.exactLocation}${booking.locality ? ', ' + booking.locality : ''}`
+      : (booking.address || booking.locality || 'Rajahmundry');
+
+    return (
+      `Hello Clean Shield Pro,\n` +
+      `I would like to confirm my service booking.\n` +
+      `Booking ID: ${booking.id}\n` +
+      `Name: ${booking.customerName}\n` +
+      `Service: ${serviceLine}\n` +
+      `Preferred Date: ${booking.date}\n` +
+      `Preferred Time: ${booking.timeSlot}\n` +
+      `Service Address: ${addressLine}\n` +
+      `Contact Number: ${booking.phone}\n` +
+      `Please contact me to confirm the appointment.\n` +
+      `Thank you.`
+    );
+  }
+
+  static getWhatsAppConfirmationUrl(booking) {
+    const rawNum = (BUSINESS_CONFIG.whatsapp1 || '9059639955').replace(/\D/g, '');
+    const cleanNumber = rawNum.startsWith('91') ? rawNum : `91${rawNum}`;
+    const text = encodeURIComponent(this.getWhatsAppConfirmationText(booking));
+    return `https://wa.me/${cleanNumber}?text=${text}`;
   }
 
   static updateBookingStatus(bookingId, newStatus, paymentStatus = null) {
@@ -1329,10 +1451,14 @@ class CleanShieldDB {
       // Also update in My Services if present
       this.saveToMyServices(bookings[idx]);
 
-      // Asynchronously update in MongoDB Atlas
+      // Asynchronously update in MongoDB Atlas with Admin JWT Token
+      const adminToken = localStorage.getItem('csp_admin_token') || '';
+      const headers = { 'Content-Type': 'application/json' };
+      if (adminToken) headers['Authorization'] = `Bearer ${adminToken}`;
+
       fetch(`${API_BASE_URL}/bookings/${bookingId}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ status: newStatus })
       }).catch(err => console.warn('Status sync error:', err.message));
 
@@ -1348,10 +1474,14 @@ class CleanShieldDB {
       const removed = bookings.splice(idx, 1)[0];
       localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
 
-      // Asynchronously delete from MongoDB Atlas
+      // Asynchronously delete from MongoDB Atlas with Admin JWT Token
+      const adminToken = localStorage.getItem('csp_admin_token') || '';
+      const headers = { 'Content-Type': 'application/json' };
+      if (adminToken) headers['Authorization'] = `Bearer ${adminToken}`;
+
       fetch(`${API_BASE_URL}/bookings/${bookingId}`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' }
+        headers
       }).catch(err => console.warn('Booking delete sync error:', err.message));
 
       return removed;

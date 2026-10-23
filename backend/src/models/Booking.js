@@ -79,7 +79,21 @@ const bookingSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['Pending', 'Confirmed', 'In Progress', 'Completed', 'Cancelled'],
-    default: 'Confirmed'
+    default: 'Pending'
+  },
+  whatsappInitiated: {
+    type: Boolean,
+    default: false
+  },
+  whatsappInitiatedAt: {
+    type: Date
+  },
+  confirmedAt: {
+    type: Date
+  },
+  confirmedBy: {
+    type: String,
+    default: ''
   },
   notes: {
     type: String,

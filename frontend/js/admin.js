@@ -438,15 +438,20 @@ function renderBookingsTable(filteredList = null) {
             <option value="Completed" ${b.status === 'Completed' ? 'selected' : ''}>Completed</option>
             <option value="Cancelled" ${b.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
           </select>
+          ${b.status === 'Pending' ? `<div style="font-size:0.7rem; color:#D97706; font-weight:700; margin-top:3px;">⏳ Awaiting WhatsApp</div>` : ''}
         </td>
         <td>
           <div class="action-btn-group">
+            ${b.status === 'Pending' ? `
+            <button class="btn-action-sm" onclick="quickConfirmBooking('${b.id}')" title="Verify customer WhatsApp message and mark as Confirmed" style="background:#15803D; color:#FFFFFF; font-weight:700; padding:4px 8px; font-size:0.75rem; border:none; border-radius:4px; cursor:pointer;">
+              ✓ Confirm
+            </button>` : ''}
             <a href="${waUrl}" target="_blank" rel="noopener" class="btn-table-wa" title="WhatsApp Customer (${b.phone})">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
               <span>WhatsApp</span>
             </a>
             <button class="btn-table-info" onclick="showBookingDetail('${b.id}')" title="View Full Details">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
               <span>Info</span>
             </button>
             <a href="${emailUrl}" class="btn-table-email" title="Email confirmation to ${cfg.email1} & ${cfg.email2}">
@@ -461,6 +466,12 @@ function renderBookingsTable(filteredList = null) {
       </tr>
     `;
   }).join('');
+}
+
+function quickConfirmBooking(bookingId) {
+  if (confirm(`Confirm booking ${bookingId}?\n\nPlease ensure you have checked the customer's WhatsApp message before confirming.`)) {
+    changeBookingStatus(bookingId, 'Confirmed');
+  }
 }
 
 function filterBookings() {
@@ -538,6 +549,30 @@ function showBookingDetail(bookingId) {
       <p><strong>Total Amount:</strong> ₹${Number(b.amount).toLocaleString('en-IN')}</p>
       <p><strong>Payment Mode:</strong> ${b.paymentMethod}</p>
       <p><strong>Payment Status:</strong> ${b.paymentStatus || 'Pending'}</p>
+    </div>
+
+    <!-- WhatsApp Confirmation Audit Trail -->
+    <div style="background:${b.status === 'Confirmed' ? '#EBF8F2' : '#FFF9E6'}; border:1px solid ${b.status === 'Confirmed' ? '#25D366' : '#FFE58F'}; padding:16px; border-radius:10px; margin-bottom:20px;">
+      <h4 style="color:${b.status === 'Confirmed' ? '#0D3B2E' : '#B78103'}; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+        <span>📱 WhatsApp Confirmation Audit</span>
+        <span class="badge ${b.status === 'Confirmed' ? 'badge-confirmed' : b.status === 'Completed' ? 'badge-completed' : 'badge-pending'}">${b.status}</span>
+      </h4>
+      <p style="font-size:0.88rem; margin-bottom:4px;">
+        <strong>Customer WhatsApp Click:</strong> ${b.whatsappInitiated ? '✅ Clicked to open WhatsApp' : '⏳ Awaiting Customer Action'}
+        ${b.whatsappInitiatedAt ? `<span style="color:#666; font-size:0.8rem;">(${new Date(b.whatsappInitiatedAt).toLocaleString('en-IN')})</span>` : ''}
+      </p>
+      ${b.confirmedAt ? `<p style="font-size:0.88rem; margin-bottom:4px;"><strong>Admin Confirmed:</strong> ${new Date(b.confirmedAt).toLocaleString('en-IN')}${b.confirmedBy ? ` by ${b.confirmedBy}` : ''}</p>` : ''}
+
+      ${b.status === 'Pending' ? `
+        <div style="margin-top:12px; padding:12px; background:#FFFFFF; border-radius:8px; border:1px dashed #25D366;">
+          <p style="font-size:0.84rem; color:#374151; margin-bottom:10px;">
+            <strong>Verification Step:</strong> Check WhatsApp desk (+91 90596 39955) for incoming confirmation message from <strong>${b.phone}</strong> for Booking ID <strong>${b.id}</strong>. Once verified, click below to confirm:
+          </p>
+          <button onclick="changeBookingStatus('${b.id}', 'Confirmed'); closeModal('modalAdminBookingDetail');" class="btn-action-sm" style="background:#25D366; color:#0A382C; font-weight:700; border:none; padding:8px 16px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+            <span>✓ Verify & Mark Confirmed</span>
+          </button>
+        </div>
+      ` : ''}
     </div>
 
     <div style="background:#F4F8F6; border:1px solid #D5EDE3; border-radius:10px; padding:16px; margin-bottom:20px;">
