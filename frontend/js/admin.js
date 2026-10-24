@@ -1,5 +1,5 @@
 /**
- * Clean Shield Pro - Admin Dashboard Operations Logic
+ * Manjusha Cleaning & Pest Control Services - Admin Dashboard Operations Logic
  * Rajamahendravaram Operations Desk
  * MongoDB Atlas Real-Time Dynamic Integration
  */
@@ -119,7 +119,7 @@ async function handleOwnerLogin(e) {
       if (nameEl) nameEl.textContent = data.admin.name || data.admin.email;
       if (letterEl) letterEl.textContent = (data.admin.name || 'O').charAt(0).toUpperCase();
 
-      showToast(`Namaste, ${data.admin.name}! Welcome to Clean Shield Pro Operations.`);
+      showToast(`Namaste, ${data.admin.name}! Welcome to Manjusha Cleaning & Pest Control Services Operations.`);
       refreshDashboard(true);
     } else {
       if (errorAlert) {
@@ -380,7 +380,7 @@ function renderBookingsTable(filteredList = null) {
     }[b.status] || 'status-pending';
 
     const cfg = window.CleanShieldDB.getBusinessConfig();
-    const waText = `Namaste ${b.customerName}! 🙏 Clean Shield Pro update regarding your booking ${b.id} for ${b.service} (${b.bhk || ''}) on ${b.date}. Current status: *${b.status}*. Address: ${b.address}. Helplines: ${cfg.phone1} / ${cfg.phone2}.`;
+    const waText = `Namaste ${b.customerName}! 🙏 Manjusha Cleaning & Pest Control Services update regarding your booking ${b.id} for ${b.service} (${b.bhk || ''}) on ${b.date}. Current status: *${b.status}*. Address: ${b.address}. Helplines: ${cfg.phone1} / ${cfg.phone2}.`;
     const waUrl = window.CleanShieldDB.getWhatsAppLink(b.phone, waText);
     const emailUrl = window.CleanShieldDB.getEmailConfirmationLink(b);
     const bookingDateStr = b.createdAt ? new Date(b.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : 'Recent';
@@ -647,7 +647,7 @@ function renderEnquiriesTable(filteredList = null) {
   }
 
   tbody.innerHTML = enquiries.map(e => {
-    const waText = `Namaste ${e.name}! 🙏 Thank you for reaching out to Clean Shield Pro Rajamahendravaram regarding *${e.service}* in ${e.locality}. We received your requirement: "${e.details}". We are ready to provide a custom quotation. May we discuss the specifics?`;
+    const waText = `Namaste ${e.name}! 🙏 Thank you for reaching out to Manjusha Cleaning & Pest Control Services Rajamahendravaram regarding *${e.service}* in ${e.locality}. We received your requirement: "${e.details}". We are ready to provide a custom quotation. May we discuss the specifics?`;
     const waUrl = window.CleanShieldDB.getWhatsAppLink(e.phone, waText);
     const dateStr = e.createdAt ? new Date(e.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : 'Recent';
     const statusClass = {
@@ -841,7 +841,7 @@ function renderCustomersTable() {
       </td>
       <td>
         <div class="action-btn-group">
-          <a href="${window.CleanShieldDB.getWhatsAppLink(c.phone, `Namaste ${c.name}, greetings from Clean Shield Pro Rajamahendravaram!`)}" target="_blank" rel="noopener" class="btn-table-wa">
+          <a href="${window.CleanShieldDB.getWhatsAppLink(c.phone, `Namaste ${c.name}, greetings from Manjusha Cleaning & Pest Control Services Rajamahendravaram!`)}" target="_blank" rel="noopener" class="btn-table-wa">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
             <span>WhatsApp</span>
           </a>
@@ -1174,7 +1174,7 @@ function handleAllPricingSave() {
 }
 
 function handleResetDefaultPricing() {
-  if (!confirm('Reset all service packages and pricing back to Clean Shield Pro factory defaults?')) {
+  if (!confirm('Reset all service packages and pricing back to Manjusha Cleaning & Pest Control Services factory defaults?')) {
     return;
   }
   if (window.CleanShieldDB && window.CleanShieldDB.resetServicePackages) {

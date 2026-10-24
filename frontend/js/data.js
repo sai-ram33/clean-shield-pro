@@ -1,5 +1,5 @@
 /**
- * Clean Shield Pro - Shared Data & State Management
+ * Manjusha Cleaning & Pest Control Services - Shared Data & State Management
  * Clean Home • Healthy Life | Rajamahendravaram, AP
  */
 
@@ -15,7 +15,7 @@ const STORAGE_KEYS = {
 
 // Official Business Contact Configuration
 const BUSINESS_CONFIG = {
-  name: 'Clean Shield Pro',
+  name: 'Manjusha Cleaning & Pest Control Services',
   slogan: "We Don't Just Clean, We Care.",
   tagline: 'Clean Home • Healthy Life',
   city: 'Rajamahendravaram, Andhra Pradesh',
@@ -1415,7 +1415,7 @@ class CleanShieldDB {
       : (booking.address || booking.locality || 'Rajahmundry');
 
     return (
-      `Hello Clean Shield Pro,\n` +
+      `Hello Manjusha Cleaning & Pest Control Services,\n` +
       `I would like to confirm my service booking.\n` +
       `Booking ID: ${booking.id}\n` +
       `Name: ${booking.customerName}\n` +
@@ -1873,7 +1873,7 @@ class CleanShieldDB {
 
   // Generate WhatsApp Message Text for Confirmation
   static getFormattedConfirmationText(booking) {
-    return `*CLEAN SHIELD PRO - OFFICIAL BOOKING CONFIRMATION*\n` +
+    return `*MANJUSHA CLEANING & PEST CONTROL SERVICES - OFFICIAL BOOKING CONFIRMATION*\n` +
       `"Clean Home • Healthy Life | We Don't Just Clean, We Care."\n\n` +
       `📌 *Booking ID:* ${booking.id}\n` +
       `👤 *Customer Name:* ${booking.customerName}\n` +
@@ -1889,7 +1889,7 @@ class CleanShieldDB {
       `💰 *Total Amount:* Rs. ${Number(booking.amount).toLocaleString('en-IN')}\n` +
       `💳 *Payment Mode:* ${booking.paymentMethod} (${booking.paymentStatus || 'Pending'})\n` +
       `📝 *Notes:* ${booking.notes || 'None'}\n\n` +
-      `🏢 *Clean Shield Pro Rajamahendravaram Office*\n` +
+      `🏢 *Manjusha Cleaning & Pest Control Services Rajamahendravaram Office*\n` +
       `Helplines: +91 90596 39955 | +91 88973 12523\n` +
       `Emails: madhuripaka756@gmail.com | prasadanem777@gmail.com`;
   }
@@ -1907,15 +1907,15 @@ class CleanShieldDB {
   // Email Confirmation mailto: Generator
   static getEmailConfirmationLink(booking, recipients = null) {
     const toEmails = recipients || BUSINESS_CONFIG.allEmails.join(',');
-    const subject = encodeURIComponent(`Clean Shield Pro Booking Confirmation [${booking.id}] - ${booking.customerName}`);
+    const subject = encodeURIComponent(`Manjusha Cleaning & Pest Control Services Booking Confirmation [${booking.id}] - ${booking.customerName}`);
     
     const bodyContent = 
-`Namaste Clean Shield Pro Team & Customer,
+`Namaste Manjusha Cleaning & Pest Control Services Team & Customer,
 
 Here are the confirmed booking details for residential cleaning & pest control in Rajamahendravaram:
 
 ==================================================
-CLEAN SHIELD PRO - OFFICIAL BOOKING CONFIRMATION
+MANJUSHA CLEANING & PEST CONTROL SERVICES - OFFICIAL BOOKING CONFIRMATION
 "Clean Home • Healthy Life"
 "We Don't Just Clean, We Care."
 ==================================================

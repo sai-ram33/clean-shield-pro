@@ -1,5 +1,5 @@
 /**
- * Clean Shield Pro - Customer Website Application Logic
+ * Manjusha Cleaning & Pest Control Services - Customer Website Application Logic
  * Rajamahendravaram, AP
  * Brand Palette: Dark Green (#0D3B2E), Light Sage (#25A27A), Luxury Gold (#D4A359)
  */
@@ -529,7 +529,7 @@ async function handleBookingSubmit(e) {
 <body>
   <div class="spinner"></div>
   <h2 style="margin:0 0 8px; font-size:1.3rem;">Connecting to WhatsApp...</h2>
-  <p style="margin:0; font-size:0.9rem; color:#15803D;">Reserving your Clean Shield Pro appointment.</p>
+  <p style="margin:0; font-size:0.9rem; color:#15803D;">Reserving your Manjusha Cleaning & Pest Control Services appointment.</p>
 </body>
 </html>`);
       }
@@ -738,7 +738,7 @@ function handleQuoteSubmit(e) {
   showToast(`Enquiry ${enquiry.id} sent! Our Rajamahendravaram team is connecting on WhatsApp.`);
 
   // Open direct WhatsApp chat with enquiry info
-  const waMsg = `*CLEAN SHIELD PRO - QUOTE ENQUIRY (${enquiry.id})*\n\n` +
+  const waMsg = `*MANJUSHA CLEANING & PEST CONTROL SERVICES - QUOTE ENQUIRY (${enquiry.id})*\n\n` +
     `*Name:* ${name}\n` +
     `*Phone:* ${phone}\n` +
     `*Service:* ${service}\n` +
@@ -872,7 +872,7 @@ async function handleTrackSubmit(e, overrideQuery = null) {
           </div>
         </div>
         <div style="display:flex; flex-direction:column; gap:6px;">
-          <a href="${window.CleanShieldDB.getWhatsAppLink(window.CleanShieldDB.getBusinessConfig().whatsapp1, `Namaste Clean Shield Pro, checking live dispatch status for my booking ${booking.id}...`)}" target="_blank" rel="noopener" class="btn-action-wa" style="padding:7px 14px; font-size:0.82rem; text-decoration:none; justify-content:center;">
+          <a href="${window.CleanShieldDB.getWhatsAppLink(window.CleanShieldDB.getBusinessConfig().whatsapp1, `Namaste Manjusha Cleaning & Pest Control Services, checking live dispatch status for my booking ${booking.id}...`)}" target="_blank" rel="noopener" class="btn-action-wa" style="padding:7px 14px; font-size:0.82rem; text-decoration:none; justify-content:center;">
             WhatsApp Support
           </a>
           <button type="button" onclick="closeModal('modalTrack'); openMyServicesModal();" style="background:#FFFFFF; border:1px solid var(--color-primary); color:var(--color-primary); border-radius:6px; font-size:0.8rem; font-weight:700; padding:6px 12px; cursor:pointer;">
@@ -1011,7 +1011,7 @@ function renderMyServicesList() {
             Track Status
           </button>
           
-          <a href="${window.CleanShieldDB.getWhatsAppLink(window.CleanShieldDB.getBusinessConfig().whatsapp1, `Namaste Clean Shield Pro, inquiring on my booking ${b.id} (${b.service})...`)}" target="_blank" rel="noopener" class="btn-action-wa" style="padding:7px 14px; font-size:0.82rem; text-decoration:none;">
+          <a href="${window.CleanShieldDB.getWhatsAppLink(window.CleanShieldDB.getBusinessConfig().whatsapp1, `Namaste Manjusha Cleaning & Pest Control Services, inquiring on my booking ${b.id} (${b.service})...`)}" target="_blank" rel="noopener" class="btn-action-wa" style="padding:7px 14px; font-size:0.82rem; text-decoration:none;">
             WhatsApp Support
           </a>
 

@@ -1,6 +1,6 @@
 /**
  * Bookings Controller (MongoDB Mongoose Powered)
- * Clean Shield Pro Express Backend
+ * Manjusha Cleaning & Pest Control Services Express Backend
  */
 
 const Booking = require('../models/Booking');
@@ -141,7 +141,7 @@ function buildWhatsAppConfirmationMessage(booking) {
     : (booking.address || booking.locality || 'Rajahmundry');
 
   return (
-    `Hello Clean Shield Pro,\n` +
+    `Hello Manjusha Cleaning & Pest Control Services,\n` +
     `I would like to confirm my service booking.\n` +
     `Booking ID: ${booking.id}\n` +
     `Name: ${booking.customerName}\n` +

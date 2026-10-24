@@ -1,5 +1,5 @@
 /**
- * Clean Shield Pro - Comprehensive Service Detail Profiles
+ * Manjusha Cleaning & Pest Control Services - Comprehensive Service Detail Profiles
  * Contains full data, pricing, inclusions, exclusions, and procedures for all 15 services.
  */
 
@@ -475,7 +475,7 @@ const SERVICES_DETAILED_DATA = {
       'High-pressure chemical pumping of Bayer Premise creating an impenetrable barrier.',
       'Door frames, wooden cupboards, and electrical conduits treated with wood injector.',
       'Color-matched chalk/cement sealing leaving drill holes virtually invisible.',
-      'Official printed 3-Year Clean Shield Pro Warranty Certificate.'
+      'Official printed 3-Year Manjusha Cleaning & Pest Control Services Warranty Certificate.'
     ],
     exclusions: [
       'Replacing already hollowed-out or destroyed woodwork.'
@@ -715,7 +715,7 @@ const SERVICES_DETAILED_DATA = {
       { step: 1, title: 'Multi-Pest Mapping', desc: 'Thorough inspection of all kitchen cabinets, bathrooms, and wardrobes.' },
       { step: 2, title: 'Kitchen & Pantry Gel Baiting', desc: 'Micro-dots placed for roaches and ants.' },
       { step: 3, title: 'Washroom & Drain Barrier', desc: 'Drain fly flush and silverfish perimeter spray.' },
-      { step: 4, title: 'Warranty Issue & Certificate', desc: '6-month warranty registered on Clean Shield Pro operations console.' }
+      { step: 4, title: 'Warranty Issue & Certificate', desc: '6-month warranty registered on Manjusha Cleaning & Pest Control Services operations console.' }
     ]
   },
 
@@ -860,7 +860,7 @@ const SERVICES_DETAILED_DATA = {
     chemicals: 'Complete portfolio of Bayer Maxforce, Premise, BASF Goliath, and WHO-approved larvicides customized to your property type.',
     steps: [
       { step: 1, title: 'Property Audit & Custom SLA Design', desc: 'Technical inspection to determine pest vulnerability and define customized visit frequencies.' },
-      { step: 2, title: 'Annual Calendar Booking & Agreement', desc: 'Maintenance schedule booked on the Clean Shield Pro operations console with assigned account manager.' },
+      { step: 2, title: 'Annual Calendar Booking & Agreement', desc: 'Maintenance schedule booked on the Manjusha Cleaning & Pest Control Services operations console with assigned account manager.' },
       { step: 3, title: 'Automated Scheduled Execution', desc: 'Technicians arrive automatically on scheduled dates with industrial-grade formulations.' },
       { step: 4, title: 'Continuous Monitoring & 4-Hr Callouts', desc: 'Round-the-clock priority hotline for instant emergency callouts between scheduled cycles.' }
     ]

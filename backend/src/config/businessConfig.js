@@ -1,10 +1,10 @@
 /**
  * Official Business Configuration & Operational Branches
- * Clean Shield Pro - Rajamahendravaram & 15+ Operational Hubs
+ * Manjusha Cleaning & Pest Control Services - Rajamahendravaram & 15+ Operational Hubs
  */
 
 const BUSINESS_CONFIG = {
-  name: 'Clean Shield Pro',
+  name: 'Manjusha Cleaning & Pest Control Services',
   slogan: "We Don't Just Clean, We Care.",
   tagline: 'Clean Home • Healthy Life',
   headquarters: 'Danavaipeta, Rajamahendravaram, Andhra Pradesh - 533103',
