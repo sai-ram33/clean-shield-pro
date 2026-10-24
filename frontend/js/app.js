@@ -506,10 +506,42 @@ async function handleBookingSubmit(e) {
     paymentMethod: selectedPayment
   };
 
+  // Detect if customer is using a mobile device
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  // Synchronously open blank window on desktop before await to guarantee popup blockers do not block it
+  let preOpenedWindow = null;
+  if (!isMobile) {
+    try {
+      preOpenedWindow = window.open('about:blank', '_blank');
+      if (preOpenedWindow) {
+        preOpenedWindow.document.write(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Opening WhatsApp...</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f0fdf4; color: #166534; text-align: center; }
+    .spinner { width: 38px; height: 38px; border: 4px solid #bbf7d0; border-top-color: #16a34a; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 14px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <h2 style="margin:0 0 8px; font-size:1.3rem;">Connecting to WhatsApp...</h2>
+  <p style="margin:0; font-size:0.9rem; color:#15803D;">Reserving your Clean Shield Pro appointment.</p>
+</body>
+</html>`);
+      }
+    } catch (popupErr) {
+      preOpenedWindow = null;
+    }
+  }
+
   // Prevent multiple clicks
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.innerHTML = `<span>⏳ Reserving Appointment...</span>`;
+    submitBtn.innerHTML = `<span>⏳ Reserving & Launching WhatsApp...</span>`;
   }
 
   try {
@@ -521,25 +553,28 @@ async function handleBookingSubmit(e) {
     // Close booking input modal
     closeModal('modalBooking');
 
-    // Attempt to open WhatsApp in a new tab immediately
-    try {
-      const waWin = window.open(whatsappUrl, '_blank');
-      if (waWin) {
-        window.CleanShieldDB.recordWhatsAppInitiated(newBooking.id);
-      }
-    } catch (popupErr) {
-      console.warn('Popup blocked, fallback button is rendered on screen.');
-    }
-
-    // Render receipt confirmation modal
+    // Render receipt confirmation modal in main tab
     const receiptContainer = document.getElementById('receiptContent');
     if (receiptContainer) {
       renderReceiptModal(newBooking, whatsappUrl, whatsappMsg);
     } else {
       showToast(`Booking ${newBooking.id} reserved! Please confirm via WhatsApp.`);
-      alert(`Booking Reserved!\nBooking ID: ${newBooking.id}\nStatus: Pending WhatsApp Confirmation\n\nPlease send the WhatsApp message to confirm.`);
+    }
+
+    // Record that WhatsApp confirmation was automatically initiated
+    window.CleanShieldDB.recordWhatsAppInitiated(newBooking.id);
+
+    // Automatically launch WhatsApp without popup blockers
+    if (preOpenedWindow && !preOpenedWindow.closed) {
+      preOpenedWindow.location.href = whatsappUrl;
+    } else {
+      // On mobile devices (or desktop if new tab was prevented), direct navigation immediately opens the WhatsApp application
+      window.location.href = whatsappUrl;
     }
   } catch (err) {
+    if (preOpenedWindow && !preOpenedWindow.closed) {
+      preOpenedWindow.close();
+    }
     console.error('Booking submission error:', err);
     alert(`Could not create booking: ${err.message || 'Please check your connection and try again.'}`);
   } finally {
