@@ -1156,8 +1156,14 @@ const SEED_REVIEWS = [];
 
 // Database API helper with MongoDB Atlas synchronization
 class CleanShieldDB {
+  static _initialized = false;
+  static _isSyncing = false;
+  static _lastSyncTime = 0;
+  static _backoffUntil = 0;
+
   static init() {
-    if (typeof localStorage === 'undefined') return;
+    if (this._initialized || typeof localStorage === 'undefined') return;
+    this._initialized = true;
 
     // Clear legacy mock seed bookings if any exist so admin portal starts empty
     const currentBookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
@@ -1183,13 +1189,25 @@ class CleanShieldDB {
       localStorage.setItem(STORAGE_KEYS.PACKAGES, JSON.stringify(DEFAULT_SERVICE_PACKAGES));
     }
 
-    // Background sync from MongoDB if available
+    // Debounced background sync from MongoDB
     this.syncFromBackend();
   }
 
   static async syncFromBackend() {
+    const now = Date.now();
+    // Throttle: don't sync if already syncing, if in backoff cooldown, or if synced less than 3 minutes ago
+    if (this._isSyncing || now < this._backoffUntil || (now - this._lastSyncTime < 180000)) {
+      return;
+    }
+
+    this._isSyncing = true;
     try {
       const bRes = await fetch(`${API_BASE_URL}/bookings`);
+      if (bRes.status === 429 || bRes.status === 503) {
+        this._backoffUntil = Date.now() + 300000; // 5-minute cooldown on rate-limit or suspension
+        this._isSyncing = false;
+        return;
+      }
       if (bRes.ok) {
         const bData = await bRes.json();
         if (bData.success && Array.isArray(bData.data)) {
@@ -1197,7 +1215,13 @@ class CleanShieldDB {
           window.dispatchEvent(new CustomEvent('csp_bookings_synced', { detail: bData.data }));
         }
       }
+
       const eRes = await fetch(`${API_BASE_URL}/enquiries`);
+      if (eRes.status === 429 || eRes.status === 503) {
+        this._backoffUntil = Date.now() + 300000;
+        this._isSyncing = false;
+        return;
+      }
       if (eRes.ok) {
         const eData = await eRes.json();
         if (eData.success && Array.isArray(eData.data)) {
@@ -1205,7 +1229,13 @@ class CleanShieldDB {
           window.dispatchEvent(new CustomEvent('csp_enquiries_synced', { detail: eData.data }));
         }
       }
+
       const rRes = await fetch(`${API_BASE_URL}/reviews?all=true`);
+      if (rRes.status === 429 || rRes.status === 503) {
+        this._backoffUntil = Date.now() + 300000;
+        this._isSyncing = false;
+        return;
+      }
       if (rRes.ok) {
         const rData = await rRes.json();
         if (rData.success && Array.isArray(rData.data)) {
@@ -1213,7 +1243,13 @@ class CleanShieldDB {
           window.dispatchEvent(new CustomEvent('csp_reviews_synced', { detail: rData.data }));
         }
       }
+
       const pRes = await fetch(`${API_BASE_URL}/pricing`);
+      if (pRes.status === 429 || pRes.status === 503) {
+        this._backoffUntil = Date.now() + 300000;
+        this._isSyncing = false;
+        return;
+      }
       if (pRes.ok) {
         const pData = await pRes.json();
         if (pData.success && pData.data) {
@@ -1226,8 +1262,12 @@ class CleanShieldDB {
           window.dispatchEvent(new CustomEvent('csp_pricing_synced', { detail: pData.data }));
         }
       }
+
+      this._lastSyncTime = Date.now();
     } catch (e) {
-      // Offline fallback: continue using local storage
+      this._backoffUntil = Date.now() + 60000;
+    } finally {
+      this._isSyncing = false;
     }
   }
 
@@ -1340,20 +1380,62 @@ class CleanShieldDB {
       status: 'Pending'
     };
 
-    const res = await fetch(`${API_BASE_URL}/bookings`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    let savedBooking = null;
+    let whatsappUrl = null;
+    let whatsappConfirmationText = null;
+    let isDuplicate = false;
 
-    const data = await res.json().catch(() => null);
+    // 1. Attempt to save to MongoDB Atlas backend
+    try {
+      const res = await fetch(`${API_BASE_URL}/bookings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
-    if (!res.ok || !data || !data.success) {
-      const errMsg = (data && data.message) ? data.message : `Unable to reserve booking (HTTP ${res.status}). Please check your connection.`;
-      throw new Error(errMsg);
+      const data = await res.json().catch(() => null);
+
+      if (res.ok && data && data.success) {
+        savedBooking = data.data;
+        whatsappUrl = data.whatsappUrl;
+        whatsappConfirmationText = data.whatsappConfirmationText;
+        isDuplicate = !!data.isDuplicate;
+      } else if (res.status === 400 && data && data.message) {
+        // Genuine validation failure from backend business rules (e.g. past date or malformed phone)
+        throw new Error(data.message);
+      } else {
+        // Server error (e.g. 503 Service Suspended / 429 Throttled / 500)
+        console.warn(`Backend responded with HTTP ${res.status}. Seamlessly continuing with offline booking and WhatsApp confirmation.`);
+        if (res.status === 429 || res.status === 503) {
+          this._backoffUntil = Date.now() + 300000;
+        }
+      }
+    } catch (netErr) {
+      // If it was a 400 validation error thrown above, bubble it up to the user
+      if (netErr.message && !netErr.message.includes('fetch') && !netErr.message.includes('HTTP')) {
+        throw netErr;
+      }
+      console.warn('Backend unavailable, proceeding with local reservation resilience:', netErr.message);
     }
 
-    const savedBooking = data.data;
+    // 2. Offline / Server Suspended Graceful Fallback:
+    // If backend is sleeping, suspended, or rate-limited, still create a genuine booking,
+    // save to local history & My Services, and launch WhatsApp so the owner receives the appointment!
+    if (!savedBooking) {
+      const localId = (bookingData.id && String(bookingData.id).trim())
+        ? String(bookingData.id).trim()
+        : ('CSP-' + Math.floor(10000 + Math.random() * 90000));
+
+      savedBooking = {
+        id: localId,
+        createdAt: new Date().toISOString(),
+        status: 'Pending',
+        paymentStatus: (Number(bookingData.amount) === 0) ? 'Site Survey Scheduled' : (bookingData.paymentMethod && bookingData.paymentMethod.includes('Cash') ? 'Pending' : 'Paid'),
+        ...payload,
+        id: localId,
+        offlineSaved: true
+      };
+    }
 
     // Save locally
     const bookings = this.getBookings();
@@ -1379,9 +1461,9 @@ class CleanShieldDB {
 
     return {
       booking: savedBooking,
-      whatsappUrl: data.whatsappUrl || this.getWhatsAppConfirmationUrl(savedBooking),
-      whatsappConfirmationText: data.whatsappConfirmationText || this.getWhatsAppConfirmationText(savedBooking),
-      isDuplicate: !!data.isDuplicate
+      whatsappUrl: whatsappUrl || this.getWhatsAppConfirmationUrl(savedBooking),
+      whatsappConfirmationText: whatsappConfirmationText || this.getWhatsAppConfirmationText(savedBooking),
+      isDuplicate
     };
   }
 
@@ -1389,20 +1471,24 @@ class CleanShieldDB {
   static async recordWhatsAppInitiated(bookingId) {
     if (!bookingId) return;
     try {
-      await fetch(`${API_BASE_URL}/bookings/${bookingId}/whatsapp-initiated`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const bookings = this.getBookings();
-      const b = bookings.find(x => x.id === bookingId);
-      if (b) {
-        b.whatsappInitiated = true;
-        b.whatsappInitiatedAt = new Date().toISOString();
-        localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
-        this.saveToMyServices(b);
+      if (Date.now() < this._backoffUntil) {
+        // Backend currently throttled/suspended, record locally only
+      } else {
+        await fetch(`${API_BASE_URL}/bookings/${bookingId}/whatsapp-initiated`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
     } catch (e) {
       // Background non-blocking ping
+    }
+    const bookings = this.getBookings();
+    const b = bookings.find(x => x.id === bookingId);
+    if (b) {
+      b.whatsappInitiated = true;
+      b.whatsappInitiatedAt = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+      this.saveToMyServices(b);
     }
   }
 
